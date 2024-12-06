@@ -128,6 +128,7 @@ const Customizer = () => {
             <Icon icon='bx:x' fontSize={20} />
           </IconButton>
         </Box>
+        {/* @ts-ignore */}
         <PerfectScrollbar options={{ wheelPropagation: false }}>
           <CustomizerSpacing className='customizer-body'>
             <Typography
