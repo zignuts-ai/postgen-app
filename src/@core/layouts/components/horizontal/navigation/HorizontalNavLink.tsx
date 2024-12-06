@@ -128,7 +128,7 @@ const HorizontalNavLink = (props: Props) => {
                   '& svg': { transition: 'transform .25s ease-in-out' },
                   ...(icon === navSubItemIcon && { color: 'text.disabled' }),
                   ...(isNavLinkActive() && {
-                    color: 'primary.main',
+                    color: mode === 'light' ? 'primary.main' : 'white',
                     ...(hasParent &&
                       icon === navSubItemIcon && {
                         '& svg': {

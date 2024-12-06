@@ -1,5 +1,5 @@
 import React from 'react'
-import Adddbmodal from './Adddbmodal'
+import Adddbmodal from './AddDBmodal'
 
 const index = () => {
   return (
