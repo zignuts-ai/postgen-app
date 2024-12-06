@@ -24,6 +24,7 @@ type ThemeConfig = {
   mode: Mode
   appBar: AppBar
   footer: Footer
+  descrition: string
   navHidden: boolean
   appBarBlur: boolean
   direction: Direction
@@ -49,7 +50,8 @@ type ThemeConfig = {
 
 const themeConfig: ThemeConfig = {
   // ** Layout Configs
-  templateName: 'Dynamic Dashboard' /* App Name */,
+  templateName: 'Dashy.ai' /* App Name */,
+  descrition: 'AI-powered platform for effortlessly creating fully customized, dynamic dashboards.',
   layout: 'horizontal' /* vertical | horizontal */,
   mode: 'light' as Mode /* light | dark | semi-dark /*! Note: semi-dark value will only work for Vertical Layout */,
   direction: 'ltr' /* ltr | rtl */,
