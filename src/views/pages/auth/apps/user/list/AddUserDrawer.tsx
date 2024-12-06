@@ -23,16 +23,6 @@ import { useForm, Controller } from 'react-hook-form'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-// ** Store Imports
-// import { useDispatch, useSelector } from 'react-redux'
-
-// ** Actions Imports
-import { addUser } from 'src/store/apps/user'
-
-// ** Types Imports
-import { RootState, AppDispatch } from 'src/store'
-import { UsersType } from 'src/types/apps/userTypes'
-
 interface SidebarAddUserType {
   open: boolean
   toggle: () => void
@@ -104,14 +94,10 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
   const [plan, setPlan] = useState<string>('basic')
   const [role, setRole] = useState<string>('subscriber')
 
-  // ** Hooks
-  // const dispatch = useDispatch<AppDispatch>()
-  // const store = useSelector((state: RootState) => state.user)
   const {
     reset,
     control,
     setValue,
-    setError,
     handleSubmit,
     formState: { errors }
   } = useForm({
@@ -120,24 +106,14 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
     resolver: yupResolver(schema)
   })
   const onSubmit = (data: UserData) => {
-    // if (store.allData.some((u: UsersType) => u.email === data.email || u.username === data.username)) {
-    //   store.allData.forEach((u: UsersType) => {
-    //     if (u.email === data.email) {
-    //       setError('email', {
-    //         message: 'Email already exists!'
-    //       })
-    //     }
-    //     if (u.username === data.username) {
-    //       setError('username', {
-    //         message: 'Username already exists!'
-    //       })
-    //     }
-    //   })
-    // } else {
-    //   dispatch(addUser({ ...data, role, currentPlan: plan }))
-    //   toggle()
-    //   reset()
-    // }
+    console.log('raj')
+
+    // Log form data to console
+    console.log('Form Data:', data)
+
+    // Log additional state values
+    console.log('Plan:', plan)
+    console.log('Role:', role)
   }
 
   const handleClose = () => {
@@ -219,40 +195,6 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
           </FormControl>
           <FormControl fullWidth sx={{ mb: 6 }}>
             <Controller
-              name='company'
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { value, onChange } }) => (
-                <TextField
-                  value={value}
-                  label='Company'
-                  onChange={onChange}
-                  placeholder='Company PVT LTD'
-                  error={Boolean(errors.company)}
-                />
-              )}
-            />
-            {errors.company && <FormHelperText sx={{ color: 'error.main' }}>{errors.company.message}</FormHelperText>}
-          </FormControl>
-          <FormControl fullWidth sx={{ mb: 6 }}>
-            <Controller
-              name='country'
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { value, onChange } }) => (
-                <TextField
-                  value={value}
-                  label='Country'
-                  onChange={onChange}
-                  placeholder='Australia'
-                  error={Boolean(errors.country)}
-                />
-              )}
-            />
-            {errors.country && <FormHelperText sx={{ color: 'error.main' }}>{errors.country.message}</FormHelperText>}
-          </FormControl>
-          <FormControl fullWidth sx={{ mb: 6 }}>
-            <Controller
               name='contact'
               control={control}
               rules={{ required: true }}
@@ -270,34 +212,6 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
             {errors.contact && <FormHelperText sx={{ color: 'error.main' }}>{errors.contact.message}</FormHelperText>}
           </FormControl>
           <FormControl fullWidth sx={{ mb: 6 }}>
-            <InputLabel
-              id='validation-billing-select'
-              error={Boolean(errors.billing)}
-              htmlFor='validation-billing-select'
-            >
-              Billing
-            </InputLabel>
-            <Controller
-              name='billing'
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { value, onChange } }) => (
-                <Select
-                  value={value}
-                  label='Billing'
-                  onChange={onChange}
-                  error={Boolean(errors.billing)}
-                  labelId='validation-billing-select'
-                  aria-describedby='validation-billing-select'
-                >
-                  <MenuItem value=''>Billing</MenuItem>
-                  <MenuItem value='Auto Debit'>Auto Debit</MenuItem>
-                  <MenuItem value='Manual - Cash'>Manual - Cash</MenuItem>
-                  <MenuItem value='Manual - Paypal'>Manual - Paypal</MenuItem>
-                  <MenuItem value='Manual - Credit Card'>Manual - Credit Card</MenuItem>
-                </Select>
-              )}
-            />
             {errors.billing && (
               <FormHelperText sx={{ color: 'error.main' }} id='validation-billing-select'>
                 This field is required
@@ -316,27 +230,7 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
               inputProps={{ placeholder: 'Select Role' }}
             >
               <MenuItem value='admin'>Admin</MenuItem>
-              <MenuItem value='author'>Author</MenuItem>
-              <MenuItem value='editor'>Editor</MenuItem>
-              <MenuItem value='maintainer'>Maintainer</MenuItem>
-              <MenuItem value='subscriber'>Subscriber</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth sx={{ mb: 6 }}>
-            <InputLabel id='plan-select'>Select Plan</InputLabel>
-            <Select
-              fullWidth
-              value={plan}
-              id='select-plan'
-              label='Select Plan'
-              labelId='plan-select'
-              onChange={e => setPlan(e.target.value)}
-              inputProps={{ placeholder: 'Select Plan' }}
-            >
-              <MenuItem value='basic'>Basic</MenuItem>
-              <MenuItem value='company'>Company</MenuItem>
-              <MenuItem value='enterprise'>Enterprise</MenuItem>
-              <MenuItem value='team'>Team</MenuItem>
+              <MenuItem value='author'>User</MenuItem>
             </Select>
           </FormControl>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
