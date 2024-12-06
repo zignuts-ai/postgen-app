@@ -6,6 +6,12 @@ export type LoginParams = {
   rememberMe?: boolean
 }
 
+export type SignupParams = {
+  email: string
+  password: string
+  rememberMe?: boolean
+}
+
 export type UserDataType = {
   id: number
   role: string
@@ -23,4 +29,5 @@ export type AuthValuesType = {
   setLoading: (value: boolean) => void
   setUser: (value: UserDataType | null) => void
   login: (params: LoginParams, errorCallback?: ErrCallbackType) => void
+  register: (params: SignupParams, errorCallback?: ErrCallbackType) => void
 }

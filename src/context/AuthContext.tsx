@@ -20,6 +20,7 @@ const defaultProvider: AuthValuesType = {
   setUser: () => null,
   setLoading: () => Boolean,
   login: () => Promise.resolve(),
+  register: () => Promise.resolve(),
   logout: () => Promise.resolve()
 }
 
@@ -92,6 +93,27 @@ const AuthProvider = ({ children }: Props) => {
         if (errorCallback) errorCallback(err)
       })
   }
+  const handleRegister = (params: LoginParams, errorCallback?: ErrCallbackType) => {
+    axios
+      .post(authConfig.loginEndpoint, params)
+      .then(async response => {
+        params.rememberMe
+          ? window.localStorage.setItem(authConfig.storageTokenKeyName, response.data.accessToken)
+          : null
+        const returnUrl = router.query.returnUrl
+
+        setUser({ ...response.data.userData })
+        params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response.data.userData)) : null
+
+        const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
+
+        router.replace(redirectURL as string)
+      })
+
+      .catch(err => {
+        if (errorCallback) errorCallback(err)
+      })
+  }
 
   const handleLogout = () => {
     setUser(null)
@@ -106,6 +128,7 @@ const AuthProvider = ({ children }: Props) => {
     setUser,
     setLoading,
     login: handleLogin,
+    register: handleRegister,
     logout: handleLogout
   }
 
