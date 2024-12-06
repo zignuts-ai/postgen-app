@@ -20,7 +20,7 @@ const Home = () => {
           </CardContent>
         </Card>
       </Grid>
-      <Grid item xs={12}>
+      {/* <Grid item xs={12}>
         <Card>
           <CardHeader title='ACL and JWT 🔒'></CardHeader>
           <CardContent>
@@ -30,7 +30,7 @@ const Home = () => {
             <Typography>Please read our Authentication and ACL Documentations to get more out of them.</Typography>
           </CardContent>
         </Card>
-      </Grid>
+      </Grid> */}
     </Grid>
   )
 }
