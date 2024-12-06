@@ -82,8 +82,8 @@ const Home = () => {
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              gap: 2,
-              p: 2
+              gap: 10,
+              p: 5
             }}
           >
             <Typography variant='h6'>Setup New Connection</Typography>
