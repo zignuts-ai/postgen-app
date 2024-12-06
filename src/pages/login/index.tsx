@@ -1,5 +1,5 @@
 // ** React Imports
-import { ChangeEvent, ReactNode, useState } from 'react'
+import { ReactNode, useState } from 'react'
 
 // ** Next Import
 import Link from 'next/link'
@@ -21,6 +21,11 @@ import { styled, useTheme } from '@mui/material/styles'
 import InputAdornment from '@mui/material/InputAdornment'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
+// ** Third Party Imports
+import * as yup from 'yup'
+import { useForm, Controller } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
@@ -32,11 +37,8 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 import AuthIllustrationWrapper from 'src/views/pages/auth/AuthIllustrationWrapper'
-
-interface State {
-  password: string
-  showPassword: boolean
-}
+import { useAuth } from 'src/hooks/useAuth'
+import { FormHelperText } from '@mui/material'
 
 // ** Styled Components
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -45,21 +47,47 @@ const LinkStyled = styled(Link)(({ theme }) => ({
   color: theme.palette.primary.main
 }))
 
-const LoginPage = () => {
-  // ** State
-  const [values, setValues] = useState<State>({
-    password: '',
-    showPassword: false
-  })
+const schema = yup.object().shape({
+  email: yup.string().email().required(),
+  password: yup.string().min(5).required()
+})
 
-  // ** Hook
+const defaultValues = {
+  password: 'admin',
+  email: 'admin@sneat.com'
+}
+
+interface FormData {
+  email: string
+  password: string
+}
+
+const LoginPage = () => {
+  // ** Hooks
+  const auth = useAuth()
   const theme = useTheme()
 
-  const handleChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword })
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+
+  const {
+    control,
+    setError,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    defaultValues,
+    mode: 'onBlur',
+    resolver: yupResolver(schema)
+  })
+
+  const onSubmit = (data: FormData) => {
+    const { email, password } = data
+    auth.login({ email, password, rememberMe: true }, () => {
+      setError('email', {
+        type: 'manual',
+        message: 'Email or Password is invalid'
+      })
+    })
   }
 
   return (
@@ -104,29 +132,62 @@ const LoginPage = () => {
             <Typography sx={{ mb: 6, color: 'text.secondary' }}>
               Please sign-in to your account and start the adventure
             </Typography>
-            <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-              <TextField autoFocus fullWidth id='email' label='Email' sx={{ mb: 4 }} />
-              <FormControl fullWidth sx={{ mb: 2 }}>
-                <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
-                <OutlinedInput
-                  label='Password'
-                  value={values.password}
-                  id='auth-login-password'
-                  onChange={handleChange('password')}
-                  type={values.showPassword ? 'text' : 'password'}
-                  endAdornment={
-                    <InputAdornment position='end'>
-                      <IconButton
-                        edge='end'
-                        onClick={handleClickShowPassword}
-                        onMouseDown={e => e.preventDefault()}
-                        aria-label='toggle password visibility'
-                      >
-                        <Icon fontSize={20} icon={values.showPassword ? 'bx:show' : 'bx:hide'} />
-                      </IconButton>
-                    </InputAdornment>
-                  }
+            <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+              <FormControl fullWidth sx={{ mb: 4 }}>
+                <Controller
+                  name='email'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange, onBlur } }) => (
+                    <TextField
+                      autoFocus
+                      label='Email'
+                      value={value}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      error={Boolean(errors.email)}
+                      placeholder='admin@sneat.com'
+                    />
+                  )}
                 />
+                {errors.email && <FormHelperText sx={{ color: 'error.main' }}>{errors.email.message}</FormHelperText>}
+              </FormControl>
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <InputLabel htmlFor='auth-login-v2-password' error={Boolean(errors.password)}>
+                  Password
+                </InputLabel>
+                <Controller
+                  name='password'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange, onBlur } }) => (
+                    <OutlinedInput
+                      value={value}
+                      onBlur={onBlur}
+                      label='Password'
+                      onChange={onChange}
+                      id='auth-login-v2-password'
+                      error={Boolean(errors.password)}
+                      type={showPassword ? 'text' : 'password'}
+                      endAdornment={
+                        <InputAdornment position='end'>
+                          <IconButton
+                            edge='end'
+                            onMouseDown={e => e.preventDefault()}
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            <Icon fontSize={20} icon={showPassword ? 'bx:show' : 'bx:hide'} />
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    />
+                  )}
+                />
+                {errors.password && (
+                  <FormHelperText sx={{ color: 'error.main' }} id=''>
+                    {errors.password.message}
+                  </FormHelperText>
+                )}
               </FormControl>
               <Box
                 sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
