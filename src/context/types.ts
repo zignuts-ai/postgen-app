@@ -1,3 +1,5 @@
+import { UseMutationResult } from '@tanstack/react-query'
+
 export type ErrCallbackType = (err: { [key: string]: string }) => void
 
 export type LoginParams = {
@@ -28,6 +30,6 @@ export type AuthValuesType = {
   user: UserDataType | null
   setLoading: (value: boolean) => void
   setUser: (value: UserDataType | null) => void
-  login: (params: LoginParams, errorCallback?: ErrCallbackType) => void
-  register: (params: SignupParams, errorCallback?: ErrCallbackType) => void
+  login?: UseMutationResult<any, any, any, unknown>
+  register?: UseMutationResult<any, any, any, unknown>
 }

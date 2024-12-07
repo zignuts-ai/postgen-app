@@ -6,9 +6,6 @@ import {
   RefetchOptions,
   RefetchQueryFilters
 } from '@tanstack/react-query'
-import endpoints from 'src/constants/endpoints'
-import Cookies from 'js-cookie'
-import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from 'src/constants/constant'
 
 export const queryClient = new QueryClient({ defaultOptions: { queries: { refetchOnWindowFocus: false } } })
 
@@ -32,24 +29,24 @@ export const userClient = axios.create()
  */
 export const apiClient = axios.create()
 
-apiClient.interceptors.response.use(
-  resp => resp,
-  async error => {
-    if (error?.response?.data?.error_message?.details[0] === 'Given token not valid for any token type') {
-      try {
-        const res = await axios.post(endpoints.auth.refresh, { refresh: Cookies.get(REFRESH_TOKEN_KEY) })
+// apiClient.interceptors.response.use(
+//   resp => resp,
+//   async error => {
+//     if (error?.response?.data?.error_message?.details[0] === 'Given token not valid for any token type') {
+//       try {
+//         const res = await axios.post(endpoints.auth.refresh, { refresh: Cookies.get(REFRESH_TOKEN_KEY) })
 
-        if (res.status === 200) {
-          Cookies.set(ACCESS_TOKEN_KEY, res.data.access)
-          axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.access}`
+//         if (res.status === 200) {
+//           Cookies.set(ACCESS_TOKEN_KEY, res.data.access)
+//           axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.access}`
 
-          return axios({ ...error.config, headers: { Authorization: `Bearer ${res.data.access}` } })
-        }
-      } catch (refreshError) {
-        console.error('Error refreshing token:', refreshError)
-      }
-    }
+//           return axios({ ...error.config, headers: { Authorization: `Bearer ${res.data.access}` } })
+//         }
+//       } catch (refreshError) {
+//         console.error('Error refreshing token:', refreshError)
+//       }
+//     }
 
-    return Promise.reject(error)
-  }
-)
+//     return Promise.reject(error)
+//   }
+// )

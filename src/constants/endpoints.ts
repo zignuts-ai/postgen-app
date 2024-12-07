@@ -4,8 +4,8 @@ const GET_URL = (key: string): string => API_BASE_URL + key
 
 const endpoints = {
   auth: {
-    login: GET_URL('/login/'),
-    registration: GET_URL('/registration/'),
+    login: GET_URL('/user/login/'),
+    registration: GET_URL('/user/signup/'),
     refresh: GET_URL('/refresh/')
   },
   user: {

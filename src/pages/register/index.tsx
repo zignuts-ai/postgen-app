@@ -27,7 +27,6 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import AuthIllustrationWrapper from 'src/views/pages/auth/AuthIllustrationWrapper'
 import CustomTextField from 'src/components/common/form/CustomTextField'
 import { useAuth } from 'src/hooks/useAuth'
-import { toast } from 'react-hot-toast'
 
 // ** Styled Components
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -39,8 +38,9 @@ const LinkStyled = styled(Link)(({ theme }) => ({
 const schema = yup.object().shape({
   name: yup.string().required('Name is required'),
   email: yup.string().email('Invalid email').required('Email is required'),
-  password: yup.string().min(5, 'Password should be at least 5 characters').required('Password is required'),
-  orgName: yup.string().required('Organization name is required')
+  password: yup.string().min(5, 'Password should be at least 5 characters').required('Password is required')
+
+  // orgName: yup.string().required('Organization name is required')
 })
 
 const defaultValues = {
@@ -60,7 +60,9 @@ interface FormData {
 const Register = () => {
   // ** Hook
   const theme = useTheme()
-  const auth = useAuth()
+
+  const { register } = useAuth()
+  const { mutate }: any = register!
 
   const [isTermsChecked, setIsTermsChecked] = useState(false)
 
@@ -74,17 +76,9 @@ const Register = () => {
     resolver: yupResolver(schema)
   })
 
-  const onSubmit = (data: FormData) => {
-    if (!isTermsChecked) {
-      toast.error('You must agree to the privacy policy and terms.')
-
-      return
-    }
+  const onSubmit = async (data: FormData) => {
     console.log(data)
-    const { email, password } = data
-    auth.login({ email, password, rememberMe: true }, () => {
-      toast.error('Email or Password is invalid')
-    })
+    await mutate(data)
   }
 
   return (
@@ -123,9 +117,7 @@ const Register = () => {
                   errors={errors?.password}
                 />
               </FormControl>
-              <FormControl fullWidth sx={{ mb: 5 }}>
-                <CustomTextField control={control} label='Organization Name' name='orgName' errors={errors?.orgName} />
-              </FormControl>
+
               <FormControlLabel
                 control={<Checkbox checked={isTermsChecked} onChange={e => setIsTermsChecked(e.target.checked)} />}
                 sx={{
