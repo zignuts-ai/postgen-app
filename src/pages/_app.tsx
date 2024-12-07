@@ -55,8 +55,10 @@ import 'prismjs/components/prism-tsx'
 import 'react-perfect-scrollbar/dist/css/styles.css'
 
 import 'src/iconify-bundle/icons-bundle-react'
+import 'react-slidedown/lib/slidedown.css'
 
 // ** Global css styles
+import '../../styles/index.css'
 import '../../styles/globals.css'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from 'src/utils/client'
@@ -69,6 +71,7 @@ type ExtendedAppProps = AppProps & {
 
 type GuardProps = {
   authGuard: boolean
+  publicGuard: boolean
   guestGuard: boolean
   children: ReactNode
 }
@@ -88,13 +91,17 @@ if (themeConfig.routingLoader) {
   })
 }
 
-const Guard = ({ children, authGuard, guestGuard }: GuardProps) => {
-  if (guestGuard) {
-    return <GuestGuard fallback={<Spinner />}>{children}</GuestGuard>
-  } else if (!guestGuard && !authGuard) {
+const Guard = ({ children, authGuard, guestGuard, publicGuard }: GuardProps) => {
+  if (publicGuard) {
     return <>{children}</>
   } else {
-    return <AuthGuard fallback={<Spinner />}>{children}</AuthGuard>
+    if (guestGuard) {
+      return <GuestGuard fallback={<Spinner />}>{children}</GuestGuard>
+    } else if (!guestGuard && !authGuard) {
+      return <>{children}</>
+    } else {
+      return <AuthGuard fallback={<Spinner />}>{children}</AuthGuard>
+    }
   }
 }
 
@@ -110,6 +117,8 @@ const App = (props: ExtendedAppProps) => {
   const setConfig = Component.setConfig ?? undefined
 
   const authGuard = Component.authGuard ?? true
+
+  const publicGuard = Component.publicGuard ?? false
 
   const guestGuard = Component.guestGuard ?? false
 
@@ -133,11 +142,18 @@ const App = (props: ExtendedAppProps) => {
               {({ settings }) => {
                 return (
                   <ThemeComponent settings={settings}>
-                    <Guard authGuard={authGuard} guestGuard={guestGuard}>
-                      <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}>
-                        {/* @ts-ignore */}
-                        {getLayout(<Component {...pageProps} />)}
-                      </AclGuard>
+                    <Guard authGuard={authGuard} guestGuard={guestGuard} publicGuard={publicGuard}>
+                      {publicGuard ? (
+                        <>
+                          {/* @ts-ignore */}
+                          {getLayout(<Component {...pageProps} />)}
+                        </>
+                      ) : (
+                        <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}>
+                          {/* @ts-ignore */}
+                          {getLayout(<Component {...pageProps} />)}
+                        </AclGuard>
+                      )}
                     </Guard>
                     <ReactHotToast>
                       <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
