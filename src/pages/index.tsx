@@ -22,15 +22,8 @@ const Home = () => {
   return (
     <main className='overflow-hidden'>
       <section className='relative pt-20 pb-20 max-lg:pt-52 max-lg:pb-10 max-md:pt-36 max-md:pb-32 bg-primary'>
-        {/* @ts-ignore */}
-        {/* <Hero /> */}
         <DashboardView />
       </section>
-      {/* <Grid container spacing={6} justifyContent='center' alignItems='center'>
-        <Grid item xs={10}>
-          <DashboardView />
-        </Grid> */}
-      {/* </Grid> */}
       <Hero />
       <Features />
       <Faq />
