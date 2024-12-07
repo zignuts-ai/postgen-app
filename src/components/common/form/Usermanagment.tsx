@@ -105,6 +105,8 @@ const renderClient = (row: UsersType) => {
 }
 
 const RowOptions = ({ id }: { id: number | string }) => {
+  console.log(id)
+
   // ** Hooks
   //   const dispatch = useDispatch<AppDispatch>()
 
@@ -211,6 +213,7 @@ const columns: GridColDef[] = [
       )
     }
   },
+  
   // {
   //   flex: 0.15,
   //   minWidth: 120,

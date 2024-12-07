@@ -7,7 +7,6 @@ import { useRouter } from 'next/router'
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Tab from '@mui/material/Tab'
-import TabPanel from '@mui/lab/TabPanel'
 import TabContext from '@mui/lab/TabContext'
 import Typography from '@mui/material/Typography'
 import { styled, Theme } from '@mui/material/styles'
@@ -17,13 +16,6 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-
-// ** Demo Components Imports
-import UserViewBilling from 'src/views/apps/user/view/UserViewBilling'
-import UserViewAccount from 'src/views/apps/user/view/UserViewAccount'
-import UserViewSecurity from 'src/views/apps/user/view/UserViewSecurity'
-import UserViewConnection from 'src/views/apps/user/view/UserViewConnection'
-import UserViewNotification from 'src/views/apps/user/view/UserViewNotification'
 
 // ** Types
 import { InvoiceType } from 'src/types/apps/invoiceTypes'
@@ -148,7 +140,7 @@ const UserViewRight = ({ tab, invoiceData }: Props) => {
           </Box>
         ) : (
           <>
-            <TabPanel value='account'>
+            {/* <TabPanel value='account'>
               <UserViewAccount invoiceData={invoiceData} />
             </TabPanel>
             <TabPanel value='security'>
@@ -162,7 +154,7 @@ const UserViewRight = ({ tab, invoiceData }: Props) => {
             </TabPanel>
             <TabPanel value='connection'>
               <UserViewConnection />
-            </TabPanel>
+            </TabPanel> */}
           </>
         )}
       </Box>
