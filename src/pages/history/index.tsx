@@ -110,4 +110,6 @@ const Home = () => {
   )
 }
 
+Home.publicGuard = true
+
 export default Home

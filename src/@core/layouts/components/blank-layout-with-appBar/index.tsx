@@ -15,6 +15,8 @@ import { useSettings } from 'src/@core/hooks/useSettings'
 import { Button } from '@mui/material'
 import { useAuth } from 'src/hooks/useAuth'
 import UserDropdown from '../shared-components/UserDropdown'
+import { usePathname } from 'next/navigation'
+import { Icon } from '@iconify/react'
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   display: 'flex',
@@ -29,6 +31,9 @@ const BlankLayoutAppBar = () => {
   const { settings } = useSettings()
   const { user } = useAuth()
   const { skin } = settings
+  const pathname = usePathname()
+
+  const isLandingPage = pathname === '/'
 
   return (
     <AppBar
@@ -80,7 +85,16 @@ const BlankLayoutAppBar = () => {
           </Typography>
         </LinkStyled>
         {user ? (
-          <UserDropdown settings={settings} />
+          <div className='flex gap-3 mx-4 items-center'>
+            {isLandingPage && (
+              <Link href='/history'>
+                <Button variant='contained' startIcon={<Icon icon='material-symbols:history' />}>
+                  History
+                </Button>
+              </Link>
+            )}
+            <UserDropdown settings={settings} />
+          </div>
         ) : (
           <div className='flex gap-3 mx-4'>
             <Link href='/login'>
