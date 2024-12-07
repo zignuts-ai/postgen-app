@@ -42,7 +42,7 @@ export const api = async (endpoint: string, data: any, type: requestType, config
     default:
       return true
   }
-  console.log('RESULT', res)
+
   if (typeof res.data === 'string') {
     try {
       res.data = JSON.parse(res.data)
