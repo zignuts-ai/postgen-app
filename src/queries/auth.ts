@@ -3,14 +3,14 @@ import { api } from 'src/api/api'
 import { REFRESH_TOKEN_KEY } from 'src/constants/constant'
 import endpoints from 'src/constants/endpoints'
 
-export async function signupWithDjango(dto: any): Promise<any> {
+export async function signup(dto: any): Promise<any> {
   const { data } = await api(endpoints.auth.registration, dto, 'postWithoutToken')
 
   return data
 }
 
-export async function loginWithDjango(dto: any): Promise<any> {
-  const { data } = await api(endpoints.auth.login, dto, 'postWithoutToken')
+export async function login(dto: any): Promise<any> {
+  const { data } = await api(endpoints.auth.login, dto, 'post')
 
   return data
 }

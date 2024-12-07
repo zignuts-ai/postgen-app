@@ -1,6 +1,7 @@
 import axios from 'axios'
-import MockAdapter from 'axios-mock-adapter'
 
-const mock = new MockAdapter(axios)
+// import MockAdapter from 'axios-mock-adapter'
 
-export default mock
+// const mock = new MockAdapter(axios)
+
+export default axios

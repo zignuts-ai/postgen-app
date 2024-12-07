@@ -28,7 +28,6 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import AuthIllustrationWrapper from 'src/views/pages/auth/AuthIllustrationWrapper'
 import { useAuth } from 'src/hooks/useAuth'
 import CustomTextField from 'src/components/common/form/CustomTextField'
-import { toast } from 'react-hot-toast'
 
 // ** Styled Components
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -54,8 +53,14 @@ interface FormData {
 
 const LoginPage = () => {
   // ** Hooks
-  const auth = useAuth()
+  // const auth = useAuth()
   const theme = useTheme()
+
+  const { login } = useAuth()
+
+  const { mutate } = login!
+
+  console.log(login, 'loginf')
 
   const {
     control,
@@ -67,12 +72,9 @@ const LoginPage = () => {
     resolver: yupResolver(schema)
   })
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     console.log(data)
-    const { email, password } = data
-    auth.login({ email, password, rememberMe: true }, () => {
-      toast.error('Email or Password is invalid')
-    })
+    await mutate(data)
   }
 
   return (
