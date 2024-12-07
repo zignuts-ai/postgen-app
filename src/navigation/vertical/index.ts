@@ -6,13 +6,14 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'History',
       path: '/history',
-      icon: 'material-symbols:history'
+      icon: 'material-symbols:history',
+      auth: false
     },
     {
       title: 'New Chat',
       path: '/chat',
       icon: 'wpf:create-new',
-      isPublic: true
+      auth: false
     }
 
     // {

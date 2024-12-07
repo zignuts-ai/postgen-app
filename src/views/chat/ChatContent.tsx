@@ -2,7 +2,6 @@
 import MuiAvatar from '@mui/material/Avatar'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
 import Box, { BoxProps } from '@mui/material/Box'
 
 // ** Icon Imports
@@ -102,11 +101,11 @@ const ChatContent = (props: ChatContentType) => {
               }}
             >
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                {mdAbove ? null : (
+                {/* {mdAbove ? null : (
                   <IconButton onClick={handleLeftSidebarToggle} sx={{ mr: 2 }}>
                     <Icon icon='bx:menu' />
                   </IconButton>
-                )}
+                )} */}
                 <Box
                   onClick={handleUserProfileRightSidebarToggle}
                   sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
