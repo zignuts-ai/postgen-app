@@ -1,27 +1,32 @@
 import React, { useState } from 'react'
-import { Card, CardMedia, CardContent, Typography, Button, Modal, Box, Chip, IconButton } from '@mui/material'
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  Button,
+  Box,
+  Chip,
+  IconButton,
+  Dialog,
+  DialogContent
+} from '@mui/material'
 import { Share as ShareIcon, Favorite as FavoriteIcon } from '@mui/icons-material'
 
-const MemeCard = ({ image, title, description, platform, type = 'image', aiGenerated = true }) => {
+type Props = {
+  image: string
+  title: string
+  description: string
+  platform: string
+  type?: string
+  aiGenerated?: boolean
+}
+const MemeCard = ({ image, title, description, platform, type = 'image', aiGenerated = true }: Props) => {
   const [open, setOpen] = useState(false)
   const [liked, setLiked] = useState(false)
 
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
-
-  const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '90%',
-    maxWidth: 800,
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 2,
-    outline: 'none'
-  }
 
   return (
     <>
@@ -48,7 +53,14 @@ const MemeCard = ({ image, title, description, platform, type = 'image', aiGener
             sx={{ cursor: 'pointer', objectFit: 'cover', borderRadius: 1 }}
           />
         ) : (
-          <video width='100%' height='300' controls style={{ borderRadius: '4px' }} onClick={handleOpen}>
+          <video
+            width='100%'
+            muted
+            height='300'
+            controls
+            style={{ borderRadius: '4px', maxHeight: 200, objectFit: 'cover' }}
+            onClick={handleOpen}
+          >
             <source src={image} type='video/mp4' />
           </video>
         )}
@@ -86,7 +98,7 @@ const MemeCard = ({ image, title, description, platform, type = 'image', aiGener
           }}
         >
           <IconButton aria-label='add to favorites' onClick={() => setLiked(!liked)}>
-            <FavoriteIcon color={liked ? 'error' : 'default'} />
+            <FavoriteIcon color={(liked ? 'error' : 'default') as any} />
           </IconButton>
           <IconButton aria-label='share'>
             <ShareIcon />
@@ -110,13 +122,15 @@ const MemeCard = ({ image, title, description, platform, type = 'image', aiGener
       </Card>
 
       {/* Modal for Enlarged View */}
-      <Modal
+      <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby='meme-modal-title'
         aria-describedby='meme-modal-description'
+        fullWidth
+        maxWidth='sm'
       >
-        <Box sx={modalStyle}>
+        <DialogContent>
           {type === 'image' ? (
             <img
               src={image}
@@ -139,8 +153,8 @@ const MemeCard = ({ image, title, description, platform, type = 'image', aiGener
           <Typography id='meme-modal-description' variant='body1' mt={1}>
             {description}
           </Typography>
-        </Box>
-      </Modal>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

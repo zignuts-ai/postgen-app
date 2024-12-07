@@ -1,59 +1,21 @@
-// import React from 'react'
-// import { Grid, Box } from '@mui/material'
-// import MemeCard from './components/MemeImageCard'
-
-// const Home = () => {
-//   const memeSamples = [
-//     {
-//       id: 1,
-//       image: '/images/testimonials/jessica-saunders.png',
-//       title: 'Hilarious Cat Meme',
-//       description: 'When your cat decides to judge your life choices',
-//       platform: 'Instagram',
-//       type: 'image',
-//       aiGenerated: true
-//     },
-//     {
-//       id: 2,
-//       image: 'https://www.w3schools.com/html/mov_bbb.mp4',
-//       title: 'Funny Dance Meme',
-//       description: 'Epic dance moves that broke the internet',
-//       platform: 'TikTok',
-//       type: 'video',
-//       aiGenerated: false
-//     },
-//     {
-//       id: 3,
-//       image: '/images/testimonials/jessica-saunders.png',
-//       title: 'Another Cat Meme',
-//       description: 'Cats being cats!',
-//       platform: 'Facebook',
-//       type: 'image',
-//       aiGenerated: true
-//     }
-//   ]
-
-//   return (
-//     <Grid container spacing={4} sx={{ padding: 3 }}>
-//       {memeSamples.map(meme => (
-//         <Grid item xs={12} sm={6} md={4} lg={3} key={meme.id}>
-//           <MemeCard {...meme} />
-//         </Grid>
-//       ))}
-//     </Grid>
-//   )
-// }
-
-// export default Home
-
 import React, { useState } from 'react'
-import { Grid, Box, Typography, Modal } from '@mui/material'
+import { Grid, Box, Typography, Modal, Divider } from '@mui/material'
 import MemeCard from './components/MemeImageCard'
 
-const Home = () => {
-  const [selectedMeme, setSelectedMeme] = useState(null)
+type Content = {
+  id: number
+  image: string
+  title: string
+  description: string
+  platform: string
+  type: 'image' | 'video' | 'text' | 'meme'
+  aiGenerated: boolean
+}
 
-  const memeSamples = [
+const Home = () => {
+  const [selectedMeme, setSelectedMeme] = useState<Content | null>(null)
+
+  const memeSamples: Content[] = [
     {
       id: 1,
       image: 'https://via.placeholder.com/600x400.png?text=Cat+Meme',
@@ -122,31 +84,31 @@ const Home = () => {
   const imageMemes = memeSamples.filter(meme => meme.type === 'image')
   const videoMemes = memeSamples.filter(meme => meme.type === 'video')
 
-  const handleCardClick = meme => setSelectedMeme(meme)
   const handleCloseModal = () => setSelectedMeme(null)
 
   return (
     <Box sx={{ padding: 4, mx: 'auto' }}>
       {/* Image Memes Section */}
-      <Typography variant='h4' gutterBottom>
-        Image Memes
+      <Typography fontWeight={600} variant='h4' gutterBottom mb={4}>
+        Image
       </Typography>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} justifyContent={{ xs: 'center', md: 'flex-start' }} sx={{ marginBottom: 4 }}>
         {imageMemes.map(meme => (
-          <Grid item xs={12} sm={6} md={4} lg={3} columnSpacing={4} key={meme.id}>
-            <MemeCard {...meme} onClick={() => handleCardClick(meme)} />
+          <Grid item xs={12} sm={6} md={4} key={meme.id} mb={4}>
+            <MemeCard {...meme} />
           </Grid>
         ))}
       </Grid>
 
+      <Divider />
       {/* Video Memes Section */}
-      <Typography variant='h4' gutterBottom sx={{ marginTop: 4 }}>
-        Video Memes
+      <Typography fontWeight={600} variant='h4' gutterBottom sx={{ marginTop: 4 }}>
+        Video
       </Typography>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} justifyContent={{ xs: 'center', md: 'flex-start' }} sx={{ marginBottom: 4 }}>
         {videoMemes.map(meme => (
-          <Grid item xs={12} sm={6} md={4} key={meme.id}>
-            <MemeCard {...meme} onClick={() => handleCardClick(meme)} />
+          <Grid item xs={12} sm={6} md={4} key={meme.id} mb={4}>
+            <MemeCard {...meme} />
           </Grid>
         ))}
       </Grid>
