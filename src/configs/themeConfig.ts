@@ -53,7 +53,7 @@ const themeConfig: ThemeConfig = {
   templateName: 'Dashy.ai' /* App Name */,
   descrition: 'AI-powered platform for effortlessly creating fully customized, dynamic dashboards.',
   layout: 'horizontal' /* vertical | horizontal */,
-  mode: 'light' as Mode /* light | dark | semi-dark /*! Note: semi-dark value will only work for Vertical Layout */,
+  mode: 'dark' as Mode /* light | dark | semi-dark /*! Note: semi-dark value will only work for Vertical Layout */,
   direction: 'ltr' /* ltr | rtl */,
   skin: 'default' /* default | bordered */,
   contentWidth: 'full' /* full | boxed */,
