@@ -12,6 +12,9 @@ import themeConfig from 'src/configs/themeConfig'
 
 // ** Hook
 import { useSettings } from 'src/@core/hooks/useSettings'
+import { Button } from '@mui/material'
+import { useAuth } from 'src/hooks/useAuth'
+import UserDropdown from '../shared-components/UserDropdown'
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   display: 'flex',
@@ -24,6 +27,7 @@ const BlankLayoutAppBar = () => {
   // ** Hooks & Vars
   const theme = useTheme()
   const { settings } = useSettings()
+  const { user } = useAuth()
   const { skin } = settings
 
   return (
@@ -75,6 +79,18 @@ const BlankLayoutAppBar = () => {
             {themeConfig.templateName}
           </Typography>
         </LinkStyled>
+        {user ? (
+          <UserDropdown settings={settings} />
+        ) : (
+          <div className='flex gap-3 mx-4'>
+            <Link href='/login'>
+              <Button variant='contained'>Login</Button>
+            </Link>
+            <Link href='/register'>
+              <Button variant='outlined'>Register</Button>
+            </Link>
+          </div>
+        )}
       </Toolbar>
     </AppBar>
   )

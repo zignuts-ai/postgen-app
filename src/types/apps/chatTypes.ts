@@ -1,5 +1,4 @@
 // ** Types
-import { Dispatch } from 'redux'
 import { ThemeColor } from 'src/@core/layouts/types'
 
 export type StatusType = 'busy' | 'away' | 'online' | 'offline'
@@ -87,9 +86,7 @@ export type SendMsgParamsType = {
 export type ChatContentType = {
   hidden: boolean
   mdAbove: boolean
-  store: ChatStoreType
   sidebarWidth: number
-  dispatch: Dispatch<any>
   statusObj: StatusObjType
   userProfileRightOpen: boolean
   handleLeftSidebarToggle: () => void
@@ -104,7 +101,6 @@ export type ChatSidebarLeftType = {
   store: ChatStoreType
   sidebarWidth: number
   userStatus: StatusType
-  dispatch: Dispatch<any>
   leftSidebarOpen: boolean
   statusObj: StatusObjType
   userProfileLeftOpen: boolean
@@ -140,7 +136,6 @@ export type UserProfileRightType = {
 
 export type SendMsgComponentType = {
   store: ChatStoreType
-  dispatch: Dispatch<any>
   sendMsg: (params: SendMsgParamsType) => void
 }
 

@@ -17,6 +17,7 @@ import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import CustomTextField from 'src/components/common/form/CustomTextField'
+import themeConfig from 'src/configs/themeConfig'
 
 // Define types
 export type platformTypes = 'instagram' | 'linkedin'
@@ -186,8 +187,9 @@ const DashboardView = () => {
         <Typography textAlign={'center'} variant='h5' fontWeight={700} color='white'>
           Generate social media posts in seconds for free
         </Typography>
-        <Typography textAlign={'center'} variant='subtitle1' fontWeight={400} sx={{ mt: 1 }}>
-          Stay consistent, creative, and productive with SocialBee's free AI social media post generator.
+        <Typography textAlign={'center'} variant='subtitle1' fontWeight={400}>
+          Stay consistent, creative, and productive with {themeConfig.templateName}'s free AI social media post
+          generator.
         </Typography>
       </Box>
       <Card
