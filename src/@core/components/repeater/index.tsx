@@ -16,6 +16,7 @@ const Repeater = (props: RepeaterProps) => {
     items.push(children(i))
   }
 
+  // @ts-ignore
   return <Tag {...props}>{items}</Tag>
 }
 

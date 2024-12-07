@@ -6,6 +6,7 @@ declare module 'next' {
   export declare type NextPage<P = {}, IP = P> = NextComponentType<NextPageContext, IP, P> & {
     acl?: ACLObj
     authGuard?: boolean
+    publicGuard?: boolean
     guestGuard?: boolean
     setConfig?: () => void
     contentHeightFixed?: boolean

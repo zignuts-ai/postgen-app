@@ -7,10 +7,6 @@ import { Router } from 'next/router'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 
-
-
-
-
 // ** Loader Import
 import NProgress from 'nprogress'
 
@@ -59,9 +55,14 @@ import 'prismjs/components/prism-tsx'
 import 'react-perfect-scrollbar/dist/css/styles.css'
 
 import 'src/iconify-bundle/icons-bundle-react'
+import 'react-slidedown/lib/slidedown.css'
 
 // ** Global css styles
+import '../../styles/index.css'
 import '../../styles/globals.css'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { queryClient } from 'src/utils/client'
+import { ChatProvider } from 'src/context/ChatContext'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -71,6 +72,7 @@ type ExtendedAppProps = AppProps & {
 
 type GuardProps = {
   authGuard: boolean
+  publicGuard: boolean
   guestGuard: boolean
   children: ReactNode
 }
@@ -90,13 +92,17 @@ if (themeConfig.routingLoader) {
   })
 }
 
-const Guard = ({ children, authGuard, guestGuard }: GuardProps) => {
-  if (guestGuard) {
-    return <GuestGuard fallback={<Spinner />}>{children}</GuestGuard>
-  } else if (!guestGuard && !authGuard) {
+const Guard = ({ children, authGuard, guestGuard, publicGuard }: GuardProps) => {
+  if (publicGuard) {
     return <>{children}</>
   } else {
-    return <AuthGuard fallback={<Spinner />}>{children}</AuthGuard>
+    if (guestGuard) {
+      return <GuestGuard fallback={<Spinner />}>{children}</GuestGuard>
+    } else if (!guestGuard && !authGuard) {
+      return <>{children}</>
+    } else {
+      return <AuthGuard fallback={<Spinner />}>{children}</AuthGuard>
+    }
   }
 }
 
@@ -113,45 +119,56 @@ const App = (props: ExtendedAppProps) => {
 
   const authGuard = Component.authGuard ?? true
 
+  const publicGuard = Component.publicGuard ?? false
+
   const guestGuard = Component.guestGuard ?? false
 
   const aclAbilities = Component.acl ?? defaultACLObj
 
   return (
-    
-      <CacheProvider value={emotionCache}>
-        <Head>
-          <title>{`${themeConfig.templateName} - Material Design React Admin Template`}</title>
-          <meta
-            name='description'
-            content={`${themeConfig.templateName} – Material Design React Admin Dashboard Template – is the most developer friendly & highly customizable Admin Dashboard Template based on MUI v5.`}
-          />
-          <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
-          <meta name='viewport' content='initial-scale=1, width=device-width' />
-        </Head>
-
+    <CacheProvider value={emotionCache}>
+      <Head>
+        <title>{`${themeConfig.templateName} - Material Design React Admin Template`}</title>
+        <meta
+          name='description'
+          content={`${themeConfig.templateName} – Material Design React Admin Dashboard Template – is the most developer friendly & highly customizable Admin Dashboard Template based on MUI v5.`}
+        />
+        <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
+        <meta name='viewport' content='initial-scale=1, width=device-width' />
+      </Head>
+      <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
-            <SettingsConsumer>
-              {({ settings }) => {
-                return (
-                  <ThemeComponent settings={settings}>
-                    <Guard authGuard={authGuard} guestGuard={guestGuard}>
-                      <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}>
-                        {getLayout(<Component {...pageProps} />)}
-                      </AclGuard>
-                    </Guard>
-                    <ReactHotToast>
-                      <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
-                    </ReactHotToast>
-                  </ThemeComponent>
-                )
-              }}
-            </SettingsConsumer>
-          </SettingsProvider>
+          <ChatProvider>
+            <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
+              <SettingsConsumer>
+                {({ settings }) => {
+                  return (
+                    <ThemeComponent settings={settings}>
+                      <Guard authGuard={authGuard} guestGuard={guestGuard} publicGuard={publicGuard}>
+                        {publicGuard ? (
+                          <>
+                            {/* @ts-ignore */}
+                            {getLayout(<Component {...pageProps} />)}
+                          </>
+                        ) : (
+                          <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}>
+                            {/* @ts-ignore */}
+                            {getLayout(<Component {...pageProps} />)}
+                          </AclGuard>
+                        )}
+                      </Guard>
+                      <ReactHotToast>
+                        <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
+                      </ReactHotToast>
+                    </ThemeComponent>
+                  )
+                }}
+              </SettingsConsumer>
+            </SettingsProvider>
+          </ChatProvider>
         </AuthProvider>
-      </CacheProvider>
-   
+      </QueryClientProvider>
+    </CacheProvider>
   )
 }
 
