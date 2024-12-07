@@ -8,6 +8,7 @@ import { PLATFORM_TYPE, TONE_TYPE } from 'src/constants/constant'
 import UseBgColor, { UseBgColorType } from 'src/@core/hooks/useBgColor'
 import { Icon } from '@iconify/react'
 import CustomTextField from 'src/components/common/form/CustomTextField'
+import themeConfig from 'src/configs/themeConfig'
 
 const schema = yup.object().shape({
   platform_type: yup
@@ -79,7 +80,8 @@ const DashboardView = () => {
           Generate social media posts in seconds for free
         </Typography>
         <Typography textAlign={'center'} variant='subtitle1' fontWeight={400}>
-          Stay consistent, creative, and productive with SocialBee's free AI social media post generator.
+          Stay consistent, creative, and productive with {themeConfig.templateName}'s free AI social media post
+          generator.
         </Typography>
       </Box>
       <Card

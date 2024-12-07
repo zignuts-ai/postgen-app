@@ -50,8 +50,8 @@ type ThemeConfig = {
 
 const themeConfig: ThemeConfig = {
   // ** Layout Configs
-  templateName: 'Dashy.ai' /* App Name */,
-  descrition: 'AI-powered platform for effortlessly creating fully customized, dynamic dashboards.',
+  templateName: 'Postgen.ai' /* App Name */,
+  descrition: "Stay consistent, creative, and productive with Postgen.ai's free AI social media post generator.",
   layout: 'horizontal' /* vertical | horizontal */,
   mode: 'dark' as Mode /* light | dark | semi-dark /*! Note: semi-dark value will only work for Vertical Layout */,
   direction: 'ltr' /* ltr | rtl */,
