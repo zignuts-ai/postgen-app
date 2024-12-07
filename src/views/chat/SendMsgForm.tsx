@@ -1,25 +1,25 @@
-// ** React Imports
-import { useState, SyntheticEvent } from 'react'
-
 // ** MUI Imports
 import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
 import TextField from '@mui/material/TextField'
-import IconButton from '@mui/material/IconButton'
 import Box, { BoxProps } from '@mui/material/Box'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import { useChat } from 'src/hooks/useChat'
+import { Controller } from 'react-hook-form'
+import { FormType } from 'src/types/chatContextType'
 
 // ** Styled Components
-const ChatFormWrapper = styled(Box)<BoxProps>(({ theme }) => ({
+const ChatFormWrapper = styled(Box)<BoxProps & { hasError: boolean }>(({ theme, hasError }) => ({
   display: 'flex',
   alignItems: 'center',
   boxShadow: theme.shadows[1],
   padding: theme.spacing(1.25, 4),
   justifyContent: 'space-between',
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: theme.palette.background.paper
+  backgroundColor: theme.palette.background.paper,
+  border: '1px solid',
+  borderColor: hasError ? theme.palette.error.main : theme.palette.divider
 }))
 
 const Form = styled('form')(({ theme }) => ({
@@ -27,39 +27,47 @@ const Form = styled('form')(({ theme }) => ({
 }))
 
 const SendMsgForm = () => {
-  // ** State
-  const [msg, setMsg] = useState<string>('')
+  const { methods } = useChat()
 
-  const handleSendMsg = (e: SyntheticEvent) => {
-    e.preventDefault()
-    setMsg('')
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = methods
+
+  const onSubmit = (data: FormType) => {
+    console.log('Message Sent:', data.prompt)
+    reset({ prompt: '' })
   }
 
   return (
-    <Form onSubmit={handleSendMsg}>
-      <ChatFormWrapper>
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <ChatFormWrapper hasError={!!errors?.prompt}>
         <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
-          <TextField
-            fullWidth
-            value={msg}
-            size='small'
-            placeholder='Type your message here…'
-            onChange={e => setMsg(e.target.value)}
-            sx={{
-              '& .MuiOutlinedInput-input': { pl: 0 },
-              '& fieldset': { border: '0 !important' },
-              '& .Mui-focused': { boxShadow: 'none !important' }
-            }}
+          <Controller
+            name='prompt'
+            control={control}
+            render={({ field }) => (
+              <TextField
+                multiline
+                {...field}
+                fullWidth
+                size='small'
+                placeholder='Type your message here…'
+                sx={{
+                  '& .MuiOutlinedInput-input': { pl: 0 },
+                  '& fieldset': { border: '0 !important' },
+                  '& .Mui-focused': { boxShadow: 'none !important' }
+                }}
+                rows={2}
+
+                // error={!!errors?.prompt}
+              />
+            )}
           />
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <IconButton size='small' sx={{ color: 'text.primary' }}>
-            <Icon icon='bx:microphone' />
-          </IconButton>
-          <IconButton size='small' component='label' htmlFor='upload-img' sx={{ mr: 4, color: 'text.primary' }}>
-            <Icon icon='bx:paperclip' />
-            <input hidden type='file' id='upload-img' />
-          </IconButton>
           <Button type='submit' variant='contained'>
             Send
           </Button>

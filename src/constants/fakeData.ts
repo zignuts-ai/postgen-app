@@ -1,5 +1,5 @@
 export const CHAT_DATA = {
-  selectedChat: {
+  currentChat: {
     chat: {
       id: 2,
       userId: 2,

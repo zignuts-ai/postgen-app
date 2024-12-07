@@ -1,3 +1,3 @@
-export type ChatValuesTypes = {
-  store: any
+export type FormType = {
+  prompt: string
 }
