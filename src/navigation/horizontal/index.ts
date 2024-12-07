@@ -6,6 +6,12 @@ const navigation = (): HorizontalNavItemsType => [
     title: 'History',
     path: '/history',
     icon: 'material-symbols:history'
+  },
+  {
+    title: 'New Chat',
+    path: '/chat',
+    icon: 'wpf:create-new',
+    isPublic: true
   }
 
   // {

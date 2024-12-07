@@ -76,5 +76,8 @@ const AppChat = () => {
 }
 
 AppChat.contentHeightFixed = true
+AppChat.publicGuard = true
+
+// AppChat.getLayout = (page: ReactNode) => <BlankLayoutWithAppBar>{page}</BlankLayoutWithAppBar>
 
 export default AppChat

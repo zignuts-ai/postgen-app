@@ -116,29 +116,6 @@ const ChatContent = (props: ChatContentType) => {
                   </Box>
                 </Box>
               </Box>
-
-              {/* <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                {mdAbove ? (
-                  <Fragment>
-                    <IconButton size='small' sx={{ color: 'text.secondary' }}>
-                      <Icon icon='bx:phone' fontSize='1.25rem' />
-                    </IconButton>
-                    <IconButton size='small' sx={{ color: 'text.secondary' }}>
-                      <Icon icon='bx:video' fontSize='1.25rem' />
-                    </IconButton>
-                    <IconButton size='small' sx={{ color: 'text.secondary' }}>
-                      <Icon icon='bx:search' fontSize='1.25rem' />
-                    </IconButton>
-                  </Fragment>
-                ) : null}
-
-                <OptionsMenu
-                  menuProps={{ sx: { mt: 2 } }}
-                  icon={<Icon icon='bx:dots-vertical-rounded' fontSize='1.25rem' />}
-                  iconButtonProps={{ size: 'small', sx: { color: 'text.secondary' } }}
-                  options={['View Contact', 'Mute Notifications', 'Block Contact', 'Clear Chat', 'Report']}
-                />
-              </Box> */}
             </Box>
 
             {currentChat ? (
