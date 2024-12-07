@@ -32,8 +32,6 @@ import Icon from 'src/@core/components/icon'
 // ** Custom Components
 import CustomChip from 'src/@core/components/mui/chip'
 import CustomAvatar from 'src/@core/components/mui/avatar'
-import UserSuspendDialog from 'src/views/apps/user/view/UserSuspendDialog'
-import UserSubscriptionDialog from 'src/views/apps/user/view/UserSubscriptionDialog'
 
 // ** Types
 import { ThemeColor } from 'src/@core/layouts/types'
@@ -99,6 +97,11 @@ const UserViewLeft = () => {
   const [openPlans, setOpenPlans] = useState<boolean>(false)
   const [suspendDialogOpen, setSuspendDialogOpen] = useState<boolean>(false)
   const [subscriptionDialogOpen, setSubscriptionDialogOpen] = useState<boolean>(false)
+
+  console.log({
+    suspendDialogOpen,
+    subscriptionDialogOpen
+  })
 
   // Handle Edit dialog
   const handleEditClickOpen = () => setOpenEdit(true)
@@ -353,8 +356,8 @@ const UserViewLeft = () => {
               </DialogActions>
             </Dialog>
 
-            <UserSuspendDialog open={suspendDialogOpen} setOpen={setSuspendDialogOpen} />
-            <UserSubscriptionDialog open={subscriptionDialogOpen} setOpen={setSubscriptionDialogOpen} />
+            {/* <UserSuspendDialog open={suspendDialogOpen} setOpen={setSuspendDialogOpen} />
+            <UserSubscriptionDialog open={subscriptionDialogOpen} setOpen={setSubscriptionDialogOpen} /> */}
           </Card>
         </Grid>
 

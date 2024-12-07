@@ -42,7 +42,6 @@ import Cards, { Focused } from 'react-credit-cards'
 // ** Demo Components Imports
 import CustomChip from 'src/@core/components/mui/chip'
 import CustomRadioIcons from 'src/@core/components/custom-radio/icons'
-import UserSubscriptionDialog from 'src/views/apps/user/view/UserSubscriptionDialog'
 
 // ** Util Import
 import { formatCVC, formatExpirationDate, formatCreditCardNumber } from 'src/@core/utils/format'
@@ -153,6 +152,8 @@ const UserViewBilling = () => {
   const [openAddressCard, setOpenAddressCard] = useState<boolean>(false)
   const [openUpgradePlans, setOpenUpgradePlans] = useState<boolean>(false)
   const [subscriptionDialogOpen, setSubscriptionDialogOpen] = useState<boolean>(false)
+
+  console.log(subscriptionDialogOpen)
 
   // Handle Edit Card dialog and get card ID
   const handleEditCardClickOpen = (id: number) => {
@@ -267,7 +268,7 @@ const UserViewBilling = () => {
             </Grid>
           </CardContent>
 
-          <UserSubscriptionDialog open={subscriptionDialogOpen} setOpen={setSubscriptionDialogOpen} />
+          {/* <UserSubscriptionDialog open={subscriptionDialogOpen} setOpen={setSubscriptionDialogOpen} /> */}
 
           <Dialog
             open={openUpgradePlans}
@@ -462,6 +463,7 @@ const UserViewBilling = () => {
                 <Grid container spacing={5}>
                   <Grid item xs={12}>
                     <CardWrapper sx={{ '& .rccs': { m: '0 auto' } }}>
+                      {/* @ts-ignore */}
                       <Cards cvc={cvc} focused={focus} expiry={expiry} name={name} number={cardNumber} />
                     </CardWrapper>
                   </Grid>
