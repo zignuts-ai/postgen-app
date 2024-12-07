@@ -13,6 +13,16 @@ export const PLATFORM_TYPE: platformArrayTypes[] = [
     name: 'Instagram',
     value: 'instagram',
     icon: 'skill-icons:instagram'
+  },
+  {
+    name: 'Reddit',
+    value: 'reddit',
+    icon: 'logos:reddit-icon'
+  },
+  {
+    name: 'X',
+    value: 'x',
+    icon: 'pajamas:twitter'
   }
 ]
 
