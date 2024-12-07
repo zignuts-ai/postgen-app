@@ -51,6 +51,7 @@ export type NavGroup = {
 
 export type NavLink = {
   icon?: string
+  isPublic?: boolean
   path?: string
   title: string
   auth?: boolean
