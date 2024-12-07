@@ -1,5 +1,5 @@
 // ** MUI Imports
-import Grid from '@mui/material/Grid'
+import { Grid } from '@mui/material'
 import DashboardView from 'src/views/dashboard/dashboard-view'
 
 const Home = () => {
