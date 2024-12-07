@@ -56,6 +56,8 @@ import 'react-slidedown/lib/slidedown.css'
 
 // ** Global css styles
 import '../../styles/index.css'
+import '../../styles/instagram.css'
+import '../../styles/facebook.css'
 import '../../styles/globals.css'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from 'src/utils/client'

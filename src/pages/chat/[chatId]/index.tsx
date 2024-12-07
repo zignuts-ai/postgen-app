@@ -19,6 +19,7 @@ import { useSettings } from 'src/@core/hooks/useSettings'
 import { getInitials } from 'src/@core/utils/get-initials'
 import ChatContent from 'src/views/chat/ChatContent'
 import { Grid } from '@mui/material'
+import ChatPreview from 'src/views/chat/ChatPreview'
 
 // ** Chat App Components Imports
 
@@ -49,7 +50,7 @@ const AppChat = () => {
 
   return (
     <Grid container spacing={6} justifyContent='center' alignItems='center'>
-      <Grid item xs={12} sx={{ height: '100%' }}>
+      <Grid item xs={12} lg={8} sx={{ height: '100%' }}>
         <Box
           className='app-chat'
           sx={{
@@ -76,6 +77,9 @@ const AppChat = () => {
             handleUserProfileRightSidebarToggle={handleUserProfileRightSidebarToggle}
           />
         </Box>
+      </Grid>
+      <Grid item xs={12} lg={4} sx={{ height: '100%' }}>
+        <ChatPreview />
       </Grid>
     </Grid>
   )
