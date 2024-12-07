@@ -101,11 +101,6 @@ const ChatContent = (props: ChatContentType) => {
               }}
             >
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                {/* {mdAbove ? null : (
-                  <IconButton onClick={handleLeftSidebarToggle} sx={{ mr: 2 }}>
-                    <Icon icon='bx:menu' />
-                  </IconButton>
-                )} */}
                 <Box
                   onClick={handleUserProfileRightSidebarToggle}
                   sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
