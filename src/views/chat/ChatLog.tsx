@@ -18,7 +18,10 @@ import { getInitials } from 'src/@core/utils/get-initials'
 // ** Types Imports
 import { useChat } from 'src/hooks/useChat'
 import { useAuth } from 'src/hooks/useAuth'
-import { ChatMessage } from 'src/context/ChatContext'
+import { ChatMessage } from 'src/types/chatContextType'
+import themeConfig from 'src/configs/themeConfig'
+import { Card, CardContent, CardMedia } from '@mui/material'
+import MemeCard from './cards/MemeCardPreview'
 
 const PerfectScrollbar = styled(PerfectScrollbarComponent)<ScrollBarProps & { ref: Ref<unknown> }>(({ theme }) => ({
   padding: theme.spacing(5)
@@ -28,6 +31,7 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
   // ** Props
   const { messages } = useChat()
   const { user } = useAuth()
+
   const senderData = {
     about: 'shsh',
     avatar: '/images/avatars/1.png',
@@ -59,10 +63,71 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages])
 
+  // Render different message types
+  const renderMessageType = (item: ChatMessage) => {
+    switch (item.type) {
+      case 'text':
+        return (
+          <Typography
+            sx={{
+              p: theme => theme.spacing(2, 3),
+              borderRadius: 2,
+              maxWidth: '100%',
+              wordBreak: 'break-word'
+            }}
+          >
+            {item.message}
+          </Typography>
+        )
+
+      case 'image':
+        return (
+          <Card sx={{ maxWidth: 345, m: 1 }}>
+            <CardMedia
+              component='img'
+              height='194'
+              image={
+                'https://plus.unsplash.com/premium_photo-1688645554172-d3aef5f837ce?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW5kaWFuJTIwbW91bnRhaW5zfGVufDB8fDB8fHww'
+              }
+              alt='Uploaded image'
+            />
+            {item.message && (
+              <CardContent>
+                <Typography variant='body2' color='text.secondary'>
+                  {item.message}
+                </Typography>
+              </CardContent>
+            )}
+          </Card>
+        )
+
+      case 'video':
+        return (
+          <Card sx={{ maxWidth: 345, m: 1 }}>
+            <CardMedia component='video' controls height='194' src={'https://www.w3schools.com/html/movie.mp4'} />
+          </Card>
+        )
+
+      case 'meme':
+        return (
+          <MemeCard
+            imageUrl='https://global.discourse-cdn.com/flex028/uploads/daml/optimized/2X/0/07c87a4e2885ff7d9674efb218e08a5d354612f6_2_500x500.jpeg'
+            alt='Meme'
+            onZoom={() => {
+              console.log('Zooming meme')
+            }}
+          />
+        )
+
+      default:
+        return null
+    }
+  }
+
   // ** Renders user chat
   const renderChats = () => {
     return messages.map((item: ChatMessage, index: number) => {
-      const isSender = String(item.senderId) === String(senderData.id)
+      const isSender = item.role === 'user'
 
       return (
         <Box
@@ -97,7 +162,7 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
                   }
                 : {})}
             >
-              {getInitials('data.contact.fullName')}
+              {getInitials(isSender ? senderData.fullName : themeConfig.templateName)}
             </CustomAvatar>
           </div>
 
@@ -121,6 +186,7 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
                   }}
                 >
                   {item.message}
+                  {!isSender && renderMessageType(item)}
                 </Typography>
               </div>
               {index + 1 === length ? (

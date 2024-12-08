@@ -1,41 +1,48 @@
+import { ChatMessage } from 'src/types/chatContextType'
 import { Content } from 'src/types/contentTypes'
 
-export const CHAT_DATA = [
+export const CHAT_DATA: ChatMessage[] = [
   {
     message: 'Hi',
     timestamp: 'Mon Dec 10 2018 07:45:00 GMT+0000 (GMT)',
-    senderId: '4396b8e1-a77d-4aa4-adcf-0fed81d06c2e',
-    id: 'dsdsddsde'
+    id: 'dsdsddsde',
+    role: 'user',
+    type: 'text'
   },
   {
     message: 'Hello. How can I help You?',
     timestamp: 'Mon Dec 11 2018 07:45:15 GMT+0000 (GMT)',
-    senderId: '2',
-    id: 'ss384ddu8'
+    id: 'ss384ddu8',
+    role: 'ai',
+    type: 'text'
   },
   {
     message: 'Can I get details of my last transaction I made last month? 🤔',
     timestamp: 'Mon Dec 11 2018 07:46:10 GMT+0000 (GMT)',
-    senderId: '4396b8e1-a77d-4aa4-adcf-0fed81d06c2e',
-    id: 'ss384u8'
+    id: 'ss384u8',
+    role: 'user',
+    type: 'text'
   },
   {
     message: 'We need to check if we can provide you such information.',
     timestamp: 'Mon Dec 11 2018 07:45:15 GMT+0000 (GMT)',
-    senderId: '2',
-    id: 'ss38sdds4u8'
+    id: 'ss38sdds4u8',
+    role: 'ai',
+    type: 'meme'
   },
   {
     message: 'I will inform you as I get update on this.',
     timestamp: 'Mon Dec 11 2018 07:46:15 GMT+0000 (GMT)',
-    senderId: '2',
-    id: 'ss383r34u8'
+    id: 'ss383r34u8',
+    role: 'ai',
+    type: 'text'
   },
   {
     message: 'If it takes long you can mail me at my mail address.',
     timestamp: '2024-12-05T11:57:12.761Z',
-    senderId: '4396b8e1-a77d-4aa4-adcf-0fed81d06c2e',
-    id: 'ss3r3r384u8'
+    id: 'ss3r3r384u8',
+    role: 'user',
+    type: 'text'
   }
 ]
 

@@ -8,7 +8,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Types
-import { FormType } from 'src/types/chatContextType'
+import { ChatMessage, FormType } from 'src/types/chatContextType'
 import { useRouter } from 'next/router'
 import { io, Socket } from 'socket.io-client'
 import endpoints from 'src/constants/endpoints'
@@ -36,13 +36,6 @@ const schema = yup.object().shape({
   prompt: yup.string().min(2, 'Prompt should be at least 2 characters').required('Prompt is required')
 })
 
-export type ChatMessage = {
-  id: string
-  message: string
-  senderId: string
-  timestamp: string
-}
-
 const ChatProvider = ({ children }: Props) => {
   const router = useRouter()
   const { chatId } = router.query
@@ -69,7 +62,9 @@ const ChatProvider = ({ children }: Props) => {
           id: chatId.toString(),
           message: content,
           senderId: user?.id?.toString() ?? 'No-Auth',
-          timestamp: Date.now().toString()
+          timestamp: Date.now().toString(),
+          role: 'user',
+          type: 'text'
         }
 
         socket.emit('send-message', message)
