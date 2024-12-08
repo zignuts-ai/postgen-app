@@ -16,7 +16,7 @@ import {
 import { Check as CheckIcon, ChevronRight as ChevronRightIcon, Circle as CircleIcon } from '@mui/icons-material'
 
 // Main Dropdown Menu context
-export const DropdownMenu = ({ children }) => {
+export const DropdownMenu = ({ children }: { children: React.ReactNode }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
 
@@ -31,7 +31,7 @@ export const DropdownMenu = ({ children }) => {
     handleClose
   }
 
-  return <DropdownMenuContext.Provider value={contextValue}>{children}</DropdownMenuContext.Provider>
+  return <DropdownMenuContext.Provider value={contextValue as any}>{children}</DropdownMenuContext.Provider>
 }
 
 // Context for managing dropdown state
@@ -43,10 +43,11 @@ const DropdownMenuContext = React.createContext({
 })
 
 // Trigger component
-export const DropdownMenuTrigger = React.forwardRef(({ children, ...props }, ref) => {
+export const DropdownMenuTrigger = React.forwardRef(({ children, ...props }: any, ref) => {
   const { setAnchorEl } = React.useContext(DropdownMenuContext)
 
-  const handleClick = event => {
+  const handleClick = (event: any) => {
+    // @ts-ignore
     setAnchorEl(event.currentTarget)
   }
 
@@ -58,7 +59,7 @@ export const DropdownMenuTrigger = React.forwardRef(({ children, ...props }, ref
 })
 
 // Content component
-export const DropdownMenuContent = ({ children, ...props }) => {
+export const DropdownMenuContent = ({ children, ...props }: any) => {
   const { anchorEl, open, handleClose } = React.useContext(DropdownMenuContext)
 
   return (
@@ -77,10 +78,10 @@ export const DropdownMenuContent = ({ children, ...props }) => {
 }
 
 // Menu Item
-export const DropdownMenuItem = React.forwardRef(({ children, inset, onClick, ...props }, ref) => {
+export const DropdownMenuItem = React.forwardRef(({ children, inset, onClick, ...props }: any, ref) => {
   const { handleClose } = React.useContext(DropdownMenuContext)
 
-  const handleItemClick = event => {
+  const handleItemClick = (event: any) => {
     onClick?.(event)
     handleClose()
   }
@@ -101,7 +102,7 @@ export const DropdownMenuItem = React.forwardRef(({ children, inset, onClick, ..
 })
 
 // Checkbox Item
-export const DropdownMenuCheckboxItem = ({ children, checked, onCheckedChange, ...props }) => {
+export const DropdownMenuCheckboxItem = ({ children, checked, onCheckedChange, ...props }: any) => {
   const [isChecked, setIsChecked] = useState(checked)
 
   const handleChange = () => {
@@ -121,7 +122,7 @@ export const DropdownMenuCheckboxItem = ({ children, checked, onCheckedChange, .
 }
 
 // Radio Item
-export const DropdownMenuRadioItem = ({ children, value, onSelect, ...props }) => {
+export const DropdownMenuRadioItem = ({ children, value, onSelect, ...props }: any) => {
   return (
     <MenuItem {...props}>
       <ListItemIcon>
@@ -136,24 +137,28 @@ export const DropdownMenuRadioItem = ({ children, value, onSelect, ...props }) =
 export const DropdownMenuSeparator = () => <Divider />
 
 // Label
-export const DropdownMenuLabel = ({ children, ...props }) => (
+export const DropdownMenuLabel = ({ children, ...props }: any) => (
   <MenuItem disabled {...props}>
     <ListItemText primary={children} />
   </MenuItem>
 )
 
 // Shortcut
-export const DropdownMenuShortcut = ({ children, ...props }) => (
+export const DropdownMenuShortcut = ({ children, ...props }: any) => (
   <span style={{ marginLeft: 'auto', opacity: 0.6, fontSize: '0.75rem' }} {...props}>
     {children}
   </span>
 )
 
 // Submenu components (simplified)
-export const DropdownMenuSub = ({ children }) => {
+export const DropdownMenuSub = ({ children }: any) => {
   const [anchorEl, setAnchorEl] = useState(null)
 
-  return <DropdownSubMenuContext.Provider value={{ anchorEl, setAnchorEl }}>{children}</DropdownSubMenuContext.Provider>
+  return (
+    <DropdownSubMenuContext.Provider value={{ anchorEl, setAnchorEl } as any}>
+      {children}
+    </DropdownSubMenuContext.Provider>
+  )
 }
 
 const DropdownSubMenuContext = React.createContext({
@@ -161,18 +166,21 @@ const DropdownSubMenuContext = React.createContext({
   setAnchorEl: () => {}
 })
 
-export const DropdownMenuSubTrigger = ({ children, ...props }) => {
+export const DropdownMenuSubTrigger = ({ children, ...props }: any) => {
   const { setAnchorEl } = React.useContext(DropdownSubMenuContext)
 
   return (
-    <MenuItem onClick={e => setAnchorEl(e.currentTarget)} {...props}>
-      {children}
-      <ChevronRightIcon style={{ marginLeft: 'auto' }} />
-    </MenuItem>
+    <>
+      {/* @ts-ignore */}
+      <MenuItem onClick={e => setAnchorEl(e.currentTarget)} {...props}>
+        {children}
+        <ChevronRightIcon style={{ marginLeft: 'auto' }} />
+      </MenuItem>
+    </>
   )
 }
 
-export const DropdownMenuSubContent = ({ children, ...props }) => {
+export const DropdownMenuSubContent = ({ children, ...props }: any) => {
   const { anchorEl } = React.useContext(DropdownSubMenuContext)
 
   return (
@@ -185,12 +193,12 @@ export const DropdownMenuSubContent = ({ children, ...props }) => {
 }
 
 // Group and RadioGroup (simplified)
-export const DropdownMenuGroup = ({ children }) => <MenuList>{children}</MenuList>
+export const DropdownMenuGroup = ({ children }: any) => <MenuList>{children}</MenuList>
 
-export const DropdownMenuRadioGroup = ({ value, onValueChange, children }) => {
+export const DropdownMenuRadioGroup = ({ value, onValueChange, children }: any) => {
   const [selectedValue, setSelectedValue] = useState(value)
 
-  const handleChange = newValue => {
+  const handleChange = (newValue: any) => {
     setSelectedValue(newValue)
     onValueChange?.(newValue)
   }

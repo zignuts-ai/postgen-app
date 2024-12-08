@@ -3,13 +3,13 @@ import { Accordion as MUIAccordion, AccordionSummary, AccordionDetails, Typograp
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 // Main Accordion component that wraps MUI's Accordion
-export const Accordion = ({ children, ...props }) => <MUIAccordion {...props}>{children}</MUIAccordion>
+export const Accordion = ({ children, ...props }: any) => <MUIAccordion {...props}>{children}</MUIAccordion>
 
 // AccordionItem is essentially the same as the Accordion in MUI
 export const AccordionItem = Accordion
 
 // AccordionTrigger component
-export const AccordionTrigger = ({ children, ...props }) => (
+export const AccordionTrigger = ({ children, ...props }: any) => (
   <AccordionSummary
     expandIcon={<ExpandMoreIcon />}
     {...props}
@@ -28,7 +28,9 @@ export const AccordionTrigger = ({ children, ...props }) => (
 )
 
 // AccordionContent component
-export const AccordionContent = ({ children, ...props }) => <AccordionDetails {...props}>{children}</AccordionDetails>
+export const AccordionContent = ({ children, ...props }: any) => (
+  <AccordionDetails {...props}>{children}</AccordionDetails>
+)
 
 // Example usage
 export const AccordionExample = () => (

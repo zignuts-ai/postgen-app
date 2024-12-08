@@ -9,3 +9,10 @@ export type ChatMessage = {
   type: 'image' | 'video' | 'text' | 'meme'
   timestamp: string
 }
+
+export type PreviewDataType = {
+  imageUrl: string
+  caption: string
+  title: string
+  type: 'image' | 'video' | 'text' | 'meme'
+}

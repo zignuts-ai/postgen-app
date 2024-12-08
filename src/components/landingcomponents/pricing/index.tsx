@@ -1,7 +1,4 @@
-import { cn } from '@/lib/utils'
-
-// import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 'src/components/ui/card'
-import { Button } from 'src/ui/button'
+import { Button } from '@mui/material'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 'src/ui/card'
 
 const plans = [
@@ -72,7 +69,7 @@ export default function () {
         <div className='mt-20 flow-root'>
           <div className='isolate -mt-16 grid max-w-sm grid-cols-1 gap-y-16 gap-x-4 sm:mx-auto lg:-mx-8 lg:mt-0 lg:max-w-none lg:grid-cols-3 xl:-mx-4'>
             {plans.map(plan => (
-              <Card key={plan.id} className={cn('flex flex-col', plan.popular ? 'ring-1 ring-primary' : '')}>
+              <Card key={plan.id} className={'flex flex-col'}>
                 <CardHeader>
                   <CardTitle id={plan.id} className='text-base font-semibold leading-7'>
                     {plan.name}
@@ -92,7 +89,7 @@ export default function () {
                   </ul>
                 </CardContent>
                 <CardFooter className='mt-auto'>
-                  <Button className='w-full' aria-describedby={plan.id} asChild>
+                  <Button size='large' className='w-full'>
                     <a href={plan.href}>{plan.actionTitle}</a>
                   </Button>
                 </CardFooter>

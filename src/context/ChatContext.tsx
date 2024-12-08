@@ -1,5 +1,5 @@
 // ** React Imports
-import { createContext, ReactNode, useEffect, useState } from 'react'
+import { createContext, ReactNode, useEffect, useMemo, useState } from 'react'
 import { useForm, UseFormReturn } from 'react-hook-form'
 import { CHAT_DATA } from 'src/constants/fakeData'
 
@@ -8,11 +8,10 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Types
-import { ChatMessage, FormType } from 'src/types/chatContextType'
+import { ChatMessage, FormType, PreviewDataType } from 'src/types/chatContextType'
 import { useRouter } from 'next/router'
 import { io, Socket } from 'socket.io-client'
 import endpoints from 'src/constants/endpoints'
-import { useAuth } from 'src/hooks/useAuth'
 import useLoading from 'src/hooks/useLoading'
 
 export type ChatValuesTypes = {
@@ -23,6 +22,8 @@ export type ChatValuesTypes = {
   messages: ChatMessage[]
   isPendingChat: boolean
   isSocketInit: boolean
+  setPreviewData: (data: PreviewDataType) => void
+  previewData: PreviewDataType
 }
 
 // ** Defaults
@@ -40,7 +41,8 @@ const ChatProvider = ({ children }: Props) => {
   const router = useRouter()
   const { chatId } = router.query
   const [messages, setMessages] = useState<ChatMessage[]>(CHAT_DATA)
-  const { user } = useAuth()
+  const [previewData, setPreviewData] = useState<PreviewDataType>({} as PreviewDataType)
+
   const { isLoading: isPendingChat, startLoading: startLoadingChat, stopLoading: stopLoadingChat } = useLoading()
   const { isLoading: isSocketInit, startLoading: startLoadingSocket, stopLoading: stopLoadingSocket } = useLoading()
 
@@ -51,6 +53,7 @@ const ChatProvider = ({ children }: Props) => {
     defaultValues: {
       prompt: ''
     },
+    mode: 'onSubmit',
     resolver: yupResolver(schema)
   })
 
@@ -61,7 +64,6 @@ const ChatProvider = ({ children }: Props) => {
         const message: ChatMessage = {
           id: chatId.toString(),
           message: content,
-          senderId: user?.id?.toString() ?? 'No-Auth',
           timestamp: Date.now().toString(),
           role: 'user',
           type: 'text'
@@ -100,16 +102,22 @@ const ChatProvider = ({ children }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatId])
 
-  const values = {
-    store: CHAT_DATA,
-    methods,
-    chatId,
-    socket,
-    sendMessage,
-    messages,
-    isPendingChat,
-    isSocketInit
-  }
+  const values = useMemo(
+    () => ({
+      store: CHAT_DATA,
+      methods,
+      chatId,
+      socket,
+      sendMessage,
+      messages,
+      isPendingChat,
+      isSocketInit,
+      previewData,
+      setPreviewData
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [chatId, socket, messages, isPendingChat, isSocketInit, previewData, methods]
+  )
 
   return <ChatContext.Provider value={values}>{children}</ChatContext.Provider>
 }

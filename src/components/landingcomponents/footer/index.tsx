@@ -1,23 +1,22 @@
-import { Footer, Item } from '../../../types/landing'
+import { LANDING_DATA } from 'src/constants/fakeData'
+import { Item } from '../../../types/landing'
 
-export default function ({ footer }: { footer: Footer }) {
-  if (footer.disabled) {
-    return
-  }
+export default function () {
+  const footer = LANDING_DATA.footer
 
   return (
     <footer className='bg-background border-t'>
       <div className='max-w-7xl mx-auto px-6 py-8'>
         <div className='flex flex-wrap'>
           {/* Newsletter */}
-          {footer.brand && footer.brand.title && (
+          {footer?.brand && footer?.brand.title && (
             <div className='w-full md:w-1/4 text-center md:text-left px-8'>
-              <p className='uppercase mb-6 font-bold'>{footer.brand.title}</p>
-              <div className='flex flex-col'>{footer.brand.description}</div>
+              <p className='uppercase mb-6 font-bold'>{footer?.brand.title}</p>
+              <div className='flex flex-col'>{footer?.brand.description}</div>
             </div>
           )}
 
-          {footer.nav?.items?.map((v: Item, idx: number) => {
+          {footer?.nav?.items?.map((v: Item, idx: number) => {
             return (
               <div className='w-full md:w-1/4 text-center md:text-left px-8' key={idx}>
                 <p className='uppercase mb-6 font-bold'>{v.title}</p>
@@ -42,9 +41,9 @@ export default function ({ footer }: { footer: Footer }) {
         </div>
 
         {/* Social Links */}
-        {footer.social && footer.social.items && (
+        {footer?.social && footer?.social.items && (
           <div className='flex justify-center mt-8 space-x-6'>
-            {footer.social?.items?.map((v: Item, idx: number) => {
+            {footer?.social?.items?.map((v: Item, idx: number) => {
               return (
                 <a
                   key={idx}
@@ -63,8 +62,8 @@ export default function ({ footer }: { footer: Footer }) {
 
         {/* Copyright */}
         <div className='mt-4 text-center'>
-          <p className='text-base text-gray-400'>{footer.copyright}</p>
-          {!footer.badge_disabled && (
+          <p className='text-base text-gray-400'>{footer?.copyright}</p>
+          {!footer?.badge_disabled && (
             <div className='mt-4 mb-2 flex flex-wrap space-x-2 text-sm dark:text-gray-400'>
               <div className='w-full flex-shrink-0'>
                 built with{' '}

@@ -1,8 +1,8 @@
-import { Item, Button as PageButton, Section } from '@/types/landing'
-
 import { FC } from 'react'
 import Link from 'next/link'
-import { Button } from 'src/ui/button'
+import { LANDING_DATA } from 'src/constants/fakeData'
+import { Item, Section } from 'src/types/landing'
+import { Button } from '@mui/material'
 
 // interface FeatureProps {
 //   title: string
@@ -43,9 +43,14 @@ const Feature: FC<{ section: Section }> = ({ section }) => (
 
       {section.buttons && (
         <div className='mt-4 flex gap-4'>
-          {section.buttons.map((v: PageButton, idx: number) => (
+          {section.buttons.map((v: any, idx: number) => (
             <Link key={idx} href={v.url || ''} target={v.target || '_self'}>
-              <Button key={idx} size='sm' variant={v.theme === 'outline' ? 'outline' : 'default'}>
+              <Button
+                key={idx}
+                size='large'
+                variant={v.theme === 'outline' ? 'outlined' : 'contained'}
+                className='w-full sm:w-auto'
+              >
                 {v.title}
               </Button>
             </Link>
@@ -66,15 +71,11 @@ const Feature: FC<{ section: Section }> = ({ section }) => (
   </div>
 )
 
-export default function ({ section }: { section: Section }) {
-  if (section.disabled) {
-    return
-  }
-
+export default function () {
   return (
     <div className='py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl'>
       <div className='my-4 flex flex-col gap-8'>
-        {section.items?.map((v: Section, idx: number) => (
+        {LANDING_DATA.section?.items?.map((v: Section, idx: number) => (
           <Feature key={idx} section={v} />
         ))}
       </div>

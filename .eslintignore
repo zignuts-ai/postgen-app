@@ -1,3 +1,8 @@
-src/ui
-src/types
-src/@fake-db/app-bar-search/index
+# Ignore all contents inside src/ui/
+src/ui/
+
+# Ignore the src/types folder
+src/types/
+
+# Ignore the specific folder src/@fake-db/app-bar-search/index
+src/@fake-db/app-bar-search/index/

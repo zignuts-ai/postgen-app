@@ -35,8 +35,8 @@ export interface User {
 export interface Header {
   brand?: Brand
   nav?: Nav
-  login_button?: Button
-  buttons?: Button[]
+  login_button?: any
+  buttons?: any[]
   disabled?: boolean
 }
 
@@ -46,11 +46,11 @@ export interface Hero {
   image?: Image
   video?: Video
   tip?: string
-  primary_button?: Button
-  secondary_button?: Button
+  primary_button?: any
+  secondary_button?: any
   image_position?: ImagePosition
   text_align?: TextAlign
-  buttons?: Button[]
+  buttons?: any[]
   show_happy_users?: boolean
   highlight_text?: string
   disabled?: boolean
@@ -66,7 +66,7 @@ export interface Footer {
   copyright?: string
   qrcode?: Image
   nav?: Nav
-  buttons?: Button[]
+  buttons?: any[]
   disabled?: boolean
   badge_disabled?: boolean
 }
@@ -91,11 +91,11 @@ export interface Item {
   theme?: string
   children?: Item[]
   tip?: string
-  button?: Button
+  button?: any
   image_position?: ImagePosition
   text_align?: TextAlign
   items?: Item[]
-  buttons?: Button[]
+  buttons?: any[]
   disabled?: boolean
   label?: string
 }
