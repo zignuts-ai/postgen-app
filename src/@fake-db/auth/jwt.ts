@@ -16,6 +16,7 @@ const users: UserDataType[] = [
     role: 'admin',
     password: 'admin',
     fullName: 'John Doe',
+    name: 'John Doe',
     username: 'johndoe',
     email: 'admin@sneat.com'
   },
@@ -24,6 +25,7 @@ const users: UserDataType[] = [
     role: 'client',
     password: 'client',
     fullName: 'Jane Doe',
+    name: 'Jane Doe',
     username: 'janedoe',
     email: 'client@sneat.com'
   }
@@ -91,7 +93,7 @@ mock.onPost('/jwt/register').reply(request => {
         role: 'admin'
       }
 
-      users.push(userData)
+      users.push(userData as any)
 
       const accessToken = jwt.sign({ id: userData.id }, jwtConfig.secret as string)
 
