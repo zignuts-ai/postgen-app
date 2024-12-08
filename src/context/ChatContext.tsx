@@ -8,11 +8,22 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Types
-import { ChatMessage, FormType, PreviewDataType } from 'src/types/chatContextType'
+import {
+  ChatMessage,
+  CreateSessionResponseTypes,
+  FormType,
+  GetChatByIdResponseTypes,
+  PreviewDataType
+} from 'src/types/chatContextType'
 import { useRouter } from 'next/router'
 import { io, Socket } from 'socket.io-client'
 import endpoints from 'src/constants/endpoints'
 import useLoading from 'src/hooks/useLoading'
+import { useMutation, UseMutationResult, useQuery } from '@tanstack/react-query'
+import { CHAT } from 'src/queries/query-keys'
+import { createChatSession, getChatById } from 'src/queries/chat'
+import { AxiosError } from 'axios'
+import { toast } from 'react-hot-toast'
 
 export type ChatValuesTypes = {
   store: any
@@ -24,6 +35,8 @@ export type ChatValuesTypes = {
   isSocketInit: boolean
   setPreviewData: (data: PreviewDataType) => void
   previewData: PreviewDataType
+  handleCraeteSessionChat: UseMutationResult<CreateSessionResponseTypes, AxiosError<unknown, any>, any, unknown>
+  chatDetails: GetChatByIdResponseTypes | null
 }
 
 // ** Defaults
@@ -40,7 +53,8 @@ const schema = yup.object().shape({
 const ChatProvider = ({ children }: Props) => {
   const router = useRouter()
   const { chatId } = router.query
-  const [messages, setMessages] = useState<ChatMessage[]>(CHAT_DATA)
+  const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [chatDetails, setChatDetails] = useState<GetChatByIdResponseTypes | null>(null)
   const [previewData, setPreviewData] = useState<PreviewDataType>({} as PreviewDataType)
 
   const { isLoading: isPendingChat, startLoading: startLoadingChat, stopLoading: stopLoadingChat } = useLoading()
@@ -57,16 +71,35 @@ const ChatProvider = ({ children }: Props) => {
     resolver: yupResolver(schema)
   })
 
+  const { data: chatDetailsData } = useQuery({
+    queryKey: [CHAT.GET_DETIAL_BY_ID],
+    queryFn: () => getChatById(chatId as string),
+    enabled: !!chatId
+  })
+
+  const handleCraeteSessionChat = useMutation({
+    mutationFn: createChatSession,
+    onSuccess: data => {
+      router.push(`/chat/${data.data.sessionId}`)
+      toast.success('Chat Session Created Successfully')
+    },
+    onError: async (err: AxiosError) => {
+      console.log(err)
+    }
+  })
+
   const sendMessage = async (content: string) => {
     startLoadingChat()
     try {
       if (socket && chatId) {
         const message: ChatMessage = {
-          id: chatId.toString(),
+          messageId: chatId as string,
           message: content,
-          timestamp: Date.now().toString(),
           role: 'user',
-          type: 'text'
+          type: 'text',
+          created_at: Date.now(),
+          created_by: 'user',
+          metadata: null
         }
 
         socket.emit('send-message', message)
@@ -87,7 +120,7 @@ const ChatProvider = ({ children }: Props) => {
 
     newSocket.on('connect', () => stopLoadingSocket())
     newSocket.on('chat-message', (message: ChatMessage) => {
-      if (message.id === chatId) {
+      if (message.messageId === chatId) {
         setMessages(prevMessages => [...prevMessages, message])
       }
     })
@@ -102,6 +135,13 @@ const ChatProvider = ({ children }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatId])
 
+  useEffect(() => {
+    if (chatDetailsData) {
+      setMessages(chatDetailsData.data?.[0]?.messages)
+      setChatDetails(chatDetailsData)
+    }
+  }, [chatDetailsData])
+
   const values = useMemo(
     () => ({
       store: CHAT_DATA,
@@ -113,7 +153,9 @@ const ChatProvider = ({ children }: Props) => {
       isPendingChat,
       isSocketInit,
       previewData,
-      setPreviewData
+      setPreviewData,
+      handleCraeteSessionChat,
+      chatDetails
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [chatId, socket, messages, isPendingChat, isSocketInit, previewData, methods]

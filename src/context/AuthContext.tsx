@@ -4,17 +4,13 @@ import { createContext, useEffect, useState, ReactNode } from 'react'
 // ** Next Import
 import { useRouter } from 'next/router'
 
-// ** Axios
-
-// ** Config
-import authConfig from 'src/configs/auth'
-
 // ** Types
 import { AuthValuesType, UserDataType } from './types'
 import { useMutation } from '@tanstack/react-query'
 import { login, signup } from 'src/queries/auth'
 import toast from 'react-hot-toast'
 import { formatMessage } from 'src/utils/utils'
+import { ACCESS_TOKEN_KEY, USER_DATA_KEY } from 'src/constants/constant'
 
 // ** Defaults
 const AuthContext = createContext({} as AuthValuesType)
@@ -41,7 +37,7 @@ const AuthProvider = ({ children }: Props) => {
       } else {
         setLoading(false)
         localStorage.removeItem('user')
-        localStorage.removeItem(authConfig.storageTokenKeyName)
+        localStorage.removeItem(ACCESS_TOKEN_KEY)
         setUser(null)
       }
     }
@@ -53,8 +49,8 @@ const AuthProvider = ({ children }: Props) => {
   const handleLogin = useMutation({
     mutationFn: login,
     onSuccess: data => {
-      window.localStorage.setItem(authConfig.storageTokenKeyName, data.data.token)
-      window.localStorage.setItem(authConfig.userData, JSON.stringify(data.data.user))
+      window.localStorage.setItem(ACCESS_TOKEN_KEY, data.data.token)
+      window.localStorage.setItem(USER_DATA_KEY, JSON.stringify(data.data.user))
       toast.success('Login successful')
       setUser(data.data.user)
       router.push('/chat')
@@ -68,8 +64,8 @@ const AuthProvider = ({ children }: Props) => {
   const handleRegister = useMutation({
     mutationFn: signup,
     onSuccess: data => {
-      window.localStorage.setItem(authConfig.storageTokenKeyName, data.data.token)
-      window.localStorage.setItem(authConfig.userData, JSON.stringify(data.data.user))
+      window.localStorage.setItem(ACCESS_TOKEN_KEY, data.data.token)
+      window.localStorage.setItem(USER_DATA_KEY, JSON.stringify(data.data.user))
       toast.success('Register successful')
       setLoading(false)
       setUser(data.data.user)
@@ -83,7 +79,7 @@ const AuthProvider = ({ children }: Props) => {
   const handleLogout = () => {
     setUser(null)
     localStorage.removeItem('user')
-    window.localStorage.removeItem(authConfig.storageTokenKeyName)
+    window.localStorage.removeItem(ACCESS_TOKEN_KEY)
     router.push('/login')
   }
 

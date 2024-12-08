@@ -14,6 +14,7 @@ import ChatLog from './ChatLog'
 import { ChatContentType } from 'src/types/apps/chatTypes'
 import SendMsgForm from './SendMsgForm'
 import { useChat } from 'src/hooks/useChat'
+import SyncLoader from 'react-spinners/SyncLoader'
 
 // ** Styled Components
 const ChatWrapperStartChat = styled(Box)<BoxProps>(({ theme }) => ({
@@ -28,7 +29,7 @@ const ChatWrapperStartChat = styled(Box)<BoxProps>(({ theme }) => ({
 }))
 
 const ChatContent = (props: ChatContentType) => {
-  const { messages } = useChat()
+  const { messages, chatDetails } = useChat()
 
   // ** Props
   const { hidden, mdAbove, handleLeftSidebarToggle, handleUserProfileRightSidebarToggle } = props
@@ -105,7 +106,9 @@ const ChatContent = (props: ChatContentType) => {
                   sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
                 >
                   <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <Typography sx={{ fontWeight: 700, fontSize: '0.975rem' }}>Post About Latest Sport News</Typography>
+                    <Typography sx={{ fontWeight: 700, fontSize: '0.975rem' }}>
+                      {chatDetails?.data?.[0]?.name ?? 'Not Found'}
+                    </Typography>
                   </Box>
                 </Box>
               </Box>
@@ -118,7 +121,7 @@ const ChatContent = (props: ChatContentType) => {
         )
       }
     } else {
-      return null
+      return <SyncLoader color='#7a88ee' className='my-5' />
     }
   }
 
