@@ -213,7 +213,7 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
       )
     } else {
       return (
-        <PerfectScrollbar ref={chatArea} options={{ wheelPropagation: false }}>
+        <PerfectScrollbar ref={chatArea} options={{ wheelPropagation: false, suppressScrollX: true }}>
           {children}
         </PerfectScrollbar>
       )
@@ -221,7 +221,7 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
   }
 
   return (
-    <Box sx={{ height: 'calc(100% - 8.4375rem)' }}>
+    <Box sx={{ height: 'calc(100% - 8.4375rem)' }} className='common-scroll'>
       <ScrollWrapper>{renderChats()}</ScrollWrapper>
     </Box>
   )
