@@ -62,6 +62,7 @@ import '../../styles/globals.css'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from 'src/utils/client'
 import { ChatProvider } from 'src/context/ChatContext'
+import PublicGuard from 'src/@core/components/auth/PublicGuard'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -93,7 +94,7 @@ if (themeConfig.routingLoader) {
 
 const Guard = ({ children, authGuard, guestGuard, publicGuard }: GuardProps) => {
   if (publicGuard) {
-    return <>{children}</>
+    return <PublicGuard fallback={<Spinner />}>{children}</PublicGuard>
   } else {
     if (guestGuard) {
       return <GuestGuard fallback={<Spinner />}>{children}</GuestGuard>
@@ -127,10 +128,10 @@ const App = (props: ExtendedAppProps) => {
   return (
     <CacheProvider value={emotionCache}>
       <Head>
-        <title>{`${themeConfig.templateName} - Material Design React Admin Template`}</title>
+        <title>{`${themeConfig.templateName} - Generate social media posts in seconds for free`}</title>
         <meta
           name='description'
-          content={`${themeConfig.templateName} – Material Design React Admin Dashboard Template – is the most developer friendly & highly customizable Admin Dashboard Template based on MUI v5.`}
+          content={`${themeConfig.templateName} – Stay consistent, creative, and productive with Postgen.ai's free AI social media post generator.`}
         />
         <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
         <meta name='viewport' content='initial-scale=1, width=device-width' />

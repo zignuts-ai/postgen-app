@@ -55,9 +55,9 @@ const AuthProvider = ({ children }: Props) => {
       window.localStorage.setItem(authConfig.storageTokenKeyName, data.data.token)
       window.localStorage.setItem(authConfig.userData, JSON.stringify(data.data.user))
       toast.success('Login successful')
-      setLoading(false)
       setUser(data.data.user)
-      router.push('/history')
+      router.push('/chat')
+      setLoading(false)
     },
     onError: (err: any) => {
       toast.error(err.response?.data?.message ?? 'Someting Went Wrong')
@@ -72,7 +72,7 @@ const AuthProvider = ({ children }: Props) => {
       toast.success('Register successful')
       setLoading(false)
       setUser(data.data.user)
-      router.push('/history')
+      router.push('/chat')
     },
     onError: (err: any) => {
       toast.error(err.response?.data?.message ?? 'Someting Went Wrong')
