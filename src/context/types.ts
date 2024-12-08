@@ -26,7 +26,7 @@ export type UserDataType = {
 
 export type AuthValuesType = {
   loading: boolean
-  logout: () => void
+  logout: UseMutationResult<any, any, any, unknown>
   user: UserDataType | null
   setLoading: (value: boolean) => void
   setUser: (value: UserDataType | null) => void
