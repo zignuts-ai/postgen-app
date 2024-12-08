@@ -2,6 +2,7 @@ import { platformArrayTypes, toneTypeArrayTypes } from 'src/types/constantTypes'
 
 export const ACCESS_TOKEN_KEY = 'accessToken'
 export const USER_DATA_KEY = 'user'
+export const LOCAL_CHAT_SESSION_KEY = 'chat-session'
 
 export const PLATFORM_TYPE: platformArrayTypes[] = [
   {

@@ -12,6 +12,7 @@ import {
   CreateSessionResponseTypes,
   FormType,
   GetChatByIdResponseTypes,
+  GuestHistoryType,
   PreviewDataType
 } from 'src/types/chatContextType'
 import { useRouter } from 'next/router'
@@ -22,13 +23,14 @@ import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanst
 import { CHAT } from 'src/queries/query-keys'
 import { createChatSession, getChatById } from 'src/queries/chat'
 import { AxiosError } from 'axios'
-import { toast } from 'react-hot-toast'
+import { useAuth } from 'src/hooks/useAuth'
+import { LOCAL_CHAT_SESSION_KEY } from 'src/constants/constant'
 
 export type ChatValuesTypes = {
   methods: UseFormReturn<FormType, any>
   chatId: string | string[] | undefined
   sendMessage: (content: string) => void
-  messages: ChatMessage[]
+  messages: ChatMessage[] | null
   isPendingChat: boolean
   isSocketInit: boolean
   setPreviewData: (data: PreviewDataType) => void
@@ -36,6 +38,7 @@ export type ChatValuesTypes = {
   handleCraeteSessionChat: UseMutationResult<CreateSessionResponseTypes, AxiosError<unknown, any>, any, unknown>
   chatDetails: GetChatByIdResponseTypes | null
   chatDetailQuery: UseQueryResult<GetChatByIdResponseTypes, Error>
+  guestHistory: GuestHistoryType[]
 }
 
 // ** Defaults
@@ -52,10 +55,11 @@ const schema = yup.object().shape({
 const ChatProvider = ({ children }: Props) => {
   const router = useRouter()
   const { chatId } = router.query
-  const [messages, setMessages] = useState<ChatMessage[]>([])
+  const { user } = useAuth()
+  const [messages, setMessages] = useState<ChatMessage[] | null>(null)
   const [chatDetails, setChatDetails] = useState<GetChatByIdResponseTypes | null>(null)
   const [previewData, setPreviewData] = useState<PreviewDataType>({} as PreviewDataType)
-
+  const [guestHistory, setGuestHistory] = useState<GuestHistoryType[]>([])
   const { isLoading: isPendingChat, startLoading: startLoadingChat, stopLoading: stopLoadingChat } = useLoading()
   const { isLoading: isSocketInit, startLoading: startLoadingSocket, stopLoading: stopLoadingSocket } = useLoading()
 
@@ -79,8 +83,15 @@ const ChatProvider = ({ children }: Props) => {
   const handleCraeteSessionChat = useMutation({
     mutationFn: createChatSession,
     onSuccess: data => {
+      if (!user) {
+        const guestHistory = JSON.parse(localStorage.getItem(LOCAL_CHAT_SESSION_KEY) || '[]')
+        guestHistory.push({
+          sessionId: data.data.sessionId,
+          sessionName: data.data.message
+        })
+        localStorage.setItem(LOCAL_CHAT_SESSION_KEY, JSON.stringify(guestHistory))
+      }
       router.push(`/chat/${data.data.sessionId}`)
-      toast.success('Chat Session Created Successfully')
     },
     onError: async (err: AxiosError) => {
       console.log(err)
@@ -102,7 +113,7 @@ const ChatProvider = ({ children }: Props) => {
         }
 
         socket.emit('send-message', message)
-        setMessages(prevMessages => [...prevMessages, message])
+        setMessages(prevMessages => [...(prevMessages || []), message])
       }
     } finally {
       stopLoadingChat()
@@ -121,7 +132,7 @@ const ChatProvider = ({ children }: Props) => {
     newSocket.on('connect', () => stopLoadingSocket())
     newSocket.on('chat-message', (message: ChatMessage) => {
       if (message.messageId === chatId) {
-        setMessages(prevMessages => [...prevMessages, message])
+        setMessages(prevMessages => [...(prevMessages || []), message])
       }
     })
 
@@ -142,6 +153,14 @@ const ChatProvider = ({ children }: Props) => {
     }
   }, [chatDetailQuery])
 
+  useEffect(() => {
+    if (!user) {
+      if (localStorage.getItem(LOCAL_CHAT_SESSION_KEY)) {
+        setGuestHistory(JSON.parse(localStorage.getItem(LOCAL_CHAT_SESSION_KEY)! ?? []))
+      }
+    }
+  }, [user])
+
   const values = useMemo(
     () => ({
       methods,
@@ -155,7 +174,8 @@ const ChatProvider = ({ children }: Props) => {
       setPreviewData,
       handleCraeteSessionChat,
       chatDetails,
-      chatDetailQuery
+      chatDetailQuery,
+      guestHistory
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [chatId, socket, messages, isPendingChat, isSocketInit, previewData, methods]

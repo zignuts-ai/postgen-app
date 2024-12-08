@@ -1,18 +1,13 @@
-import React, { useState } from 'react'
-import { Card, CardMedia, CardContent, Typography, Button, Box, Chip, IconButton } from '@mui/material'
-import { Share as ShareIcon, Favorite as FavoriteIcon } from '@mui/icons-material'
+import React from 'react'
+import { Card, CardMedia, CardContent, Typography, Button, Box, Chip } from '@mui/material'
 import { Content } from 'src/types/contentTypes'
 import Link from 'next/link'
 
 const PostCard = ({ image, title, description, platform, type = 'image', aiGenerated = true, id }: Content) => {
-  const [liked, setLiked] = useState(false)
-
   return (
     <>
       <Card
         sx={{
-          maxWidth: 400,
-          minWidth: 280,
           position: 'relative',
           transition: 'transform 0.3s ease-in-out',
           boxShadow: 4,
@@ -61,15 +56,15 @@ const PostCard = ({ image, title, description, platform, type = 'image', aiGener
         {/* Card Content */}
         <CardContent>
           <Typography gutterBottom variant='h6' component='div'>
-            {title}
+            {title.length > 20 ? `${title.slice(0, 20)}...` : title}
           </Typography>
           <Typography variant='body2' color='text.secondary'>
-            {description}
+            {description.length > 40 ? `${description.slice(0, 40)}...` : description}
           </Typography>
         </CardContent>
 
         {/* Action Buttons */}
-        <Box
+        {/* <Box
           sx={{
             display: 'flex',
             justifyContent: 'space-between',
@@ -82,7 +77,7 @@ const PostCard = ({ image, title, description, platform, type = 'image', aiGener
           <IconButton aria-label='share'>
             <ShareIcon />
           </IconButton>
-        </Box>
+        </Box> */}
 
         <Button
           variant='contained'

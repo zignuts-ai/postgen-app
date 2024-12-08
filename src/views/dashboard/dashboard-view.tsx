@@ -105,8 +105,8 @@ const DashboardView = () => {
       prompt: data.prompt,
       sessionId
     }
+
     await mutate(payLoad)
-    window.open(`/chat/${sessionId}`, '_self')
   }
 
   // Dropdown handlers
@@ -275,10 +275,12 @@ const DashboardView = () => {
                       background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
                       '&:hover': {
                         background: 'linear-gradient(45deg, #FF8E53 30%, #FE6B8B 90%)'
-                      }
+                      },
+                      transition: 'all 0.5s ease-in-out',
+                      fontWeight: 600
                     }}
                   >
-                    {isPending ? 'generating...' : 'Generater'}
+                    {isPending ? 'generating...' : 'Generate'}
                   </Button>
                 </Box>
               </Grid>
