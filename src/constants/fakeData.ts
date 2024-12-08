@@ -16,7 +16,7 @@ export const dataSample: Content[] = [
     id: 2,
     image: 'https://via.placeholder.com/600x400.png?text=Dog+Meme',
     title: 'Dog Humor',
-    description: 'When your dog is too excited for a walk',
+    description: 'When your dog is too excited for a walk and you have to catch up',
     platform: 'Twitter',
     type: 'image',
     aiGenerated: false,

@@ -21,7 +21,7 @@ import endpoints from 'src/constants/endpoints'
 import useLoading from 'src/hooks/useLoading'
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query'
 import { CHAT } from 'src/queries/query-keys'
-import { createChatSession, getChatById } from 'src/queries/chat'
+import { createChatSession, getAllChats, getChatById } from 'src/queries/chat'
 import { AxiosError } from 'axios'
 import { useAuth } from 'src/hooks/useAuth'
 import { LOCAL_CHAT_SESSION_KEY } from 'src/constants/constant'
@@ -38,6 +38,7 @@ export type ChatValuesTypes = {
   handleCraeteSessionChat: UseMutationResult<CreateSessionResponseTypes, AxiosError<unknown, any>, any, unknown>
   chatDetails: GetChatByIdResponseTypes | null
   chatDetailQuery: UseQueryResult<GetChatByIdResponseTypes, Error>
+  allUserChatsQuery: UseQueryResult<GetChatByIdResponseTypes, Error>
   guestHistory: GuestHistoryType[]
 }
 
@@ -80,8 +81,14 @@ const ChatProvider = ({ children }: Props) => {
     enabled: !!chatId
   })
 
+  const allUserChatsQuery = useQuery({
+    queryKey: [CHAT.ALL_USER_CHATS],
+    queryFn: getAllChats,
+    enabled: false
+  })
+
   const handleCraeteSessionChat = useMutation({
-    mutationFn: createChatSession,
+    mutationFn: dto => createChatSession(dto, user),
     onSuccess: data => {
       if (!user) {
         const guestHistory = JSON.parse(localStorage.getItem(LOCAL_CHAT_SESSION_KEY) || '[]')
@@ -175,7 +182,8 @@ const ChatProvider = ({ children }: Props) => {
       handleCraeteSessionChat,
       chatDetails,
       chatDetailQuery,
-      guestHistory
+      guestHistory,
+      allUserChatsQuery
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [chatId, socket, messages, isPendingChat, isSocketInit, previewData, methods]
