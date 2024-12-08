@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 
 // ** Hooks Import
 import { useAuth } from 'src/hooks/useAuth'
+import { USER_DATA_KEY } from 'src/constants/constant'
 
 interface GuestGuardProps {
   children: ReactNode
@@ -22,7 +23,7 @@ const GuestGuard = (props: GuestGuardProps) => {
       return
     }
 
-    if (window.localStorage.getItem('user')) {
+    if (window.localStorage.getItem(USER_DATA_KEY)) {
       router.replace('/')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
