@@ -27,9 +27,3 @@ export async function logout(dto: any): Promise<any> {
 
   return data
 }
-
-export async function fetchUser(): Promise<any> {
-  const { data } = await api(endpoints.user.userDetails, 'get')
-
-  return data
-}
