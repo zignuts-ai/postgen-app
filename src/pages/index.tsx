@@ -5,11 +5,9 @@ import { ReactNode, useEffect } from 'react'
 import { useSettings } from 'src/@core/hooks/useSettings'
 import BlankLayoutWithAppBar from 'src/@core/layouts/BlankLayoutWithAppBar'
 import DashboardView from 'src/views/dashboard/dashboard-view'
-import Download from 'src/views/landing/Download'
-import Faq from 'src/views/landing/Faq'
-import Features from 'src/views/landing/Features'
-import Footer from 'src/views/landing/Footer'
-import Hero from 'src/views/landing/Hero'
+
+import Landing from './landing'
+import { page } from 'src/data/demo'
 
 const Home = () => {
   const { settings, saveSettings } = useSettings()
@@ -24,11 +22,12 @@ const Home = () => {
       <section className='relative pt-20 pb-20 max-lg:pt-52 max-lg:pb-10 max-md:pt-36 max-md:pb-32 bg-primary'>
         <DashboardView />
       </section>
-      <Hero />
+      <Landing page={page} />
+      {/* <Hero />
       <Features />
       <Faq />
       <Download />
-      <Footer />
+      <Footer /> */}
     </main>
   )
 }
