@@ -12,7 +12,6 @@ import { ChatMessage, FormType } from 'src/types/chatContextType'
 import { useRouter } from 'next/router'
 import { io, Socket } from 'socket.io-client'
 import endpoints from 'src/constants/endpoints'
-import { useAuth } from 'src/hooks/useAuth'
 import useLoading from 'src/hooks/useLoading'
 
 export type ChatValuesTypes = {
@@ -40,7 +39,6 @@ const ChatProvider = ({ children }: Props) => {
   const router = useRouter()
   const { chatId } = router.query
   const [messages, setMessages] = useState<ChatMessage[]>(CHAT_DATA)
-  const { user } = useAuth()
   const { isLoading: isPendingChat, startLoading: startLoadingChat, stopLoading: stopLoadingChat } = useLoading()
   const { isLoading: isSocketInit, startLoading: startLoadingSocket, stopLoading: stopLoadingSocket } = useLoading()
 
@@ -61,7 +59,6 @@ const ChatProvider = ({ children }: Props) => {
         const message: ChatMessage = {
           id: chatId.toString(),
           message: content,
-          senderId: user?.id?.toString() ?? 'No-Auth',
           timestamp: Date.now().toString(),
           role: 'user',
           type: 'text'

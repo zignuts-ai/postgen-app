@@ -20,8 +20,7 @@ import { useChat } from 'src/hooks/useChat'
 import { useAuth } from 'src/hooks/useAuth'
 import { ChatMessage } from 'src/types/chatContextType'
 import themeConfig from 'src/configs/themeConfig'
-import { Card, CardContent, CardMedia } from '@mui/material'
-import MemeCard from './cards/MemeCardPreview'
+import MediaCard from './MediaCardPreview'
 
 const PerfectScrollbar = styled(PerfectScrollbarComponent)<ScrollBarProps & { ref: Ref<unknown> }>(({ theme }) => ({
   padding: theme.spacing(5)
@@ -82,40 +81,26 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
 
       case 'image':
         return (
-          <Card sx={{ maxWidth: 345, m: 1 }}>
-            <CardMedia
-              component='img'
-              height='194'
-              image={
-                'https://plus.unsplash.com/premium_photo-1688645554172-d3aef5f837ce?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW5kaWFuJTIwbW91bnRhaW5zfGVufDB8fDB8fHww'
-              }
-              alt='Uploaded image'
-            />
-            {item.message && (
-              <CardContent>
-                <Typography variant='body2' color='text.secondary'>
-                  {item.message}
-                </Typography>
-              </CardContent>
-            )}
-          </Card>
+          <MediaCard
+            type='image'
+            src={
+              'https://plus.unsplash.com/premium_photo-1688645554172-d3aef5f837ce?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW5kaWFuJTIwbW91bnRhaW5zfGVufDB8fDB8fHww'
+            }
+            alt='Uploaded image'
+          />
         )
 
       case 'video':
-        return (
-          <Card sx={{ maxWidth: 345, m: 1 }}>
-            <CardMedia component='video' controls height='194' src={'https://www.w3schools.com/html/movie.mp4'} />
-          </Card>
-        )
+        return <MediaCard type='video' src={'https://www.w3schools.com/html/movie.mp4'} alt='Uploaded video' />
 
       case 'meme':
         return (
-          <MemeCard
-            imageUrl='https://global.discourse-cdn.com/flex028/uploads/daml/optimized/2X/0/07c87a4e2885ff7d9674efb218e08a5d354612f6_2_500x500.jpeg'
+          <MediaCard
+            type='meme'
+            src={
+              'https://global.discourse-cdn.com/flex028/uploads/daml/optimized/2X/0/07c87a4e2885ff7d9674efb218e08a5d354612f6_2_500x500.jpeg'
+            }
             alt='Meme'
-            onZoom={() => {
-              console.log('Zooming meme')
-            }}
           />
         )
 
