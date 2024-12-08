@@ -32,12 +32,11 @@ const AuthProvider = ({ children }: Props) => {
 
   useEffect(() => {
     const initAuth = async (): Promise<void> => {
+      setLoading(true)
       const userData = window.localStorage.getItem('user')!
       if (userData) {
-        setLoading(true)
-
-        setLoading(false)
         setUser(JSON.parse(userData))
+        setLoading(false)
       } else {
         setLoading(false)
         localStorage.removeItem('user')
@@ -53,7 +52,7 @@ const AuthProvider = ({ children }: Props) => {
   const handleLogin = useMutation({
     mutationFn: login,
     onSuccess: data => {
-      window.localStorage.setItem(authConfig.storageTokenKeyName, JSON.stringify(data.data.token))
+      window.localStorage.setItem(authConfig.storageTokenKeyName, data.data.token)
       window.localStorage.setItem(authConfig.userData, JSON.stringify(data.data.user))
       toast.success('Login successful')
       setLoading(false)
@@ -68,7 +67,7 @@ const AuthProvider = ({ children }: Props) => {
   const handleRegister = useMutation({
     mutationFn: signup,
     onSuccess: data => {
-      window.localStorage.setItem(authConfig.storageTokenKeyName, JSON.stringify(data.data.token))
+      window.localStorage.setItem(authConfig.storageTokenKeyName, data.data.token)
       window.localStorage.setItem(authConfig.userData, JSON.stringify(data.data.user))
       toast.success('Register successful')
       setLoading(false)

@@ -90,6 +90,7 @@ const Register = () => {
         <Card>
           <CardContent sx={{ p: `${theme.spacing(8, 8, 7)} !important` }}>
             <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img alt='Logo' src='/logo.png' className='h-[40px] w-[40px]' />
               <Typography
                 variant='h5'
                 sx={{
