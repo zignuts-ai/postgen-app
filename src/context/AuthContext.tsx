@@ -14,6 +14,7 @@ import { AuthValuesType, UserDataType } from './types'
 import { useMutation } from '@tanstack/react-query'
 import { login, signup } from 'src/queries/auth'
 import toast from 'react-hot-toast'
+import { formatMessage } from 'src/utils/utils'
 
 // ** Defaults
 const AuthContext = createContext({} as AuthValuesType)
@@ -60,7 +61,7 @@ const AuthProvider = ({ children }: Props) => {
       setLoading(false)
     },
     onError: (err: any) => {
-      toast.error(err.response?.data?.message ?? 'Someting Went Wrong')
+      toast.error(formatMessage(err.response?.data?.message) ?? 'Someting Went Wrong')
     }
   })
 
@@ -75,7 +76,7 @@ const AuthProvider = ({ children }: Props) => {
       router.push('/chat')
     },
     onError: (err: any) => {
-      toast.error(err.response?.data?.message ?? 'Someting Went Wrong')
+      toast.error(formatMessage(err.response?.data?.message) ?? 'Someting Went Wrong')
     }
   })
 
