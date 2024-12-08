@@ -5,13 +5,14 @@ type Props = {
   metadata: {
     caption: string
     imageUrl: string
+    type: 'image' | 'video' | 'text' | 'meme'
   }
 }
 
 const InstagramPreview = ({ metadata }: Props) => {
   const { user } = useAuth()
 
-  const { caption, imageUrl } = metadata
+  const { caption, imageUrl, type } = metadata
 
   return (
     <article className='post'>
@@ -34,7 +35,11 @@ const InstagramPreview = ({ metadata }: Props) => {
 
       <div className='post__content'>
         <div className='post__medias'>
-          <img className='post__media' src={imageUrl} alt='Post Content' />
+          {type === 'image' || type === 'meme' ? (
+            <img className='post__media max-h-[300px] object-contain' src={imageUrl} alt='Post Content' />
+          ) : (
+            <video autoPlay className='post__media' src={imageUrl} controls />
+          )}
         </div>
       </div>
 
@@ -96,12 +101,8 @@ const InstagramPreview = ({ metadata }: Props) => {
             </div>
 
             <span>
-              Liked by
-              <a className='post__name--underline' href='#'>
-                user123
-              </a>{' '}
-              and
-              <a href='#'>73 others</a>
+              Liked by <span className='post__name--underline'>user123</span> and
+              <span> 73 others</span>
             </span>
           </div>
 

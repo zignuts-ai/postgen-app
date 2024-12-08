@@ -1,5 +1,5 @@
 import React from 'react'
-import { LANDING_DATA } from 'src/data/demo'
+import { LANDING_DATA } from 'src/constants/fakeData'
 import { Item } from 'src/types/landing'
 import { Avatar, AvatarFallback, AvatarImage } from 'src/ui/avatar'
 import { Card, CardContent } from 'src/ui/card'

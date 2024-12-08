@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Card, CardMedia, Box, IconButton, styled } from '@mui/material'
 import { Icon } from '@iconify/react'
+import { useChat } from 'src/hooks/useChat'
+import { ChatMessage } from 'src/types/chatContextType'
 
 const HoverableCard = styled(Card)(({ theme }) => ({
   position: 'relative',
@@ -33,10 +35,12 @@ interface MediaCardProps {
   src: string
   alt?: string
   onZoom?: () => void
+  item: ChatMessage
 }
 
-const MediaCard: React.FC<MediaCardProps> = ({ type, src, alt = 'Media', onZoom }) => {
+const MediaCard: React.FC<MediaCardProps> = ({ type, src, alt = 'Media', onZoom, item }) => {
   const [isHovered, setIsHovered] = useState(false)
+  const { setPreviewData } = useChat()
 
   return (
     <HoverableCard onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
@@ -57,6 +61,12 @@ const MediaCard: React.FC<MediaCardProps> = ({ type, src, alt = 'Media', onZoom 
           onClick={e => {
             e.stopPropagation()
             onZoom?.()
+            setPreviewData({
+              title: item.message,
+              caption: item.message,
+              imageUrl: src,
+              type: item?.type
+            })
           }}
         >
           <Icon icon='mdi:eye' fontSize={22} />
@@ -67,6 +77,8 @@ const MediaCard: React.FC<MediaCardProps> = ({ type, src, alt = 'Media', onZoom 
           component='video'
           controls={false}
           autoPlay
+          muted
+          loop
           height='194'
           src={src}
           sx={{

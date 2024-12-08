@@ -8,7 +8,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Types
-import { ChatMessage, FormType } from 'src/types/chatContextType'
+import { ChatMessage, FormType, PreviewDataType } from 'src/types/chatContextType'
 import { useRouter } from 'next/router'
 import { io, Socket } from 'socket.io-client'
 import endpoints from 'src/constants/endpoints'
@@ -22,6 +22,8 @@ export type ChatValuesTypes = {
   messages: ChatMessage[]
   isPendingChat: boolean
   isSocketInit: boolean
+  setPreviewData: (data: PreviewDataType) => void
+  previewData: PreviewDataType
 }
 
 // ** Defaults
@@ -39,6 +41,8 @@ const ChatProvider = ({ children }: Props) => {
   const router = useRouter()
   const { chatId } = router.query
   const [messages, setMessages] = useState<ChatMessage[]>(CHAT_DATA)
+  const [previewData, setPreviewData] = useState<PreviewDataType>({} as PreviewDataType)
+
   const { isLoading: isPendingChat, startLoading: startLoadingChat, stopLoading: stopLoadingChat } = useLoading()
   const { isLoading: isSocketInit, startLoading: startLoadingSocket, stopLoading: stopLoadingSocket } = useLoading()
 
@@ -105,7 +109,9 @@ const ChatProvider = ({ children }: Props) => {
     sendMessage,
     messages,
     isPendingChat,
-    isSocketInit
+    isSocketInit,
+    previewData,
+    setPreviewData
   }
 
   return <ChatContext.Provider value={values}>{children}</ChatContext.Provider>

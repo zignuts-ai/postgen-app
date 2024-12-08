@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import Link from 'next/link'
-import { LANDING_DATA } from 'src/data/demo'
+import { LANDING_DATA } from 'src/constants/fakeData'
 import { Item, Section } from 'src/types/landing'
 import { Button } from '@mui/material'
 
