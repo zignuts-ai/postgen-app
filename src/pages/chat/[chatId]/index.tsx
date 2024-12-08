@@ -20,6 +20,7 @@ import { getInitials } from 'src/@core/utils/get-initials'
 import ChatContent from 'src/views/chat/ChatContent'
 import { Grid } from '@mui/material'
 import ChatPreview from 'src/views/chat/ChatPreview'
+import { useChat } from 'src/hooks/useChat'
 
 // ** Chat App Components Imports
 
@@ -31,6 +32,7 @@ const AppChat = () => {
   // ** Hooks
   const theme = useTheme()
   const { settings } = useSettings()
+  const { messages } = useChat()
   const hidden = useMediaQuery(theme.breakpoints.down('lg'))
 
   // ** Vars
@@ -78,9 +80,11 @@ const AppChat = () => {
           />
         </Box>
       </Grid>
-      <Grid item xs={12} lg={4} sx={{ height: '100%' }}>
-        <ChatPreview />
-      </Grid>
+      {messages && (
+        <Grid item xs={12} lg={4} sx={{ height: '100%' }}>
+          <ChatPreview />
+        </Grid>
+      )}
     </Grid>
   )
 }
