@@ -5,11 +5,15 @@ import { ReactNode, useEffect } from 'react'
 import { useSettings } from 'src/@core/hooks/useSettings'
 import BlankLayoutWithAppBar from 'src/@core/layouts/BlankLayoutWithAppBar'
 import DashboardView from 'src/views/dashboard/dashboard-view'
-import Download from 'src/views/landing/Download'
-import Faq from 'src/views/landing/Faq'
-import Features from 'src/views/landing/Features'
-import Footer from 'src/views/landing/Footer'
-import Hero from 'src/views/landing/Hero'
+import Usercase from 'src/components/landingcomponents/usercase'
+import Section from 'src/components/landingcomponents/section'
+import Feature from 'src/components/landingcomponents/feature'
+import Testimonial from 'src/components/landingcomponents/testimonial'
+import Footer from 'src/components/landingcomponents/footer'
+import Cta from 'src/components/landingcomponents/cta'
+import Faq from 'src/components/landingcomponents/faq'
+import { LANDING_DATA } from 'src/constants/fakeData'
+import Hero from 'src/components/landingcomponents/hero'
 
 const Home = () => {
   const { settings, saveSettings } = useSettings()
@@ -21,21 +25,17 @@ const Home = () => {
 
   return (
     <main className='overflow-hidden'>
-      <section className='relative pt-20 pb-20 max-lg:pt-52 max-lg:pb-10 max-md:pt-36 max-md:pb-32 bg-primary'>
-        {/* @ts-ignore */}
-        {/* <Hero /> */}
+      <section className='relative pt-20 pb-20 max-lg:pt-52 max-lg:pb-10 max-md:pt-36 max-md:pb-32 bg-[#010101]'>
         <DashboardView />
       </section>
-      {/* <Grid container spacing={6} justifyContent='center' alignItems='center'>
-        <Grid item xs={10}>
-          <DashboardView />
-        </Grid> */}
-      {/* </Grid> */}
-      <Hero />
-      <Features />
-      <Faq />
-      <Download />
-      <Footer />
+      {LANDING_DATA.hero && <Hero />}
+      {LANDING_DATA.usercase && <Usercase />}
+      {LANDING_DATA.section && <Section />}
+      {LANDING_DATA.feature && <Feature />}
+      {LANDING_DATA.testimonial && <Testimonial />}
+      {LANDING_DATA.faq && <Faq />}
+      {LANDING_DATA.cta && <Cta />}
+      {LANDING_DATA.footer && <Footer />}
     </main>
   )
 }

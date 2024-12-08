@@ -18,6 +18,8 @@ import { useSettings } from 'src/@core/hooks/useSettings'
 // ** Utils Imports
 import { getInitials } from 'src/@core/utils/get-initials'
 import ChatContent from 'src/views/chat/ChatContent'
+import { Grid } from '@mui/material'
+import ChatPreview from 'src/views/chat/ChatPreview'
 
 // ** Chat App Components Imports
 
@@ -47,37 +49,43 @@ const AppChat = () => {
   const handleUserProfileRightSidebarToggle = () => setUserProfileRightOpen(!userProfileRightOpen)
 
   return (
-    <Box
-      className='app-chat'
-      sx={{
-        width: '100%',
-        display: 'flex',
-        borderRadius: 1,
-        overflow: 'hidden',
-        position: 'relative',
-        backgroundColor: 'background.paper',
-        boxShadow: skin === 'bordered' ? 0 : 6,
-        ...(skin === 'bordered' && { border: `1px solid ${theme.palette.divider}` })
-      }}
-    >
-      <ChatContent
-        hidden={hidden}
-        sendMsg={sendMsg}
-        mdAbove={mdAbove}
-        statusObj={statusObj}
-        getInitials={getInitials}
-        sidebarWidth={sidebarWidth}
-        userProfileRightOpen={userProfileRightOpen}
-        handleLeftSidebarToggle={handleLeftSidebarToggle}
-        handleUserProfileRightSidebarToggle={handleUserProfileRightSidebarToggle}
-      />
-    </Box>
+    <Grid container spacing={6} justifyContent='center' alignItems='center'>
+      <Grid item xs={12} lg={8} sx={{ height: '100%' }}>
+        <Box
+          className='app-chat'
+          sx={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            borderRadius: 1,
+            overflow: 'hidden',
+            position: 'relative',
+            backgroundColor: 'background.paper',
+            boxShadow: skin === 'bordered' ? 0 : 6,
+            ...(skin === 'bordered' && { border: `1px solid ${theme.palette.divider}` })
+          }}
+        >
+          <ChatContent
+            hidden={hidden}
+            sendMsg={sendMsg}
+            mdAbove={mdAbove}
+            statusObj={statusObj}
+            getInitials={getInitials}
+            sidebarWidth={sidebarWidth}
+            userProfileRightOpen={userProfileRightOpen}
+            handleLeftSidebarToggle={handleLeftSidebarToggle}
+            handleUserProfileRightSidebarToggle={handleUserProfileRightSidebarToggle}
+          />
+        </Box>
+      </Grid>
+      <Grid item xs={12} lg={4} sx={{ height: '100%' }}>
+        <ChatPreview />
+      </Grid>
+    </Grid>
   )
 }
 
 AppChat.contentHeightFixed = true
 AppChat.publicGuard = true
-
-// AppChat.getLayout = (page: ReactNode) => <BlankLayoutWithAppBar>{page}</BlankLayoutWithAppBar>
 
 export default AppChat

@@ -18,52 +18,10 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import CustomTextField from 'src/components/common/form/CustomTextField'
 import themeConfig from 'src/configs/themeConfig'
+import { platformTypes, toneTypes } from 'src/types/constantTypes'
+import { PLATFORM_TYPE, TONE_TYPE } from 'src/constants/constant'
 
-// Define types
-export type platformTypes = 'instagram' | 'linkedin'
-export type toneTypes =
-  | 'Polite'
-  | 'Witty'
-  | 'Enthusiastic'
-  | 'Friendly'
-  | 'Informational'
-  | 'Funny'
-  | 'Formal'
-  | 'Informal'
-  | 'Humorous'
-  | 'Serious'
-  | 'Optimistic'
-  | 'Motivating'
 export type postTypes = 'text' | 'image' | 'memes'
-
-// Define constants
-export const PLATFORM_TYPE = [
-  {
-    value: 'linkedin',
-    name: 'LinkedIn',
-    icon: 'mdi:linkedin'
-  },
-  {
-    value: 'instagram',
-    name: 'Instagram',
-    icon: 'mdi:instagram'
-  }
-]
-
-export const TONE_TYPE = [
-  { value: 'Polite' },
-  { value: 'Witty' },
-  { value: 'Enthusiastic' },
-  { value: 'Friendly' },
-  { value: 'Informational' },
-  { value: 'Funny' },
-  { value: 'Formal' },
-  { value: 'Informal' },
-  { value: 'Humorous' },
-  { value: 'Serious' },
-  { value: 'Optimistic' },
-  { value: 'Motivating' }
-]
 
 export const POST_TYPE = [
   {
@@ -85,34 +43,21 @@ export const POST_TYPE = [
 
 // Validation Schema
 const schema = yup.object().shape({
-  platform_type: yup
-    .mixed<platformTypes>()
-    .oneOf(['instagram', 'linkedin'], 'Please Select platform')
-    .required('Platform Type is required'),
-  tone_types: yup
-    .mixed<toneTypes>()
-    .oneOf(
-      [
-        'Polite',
-        'Witty',
-        'Enthusiastic',
-        'Friendly',
-        'Informational',
-        'Funny',
-        'Formal',
-        'Informal',
-        'Humorous',
-        'Serious',
-        'Optimistic',
-        'Motivating'
-      ],
-      'Please Select Tone'
-    )
-    .required('Tone is required'),
-  post_type: yup
-    .mixed<postTypes>()
-    .oneOf(['text', 'image', 'memes'], 'Please Select Post Type')
-    .required('Post Type is required'),
+  // platform_type: yup
+  //   .mixed<platformTypes>()
+  //   .oneOf(['instagram', 'linkedin'], 'Please Select platform')
+  //   .required('Platform Type is required'),
+  // tone_types: yup
+  //   .mixed<toneTypes>()
+  //   .oneOf(
+  //     ['Informative', 'Educative', 'Humorous', 'Funny', 'Meme', 'Serious', 'Professional', 'Concerning', 'Exciting'],
+  //     'Please Select Tone'
+  //   )
+  //   .required('Tone is required'),
+  // post_type: yup
+  //   .mixed<postTypes>()
+  //   .oneOf(['text', 'image', 'memes'], 'Please Select Post Type')
+  //   .required('Post Type is required'),
   prompt: yup.string().min(5, 'Prompt should be at least 5 characters').required('Prompt is required')
 })
 
@@ -125,17 +70,11 @@ interface FormData {
 }
 
 // Default Values
-const defaultValues: FormData = {
-  platform_type: 'linkedin',
-  tone_types: 'Polite',
-  post_type: 'text',
-  prompt: ''
-}
 
 const DashboardView = () => {
-  const [selectedPlatform, setSelectedPlatform] = useState<platformTypes>('linkedin')
-  const [selectedTone, setSelectedTone] = useState<toneTypes>('Polite')
-  const [selectedPostType, setSelectedPostType] = useState<postTypes>('text')
+  const [selectedPlatform, setSelectedPlatform] = useState<platformTypes | null>(null)
+  const [selectedTone, setSelectedTone] = useState<toneTypes | null>(null)
+  const [selectedPostType, setSelectedPostType] = useState<postTypes | null>(null)
 
   // Anchor states for dropdowns
   const [platformAnchorEl, setPlatformAnchorEl] = useState<null | HTMLElement>(null)
@@ -147,13 +86,17 @@ const DashboardView = () => {
     control,
     formState: { errors }
   } = useForm({
-    defaultValues,
     mode: 'onBlur',
     resolver: yupResolver(schema)
   })
 
   const onSubmit = (data: FormData) => {
-    console.log(data)
+    console.log('Form Data:', {
+      platform: selectedPlatform,
+      tone: selectedTone,
+      postType: selectedPostType,
+      prompt: data.prompt
+    })
   }
 
   // Dropdown handlers
@@ -200,7 +143,7 @@ const DashboardView = () => {
           borderRadius: 3
         }}
       >
-        <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+        <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit as any)}>
           <CardContent>
             <Grid container spacing={3}>
               {/* Prompt Input */}
@@ -209,7 +152,7 @@ const DashboardView = () => {
                   <CustomTextField
                     control={control}
                     name='prompt'
-                    label='Write your post content here'
+                    label='Write your prompt here'
                     multiline
                     rows={5}
                     errors={errors?.prompt}
@@ -235,7 +178,7 @@ const DashboardView = () => {
                       variant='outlined'
                       startIcon={<Icon icon={PLATFORM_TYPE.find(p => p.value === selectedPlatform)?.icon || ''} />}
                     >
-                      {PLATFORM_TYPE.find(p => p.value === selectedPlatform)?.name}
+                      {PLATFORM_TYPE.find(p => p.value === selectedPlatform)?.name ?? 'Platform'}
                     </Button>
                     <Menu anchorEl={platformAnchorEl} open={Boolean(platformAnchorEl)} onClose={handlePlatformClose}>
                       {PLATFORM_TYPE.map(platform => (
@@ -258,7 +201,7 @@ const DashboardView = () => {
                   {/* Tone Selection */}
                   <Grid item>
                     <Button onClick={handleToneOpen} variant='outlined'>
-                      {selectedTone}
+                      {selectedTone ? selectedTone : 'TONE'}
                     </Button>
                     <Menu anchorEl={toneAnchorEl} open={Boolean(toneAnchorEl)} onClose={handleToneClose}>
                       {TONE_TYPE.map(tone => (
@@ -282,7 +225,9 @@ const DashboardView = () => {
                       variant='outlined'
                       startIcon={<Icon icon={POST_TYPE.find(p => p.value === selectedPostType)?.icon || ''} />}
                     >
-                      {POST_TYPE.find(p => p.value === selectedPostType)?.name}
+                      {POST_TYPE.find(p => p.value === selectedPostType)?.name
+                        ? POST_TYPE.find(p => p.value === selectedPostType)?.name
+                        : 'POSTTYPE'}
                     </Button>
                     <Menu anchorEl={postTypeAnchorEl} open={Boolean(postTypeAnchorEl)} onClose={handlePostTypeClose}>
                       {POST_TYPE.map(postType => (
@@ -312,8 +257,8 @@ const DashboardView = () => {
                     type='submit'
                     variant='contained'
                     sx={{
-                      borderRadius: 2,
-                      padding: '10px 20px',
+                      borderRadius: 1,
+                      padding: '5px 10px',
                       background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
                       '&:hover': {
                         background: 'linear-gradient(45deg, #FF8E53 30%, #FE6B8B 90%)'

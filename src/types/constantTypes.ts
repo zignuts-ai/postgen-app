@@ -1,4 +1,4 @@
-export type platformTypes = 'instagram' | 'linkedin'
+export type platformTypes = 'instagram' | 'linkedin' | 'reddit' | 'x'
 export type toneTypes =
   | 'Polite'
   | 'Witty'

@@ -3,17 +3,18 @@ import { HorizontalNavItemsType } from 'src/@core/layouts/types'
 
 const navigation = (): HorizontalNavItemsType => [
   {
-    title: 'History',
-    path: '/history',
-    icon: 'material-symbols:history'
-  },
-  {
     title: 'New Chat',
     path: '/chat',
     icon: 'wpf:create-new',
-    isPublic: true
+    auth: false
+  },
+  {
+    title: 'History',
+    path: '/history',
+    icon: 'material-symbols:history',
+    auth: false
   }
-
+  
   // {
   //   title: 'Second Page',
   //   path: '/second-page',
