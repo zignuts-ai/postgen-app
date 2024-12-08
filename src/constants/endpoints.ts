@@ -10,6 +10,9 @@ const endpoints = {
   },
   user: {
     userDetails: GET_URL('/user/')
+  },
+  chat: {
+    connection: GET_URL('http://localhost:3001/')
   }
 }
 export default endpoints

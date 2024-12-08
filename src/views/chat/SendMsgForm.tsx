@@ -27,18 +27,17 @@ const Form = styled('form')(({ theme }) => ({
 }))
 
 const SendMsgForm = () => {
-  const { methods } = useChat()
+  const { methods, sendMessage } = useChat()
 
   const {
     control,
     handleSubmit,
-    reset,
     formState: { errors }
   } = methods
 
   const onSubmit = (data: FormType) => {
-    console.log('Message Sent:', data.prompt)
-    reset({ prompt: '' })
+    sendMessage(data.prompt)
+    methods.reset()
   }
 
   return (
@@ -61,8 +60,6 @@ const SendMsgForm = () => {
                   '& .Mui-focused': { boxShadow: 'none !important' }
                 }}
                 rows={2}
-
-                // error={!!errors?.prompt}
               />
             )}
           />

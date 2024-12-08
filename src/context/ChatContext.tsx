@@ -11,11 +11,15 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { FormType } from 'src/types/chatContextType'
 import { useRouter } from 'next/router'
 import { io, Socket } from 'socket.io-client'
+import endpoints from 'src/constants/endpoints'
+import { useAuth } from 'src/hooks/useAuth'
 
 export type ChatValuesTypes = {
   store: any
   methods: UseFormReturn<FormType, any>
   chatId: string | string[] | undefined
+  sendMessage: (content: string) => void
+  messages: ChatMessage[]
 }
 
 // ** Defaults
@@ -31,16 +35,16 @@ const schema = yup.object().shape({
 
 export type ChatMessage = {
   id: string
-  content: string
+  message: string
   senderId: string
-  timestamp: number
+  timestamp: string
 }
 
 const ChatProvider = ({ children }: Props) => {
   const router = useRouter()
-
   const { chatId } = router.query
-  const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [messages, setMessages] = useState<ChatMessage[]>(CHAT_DATA)
+  const { user } = useAuth()
 
   // ** States
   const [socket, setSocket] = useState<Socket | null>(null)
@@ -56,9 +60,9 @@ const ChatProvider = ({ children }: Props) => {
     if (socket && chatId) {
       const message: ChatMessage = {
         id: chatId.toString(),
-        content,
-        senderId: 'current-user-id', // Replace with actual user ID
-        timestamp: Date.now()
+        message: content,
+        senderId: user?.id?.toString() ?? 'No-Auth',
+        timestamp: Date.now().toString()
       }
 
       socket.emit('send-message', message)
@@ -67,20 +71,18 @@ const ChatProvider = ({ children }: Props) => {
   }
 
   useEffect(() => {
-    const newSocket = io('http://localhost:3001', {
+    const newSocket = io(endpoints.chat.connection, {
       query: { chatId }
     })
 
     setSocket(newSocket)
 
-    // Listen for messages specific to this chat
     newSocket.on('chat-message', (message: ChatMessage) => {
       if (message.id === chatId) {
         setMessages(prevMessages => [...prevMessages, message])
       }
     })
 
-    // Cleanup socket connection on unmount
     return () => {
       newSocket.disconnect()
     }
