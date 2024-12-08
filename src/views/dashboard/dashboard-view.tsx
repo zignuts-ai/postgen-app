@@ -9,8 +9,7 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
-  ListItemText,
-  Typography
+  ListItemText
 } from '@mui/material'
 import { Icon } from '@iconify/react'
 import * as yup from 'yup'
@@ -127,13 +126,15 @@ const DashboardView = () => {
   return (
     <Box sx={{ my: 10, mt: 15 }}>
       <Box sx={{ my: 10, mt: 10 }}>
-        <Typography textAlign={'center'} variant='h5' fontWeight={700} color='white'>
-          Generate social media posts in seconds for free
-        </Typography>
-        <Typography textAlign={'center'} variant='subtitle1' fontWeight={400}>
-          Stay consistent, creative, and productive with {themeConfig.templateName}'s free AI social media post
-          generator.
-        </Typography>
+        <div className='max-w-3xl mx-auto text-center'>
+          <h2 className='text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-primary mb-6 drop-shadow-md'>
+            Generate social media posts in seconds for free
+          </h2>
+          <p className='text-base sm:text-lg text-muted-foreground mb-8'>
+            Stay consistent, creative, and productive with {themeConfig.templateName}'s free AI social media post
+            generator.
+          </p>
+        </div>
       </Box>
       <Card
         sx={{

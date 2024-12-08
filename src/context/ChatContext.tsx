@@ -1,5 +1,5 @@
 // ** React Imports
-import { createContext, ReactNode, useEffect, useState } from 'react'
+import { createContext, ReactNode, useEffect, useMemo, useState } from 'react'
 import { useForm, UseFormReturn } from 'react-hook-form'
 import { CHAT_DATA } from 'src/constants/fakeData'
 
@@ -53,6 +53,7 @@ const ChatProvider = ({ children }: Props) => {
     defaultValues: {
       prompt: ''
     },
+    mode: 'onSubmit',
     resolver: yupResolver(schema)
   })
 
@@ -101,18 +102,22 @@ const ChatProvider = ({ children }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatId])
 
-  const values = {
-    store: CHAT_DATA,
-    methods,
-    chatId,
-    socket,
-    sendMessage,
-    messages,
-    isPendingChat,
-    isSocketInit,
-    previewData,
-    setPreviewData
-  }
+  const values = useMemo(
+    () => ({
+      store: CHAT_DATA,
+      methods,
+      chatId,
+      socket,
+      sendMessage,
+      messages,
+      isPendingChat,
+      isSocketInit,
+      previewData,
+      setPreviewData
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [chatId, socket, messages, isPendingChat, isSocketInit, previewData, methods]
+  )
 
   return <ChatContext.Provider value={values}>{children}</ChatContext.Provider>
 }

@@ -21,13 +21,13 @@ const HistoryView = () => {
   return (
     <Box sx={{ padding: 4, mx: 'auto' }}>
       {Object.entries(groupedData).map(([date, memes]) => (
-        <Box key={date} sx={{ marginBottom: 4 }}>
+        <Box key={date} sx={{ marginBottom: 5 }}>
           <Typography fontWeight={600} variant='h5' gutterBottom>
             {date}
           </Typography>
           <Grid container spacing={3}>
             {memes.map(meme => (
-              <Grid item xs={12} sm={6} md={4} key={meme.id}>
+              <Grid item xs={12} sm={6} md={3} key={meme.id}>
                 <PostCard {...meme} />
               </Grid>
             ))}
