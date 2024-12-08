@@ -105,7 +105,6 @@ const DashboardView = () => {
       prompt: data.prompt,
       sessionId
     }
-
     await mutate(payLoad)
   }
 
@@ -268,19 +267,16 @@ const DashboardView = () => {
                     endIcon={isPending ? <CircularProgress size={20} /> : <Icon icon='ri:quill-pen-ai-line' />}
                     type='submit'
                     variant='contained'
-                    disabled={isPending}
                     sx={{
                       borderRadius: 1,
                       padding: '5px 10px',
                       background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
                       '&:hover': {
                         background: 'linear-gradient(45deg, #FF8E53 30%, #FE6B8B 90%)'
-                      },
-                      transition: 'all 0.5s ease-in-out',
-                      fontWeight: 600
+                      }
                     }}
                   >
-                    {isPending ? 'generating...' : 'Generate'}
+                    {isPending ? 'generating...' : 'Generater'}
                   </Button>
                 </Box>
               </Grid>
