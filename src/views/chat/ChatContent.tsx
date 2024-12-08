@@ -28,7 +28,7 @@ const ChatWrapperStartChat = styled(Box)<BoxProps>(({ theme }) => ({
 }))
 
 const ChatContent = (props: ChatContentType) => {
-  const { store } = useChat()
+  const { messages } = useChat()
 
   // ** Props
   const { hidden, mdAbove, handleLeftSidebarToggle, handleUserProfileRightSidebarToggle } = props
@@ -40,9 +40,8 @@ const ChatContent = (props: ChatContentType) => {
   }
 
   const renderContent = () => {
-    if (store) {
-      const currentChat = store.currentChat
-      if (!currentChat) {
+    if (messages) {
+      if (!messages.length) {
         return (
           <ChatWrapperStartChat
             sx={{
@@ -101,11 +100,6 @@ const ChatContent = (props: ChatContentType) => {
               }}
             >
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                {/* {mdAbove ? null : (
-                  <IconButton onClick={handleLeftSidebarToggle} sx={{ mr: 2 }}>
-                    <Icon icon='bx:menu' />
-                  </IconButton>
-                )} */}
                 <Box
                   onClick={handleUserProfileRightSidebarToggle}
                   sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
@@ -117,21 +111,7 @@ const ChatContent = (props: ChatContentType) => {
               </Box>
             </Box>
 
-            {currentChat ? (
-              <ChatLog
-                hidden={hidden}
-                data={{
-                  ...currentChat,
-                  userContact: {
-                    about: 'shsh',
-                    avatar: '/images/avatars/1.png',
-                    fullName: 'Hardik',
-                    id: 11,
-                    role: 'user'
-                  }
-                }}
-              />
-            ) : null}
+            <ChatLog hidden={hidden} />
 
             <SendMsgForm />
           </Box>

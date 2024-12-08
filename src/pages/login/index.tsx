@@ -38,12 +38,18 @@ const LinkStyled = styled(Link)(({ theme }) => ({
 
 const schema = yup.object().shape({
   email: yup.string().email('Invalid email').required('Email is required'),
-  password: yup.string().min(5, 'Password should be at least 5 characters').required('Password is required')
+  password: yup
+    .string()
+    .min(8, 'Password should be at least 8 characters')
+    .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .matches(/[!@#$%^&*(),.?":{}|<>]/, 'Password must contain at least one special character')
+    .matches(/[0-9]/, 'Password must contain at least one number')
+    .required('Password is required')
 })
 
 const defaultValues = {
-  password: 'admin',
-  email: 'admin@sneat.com'
+  password: '',
+  email: ''
 }
 
 interface FormData {
@@ -60,8 +66,6 @@ const LoginPage = () => {
 
   const { mutate } = login!
 
-  console.log(login, 'loginf')
-
   const {
     control,
     handleSubmit,
@@ -73,7 +77,6 @@ const LoginPage = () => {
   })
 
   const onSubmit = async (data: FormData) => {
-    console.log(data)
     await mutate(data)
   }
 
@@ -83,6 +86,7 @@ const LoginPage = () => {
         <Card>
           <CardContent sx={{ p: `${theme.spacing(8, 8, 7)} !important` }}>
             <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img alt='Logo' src='/logo.png' className='h-[40px] w-[40px]' />
               <Typography
                 variant='h5'
                 sx={{

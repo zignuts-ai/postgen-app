@@ -4,15 +4,15 @@ import { VerticalNavItemsType } from 'src/@core/layouts/types'
 const navigation = (): VerticalNavItemsType => {
   return [
     {
-      title: 'History',
-      path: '/history',
-      icon: 'material-symbols:history',
-      auth: false
-    },
-    {
       title: 'New Chat',
       path: '/chat',
       icon: 'wpf:create-new',
+      auth: false
+    },
+    {
+      title: 'History',
+      path: '/history',
+      icon: 'material-symbols:history',
       auth: false
     }
 

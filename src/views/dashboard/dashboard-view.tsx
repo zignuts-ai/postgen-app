@@ -18,52 +18,10 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import CustomTextField from 'src/components/common/form/CustomTextField'
 import themeConfig from 'src/configs/themeConfig'
+import { platformTypes, toneTypes } from 'src/types/constantTypes'
+import { PLATFORM_TYPE, TONE_TYPE } from 'src/constants/constant'
 
-// Define types
-export type platformTypes = 'instagram' | 'linkedin'
-export type toneTypes =
-  | 'Polite'
-  | 'Witty'
-  | 'Enthusiastic'
-  | 'Friendly'
-  | 'Informational'
-  | 'Funny'
-  | 'Formal'
-  | 'Informal'
-  | 'Humorous'
-  | 'Serious'
-  | 'Optimistic'
-  | 'Motivating'
 export type postTypes = 'text' | 'image' | 'memes'
-
-// Define constants
-export const PLATFORM_TYPE = [
-  {
-    value: 'linkedin',
-    name: 'LinkedIn',
-    icon: 'mdi:linkedin'
-  },
-  {
-    value: 'instagram',
-    name: 'Instagram',
-    icon: 'mdi:instagram'
-  }
-]
-
-export const TONE_TYPE = [
-  { value: 'Polite' },
-  { value: 'Witty' },
-  { value: 'Enthusiastic' },
-  { value: 'Friendly' },
-  { value: 'Informational' },
-  { value: 'Funny' },
-  { value: 'Formal' },
-  { value: 'Informal' },
-  { value: 'Humorous' },
-  { value: 'Serious' },
-  { value: 'Optimistic' },
-  { value: 'Motivating' }
-]
 
 export const POST_TYPE = [
   {
@@ -133,7 +91,7 @@ const defaultValues: FormData = {
 }
 
 const DashboardView = () => {
-  const [selectedPlatform, setSelectedPlatform] = useState<platformTypes>('linkedin')
+  const [selectedPlatform, setSelectedPlatform] = useState<platformTypes | null>(null)
   const [selectedTone, setSelectedTone] = useState<toneTypes>('Polite')
   const [selectedPostType, setSelectedPostType] = useState<postTypes>('text')
 
@@ -235,7 +193,7 @@ const DashboardView = () => {
                       variant='outlined'
                       startIcon={<Icon icon={PLATFORM_TYPE.find(p => p.value === selectedPlatform)?.icon || ''} />}
                     >
-                      {PLATFORM_TYPE.find(p => p.value === selectedPlatform)?.name}
+                      {PLATFORM_TYPE.find(p => p.value === selectedPlatform)?.name ?? 'Platform'}
                     </Button>
                     <Menu anchorEl={platformAnchorEl} open={Boolean(platformAnchorEl)} onClose={handlePlatformClose}>
                       {PLATFORM_TYPE.map(platform => (
