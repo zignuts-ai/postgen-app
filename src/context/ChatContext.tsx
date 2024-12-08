@@ -13,6 +13,7 @@ import { useRouter } from 'next/router'
 import { io, Socket } from 'socket.io-client'
 import endpoints from 'src/constants/endpoints'
 import { useAuth } from 'src/hooks/useAuth'
+import useLoading from 'src/hooks/useLoading'
 
 export type ChatValuesTypes = {
   store: any
@@ -20,6 +21,8 @@ export type ChatValuesTypes = {
   chatId: string | string[] | undefined
   sendMessage: (content: string) => void
   messages: ChatMessage[]
+  isPendingChat: boolean
+  isSocketInit: boolean
 }
 
 // ** Defaults
@@ -45,6 +48,8 @@ const ChatProvider = ({ children }: Props) => {
   const { chatId } = router.query
   const [messages, setMessages] = useState<ChatMessage[]>(CHAT_DATA)
   const { user } = useAuth()
+  const { isLoading: isPendingChat, startLoading: startLoadingChat, stopLoading: stopLoadingChat } = useLoading()
+  const { isLoading: isSocketInit, startLoading: startLoadingSocket, stopLoading: stopLoadingSocket } = useLoading()
 
   // ** States
   const [socket, setSocket] = useState<Socket | null>(null)
@@ -56,36 +61,48 @@ const ChatProvider = ({ children }: Props) => {
     resolver: yupResolver(schema)
   })
 
-  const sendMessage = (content: string) => {
-    if (socket && chatId) {
-      const message: ChatMessage = {
-        id: chatId.toString(),
-        message: content,
-        senderId: user?.id?.toString() ?? 'No-Auth',
-        timestamp: Date.now().toString()
-      }
+  const sendMessage = async (content: string) => {
+    startLoadingChat()
+    try {
+      if (socket && chatId) {
+        const message: ChatMessage = {
+          id: chatId.toString(),
+          message: content,
+          senderId: user?.id?.toString() ?? 'No-Auth',
+          timestamp: Date.now().toString()
+        }
 
-      socket.emit('send-message', message)
-      setMessages(prevMessages => [...prevMessages, message])
+        socket.emit('send-message', message)
+        setMessages(prevMessages => [...prevMessages, message])
+      }
+    } finally {
+      stopLoadingChat()
     }
   }
 
   useEffect(() => {
+    startLoadingSocket()
     const newSocket = io(endpoints.chat.connection, {
       query: { chatId }
     })
 
     setSocket(newSocket)
 
+    newSocket.on('connect', () => stopLoadingSocket())
     newSocket.on('chat-message', (message: ChatMessage) => {
       if (message.id === chatId) {
         setMessages(prevMessages => [...prevMessages, message])
       }
     })
 
+    newSocket.on('disconnect', () => stopLoadingSocket())
+
     return () => {
       newSocket.disconnect()
+      stopLoadingSocket()
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatId])
 
   const values = {
@@ -94,7 +111,9 @@ const ChatProvider = ({ children }: Props) => {
     chatId,
     socket,
     sendMessage,
-    messages
+    messages,
+    isPendingChat,
+    isSocketInit
   }
 
   return <ChatContext.Provider value={values}>{children}</ChatContext.Provider>
