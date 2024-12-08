@@ -1,6 +1,6 @@
 import { Page } from 'src/types/landing'
 
-export const page: Page = {
+export const LANDING_DATA: Page = {
   template: 'innovate',
   theme: 'dark',
   header: {

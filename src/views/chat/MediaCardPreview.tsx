@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Card, CardMedia, Box, IconButton, styled } from '@mui/material'
-import { ZoomIn as ZoomInIcon } from '@mui/icons-material'
+import { Icon } from '@iconify/react'
 
 const HoverableCard = styled(Card)(({ theme }) => ({
   position: 'relative',
@@ -28,7 +28,14 @@ const HoverOverlay = styled(Box)(({ theme }) => ({
   zIndex: 10
 }))
 
-const MemeCard = ({ imageUrl, alt = 'Meme', onZoom }: { imageUrl: string; alt?: string; onZoom?: () => void }) => {
+interface MediaCardProps {
+  type: 'image' | 'video' | 'meme'
+  src: string
+  alt?: string
+  onZoom?: () => void
+}
+
+const MediaCard: React.FC<MediaCardProps> = ({ type, src, alt = 'Media', onZoom }) => {
   const [isHovered, setIsHovered] = useState(false)
 
   return (
@@ -39,7 +46,7 @@ const MemeCard = ({ imageUrl, alt = 'Meme', onZoom }: { imageUrl: string; alt?: 
         }}
       >
         <IconButton
-          size='small'
+          size='large'
           sx={{
             color: 'white',
             backgroundColor: 'rgba(0,0,0,0.5)',
@@ -52,24 +59,41 @@ const MemeCard = ({ imageUrl, alt = 'Meme', onZoom }: { imageUrl: string; alt?: 
             onZoom?.()
           }}
         >
-          <ZoomInIcon fontSize='small' />
+          <Icon icon='mdi:eye' fontSize={22} />
         </IconButton>
       </HoverOverlay>
-      <CardMedia
-        component='img'
-        height='194'
-        image={imageUrl}
-        alt={alt}
-        sx={{
-          objectFit: 'contain',
-          transition: 'transform 0.3s ease',
-          '&:hover': {
-            transform: 'scale(1.05)'
-          }
-        }}
-      />
+      {type === 'video' ? (
+        <CardMedia
+          component='video'
+          controls={false}
+          autoPlay
+          height='194'
+          src={src}
+          sx={{
+            objectFit: 'contain',
+            transition: 'transform 0.3s ease',
+            '&:hover': {
+              transform: 'scale(1.05)'
+            }
+          }}
+        />
+      ) : (
+        <CardMedia
+          component='img'
+          height='194'
+          image={src}
+          alt={alt}
+          sx={{
+            objectFit: 'contain',
+            transition: 'transform 0.3s ease',
+            '&:hover': {
+              transform: 'scale(1.05)'
+            }
+          }}
+        />
+      )}
     </HoverableCard>
   )
 }
 
-export default MemeCard
+export default MediaCard

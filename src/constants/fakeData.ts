@@ -28,7 +28,7 @@ export const CHAT_DATA: ChatMessage[] = [
     timestamp: 'Mon Dec 11 2018 07:45:15 GMT+0000 (GMT)',
     id: 'ss38sdds4u8',
     role: 'ai',
-    type: 'meme'
+    type: 'video'
   },
   {
     message: 'I will inform you as I get update on this.',

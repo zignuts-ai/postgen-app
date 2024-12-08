@@ -2,8 +2,8 @@ import { Header, Item } from '../../../types/landing'
 
 import Link from 'next/link'
 import { Menu } from 'lucide-react'
-import { Button } from 'src/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSubTrigger } from 'src/ui/dropdown-menu'
+import { Button } from '@mui/material'
 
 export default function ({ header }: { header: Header }) {
   if (header.disabled) {
@@ -46,7 +46,12 @@ export default function ({ header }: { header: Header }) {
         <div className='flex flex-1 items-center justify-between space-x-4 md:justify-end'>
           {header.buttons?.map((v, idx) => (
             <Link key={idx} href={v.url || ''} target={v.target || '_self'}>
-              <Button key={idx} size='sm' variant={v.theme === 'outline' ? 'outline' : 'default'}>
+              <Button
+                key={idx}
+                size='large'
+                variant={v.theme === 'outline' ? 'outlined' : 'contained'}
+                className='w-full sm:w-auto'
+              >
                 {v.title}
               </Button>
             </Link>
@@ -68,7 +73,7 @@ export default function ({ header }: { header: Header }) {
             {header.nav && header.nav.items && header.nav.items.length > 0 && (
               <DropdownMenu>
                 <DropdownMenuSubTrigger asChild>
-                  <Button variant='outline' size='icon' className='md:hidden'>
+                  <Button size='large' variant={'outlined'} className='md:hidden'>
                     <Menu className='h-5 w-5' />
                     <span className='sr-only'>Toggle menu</span>
                   </Button>
@@ -76,11 +81,14 @@ export default function ({ header }: { header: Header }) {
                 <DropdownMenuContent align='end'>
                   {header.nav?.items?.map((v: Item, idx: number) => {
                     return (
-                      <DropdownMenuItem key={idx}>
-                        <Link href={v.url || ''} target={v.target || '_self'} className='w-full'>
-                          {v.title}
-                        </Link>
-                      </DropdownMenuItem>
+                      <>
+                        {/* @ts-ignore */}
+                        <DropdownMenuItem key={idx}>
+                          <Link href={v.url || ''} target={v.target || '_self'} className='w-full'>
+                            {v.title}
+                          </Link>
+                        </DropdownMenuItem>
+                      </>
                     )
                   })}
                 </DropdownMenuContent>
