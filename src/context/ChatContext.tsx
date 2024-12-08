@@ -1,7 +1,6 @@
 // ** React Imports
 import { createContext, ReactNode, useEffect, useMemo, useState } from 'react'
 import { useForm, UseFormReturn } from 'react-hook-form'
-import { CHAT_DATA } from 'src/constants/fakeData'
 
 // ** Third Party Imports
 import * as yup from 'yup'
@@ -19,14 +18,13 @@ import { useRouter } from 'next/router'
 import { io, Socket } from 'socket.io-client'
 import endpoints from 'src/constants/endpoints'
 import useLoading from 'src/hooks/useLoading'
-import { useMutation, UseMutationResult, useQuery } from '@tanstack/react-query'
+import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query'
 import { CHAT } from 'src/queries/query-keys'
 import { createChatSession, getChatById } from 'src/queries/chat'
 import { AxiosError } from 'axios'
 import { toast } from 'react-hot-toast'
 
 export type ChatValuesTypes = {
-  store: any
   methods: UseFormReturn<FormType, any>
   chatId: string | string[] | undefined
   sendMessage: (content: string) => void
@@ -37,6 +35,7 @@ export type ChatValuesTypes = {
   previewData: PreviewDataType
   handleCraeteSessionChat: UseMutationResult<CreateSessionResponseTypes, AxiosError<unknown, any>, any, unknown>
   chatDetails: GetChatByIdResponseTypes | null
+  chatDetailQuery: UseQueryResult<GetChatByIdResponseTypes, Error>
 }
 
 // ** Defaults
@@ -71,7 +70,7 @@ const ChatProvider = ({ children }: Props) => {
     resolver: yupResolver(schema)
   })
 
-  const { data: chatDetailsData } = useQuery({
+  const chatDetailQuery = useQuery({
     queryKey: [CHAT.GET_DETIAL_BY_ID],
     queryFn: () => getChatById(chatId as string),
     enabled: !!chatId
@@ -111,6 +110,7 @@ const ChatProvider = ({ children }: Props) => {
   }
 
   useEffect(() => {
+    return
     startLoadingSocket()
     const newSocket = io(endpoints.chat.connection, {
       query: { chatId }
@@ -136,15 +136,14 @@ const ChatProvider = ({ children }: Props) => {
   }, [chatId])
 
   useEffect(() => {
-    if (chatDetailsData) {
-      setMessages(chatDetailsData.data?.[0]?.messages)
-      setChatDetails(chatDetailsData)
+    if (chatDetailQuery?.data) {
+      setMessages(chatDetailQuery?.data?.data?.[0]?.messages)
+      setChatDetails(chatDetailQuery?.data)
     }
-  }, [chatDetailsData])
+  }, [chatDetailQuery])
 
   const values = useMemo(
     () => ({
-      store: CHAT_DATA,
       methods,
       chatId,
       socket,
@@ -155,7 +154,8 @@ const ChatProvider = ({ children }: Props) => {
       previewData,
       setPreviewData,
       handleCraeteSessionChat,
-      chatDetails
+      chatDetails,
+      chatDetailQuery
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [chatId, socket, messages, isPendingChat, isSocketInit, previewData, methods]

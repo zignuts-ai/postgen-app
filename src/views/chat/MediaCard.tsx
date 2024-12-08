@@ -62,10 +62,10 @@ const MediaCard: React.FC<MediaCardProps> = ({ type, src, alt = 'Media', onZoom,
             e.stopPropagation()
             onZoom?.()
             setPreviewData({
-              title: item.message,
-              caption: item.message,
+              title: item.message ?? '',
+              caption: item.message ?? '',
               imageUrl: src,
-              type: item?.type
+              type: item?.type ?? 'image'
             })
           }}
         >

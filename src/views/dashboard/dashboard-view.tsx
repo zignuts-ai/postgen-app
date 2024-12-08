@@ -9,7 +9,8 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
-  ListItemText
+  ListItemText,
+  CircularProgress
 } from '@mui/material'
 import { Icon } from '@iconify/react'
 import * as yup from 'yup'
@@ -82,7 +83,9 @@ const DashboardView = () => {
   const [toneAnchorEl, setToneAnchorEl] = useState<null | HTMLElement>(null)
   const [postTypeAnchorEl, setPostTypeAnchorEl] = useState<null | HTMLElement>(null)
 
-  const { handleCraeteSessionChat } = useChat()
+  const {
+    handleCraeteSessionChat: { mutate, isPending }
+  } = useChat()
 
   const {
     handleSubmit,
@@ -102,8 +105,8 @@ const DashboardView = () => {
       prompt: data.prompt,
       sessionId
     }
-
-    await handleCraeteSessionChat.mutate(payLoad)
+    await mutate(payLoad)
+    window.open(`/chat/${sessionId}`, '_self')
   }
 
   // Dropdown handlers
@@ -262,9 +265,10 @@ const DashboardView = () => {
               <Grid item xs={12}>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                   <Button
-                    endIcon={<Icon icon='ri:quill-pen-ai-line' />}
+                    endIcon={isPending ? <CircularProgress size={20} /> : <Icon icon='ri:quill-pen-ai-line' />}
                     type='submit'
                     variant='contained'
+                    disabled={isPending}
                     sx={{
                       borderRadius: 1,
                       padding: '5px 10px',
@@ -274,7 +278,7 @@ const DashboardView = () => {
                       }
                     }}
                   >
-                    Generate
+                    {isPending ? 'generating...' : 'Generater'}
                   </Button>
                 </Box>
               </Grid>

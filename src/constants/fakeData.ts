@@ -1,51 +1,5 @@
-import { ChatMessage } from 'src/types/chatContextType'
 import { Content } from 'src/types/contentTypes'
 import { Page } from 'src/types/landing'
-
-export const CHAT_DATA: ChatMessage[] = [
-  {
-    message: 'Hi',
-    timestamp: 'Mon Dec 10 2018 07:45:00 GMT+0000 (GMT)',
-    id: 'dsdsddsde',
-    role: 'user',
-    type: 'text'
-  },
-  {
-    message: 'Hello. How can I help You?',
-    timestamp: 'Mon Dec 11 2018 07:45:15 GMT+0000 (GMT)',
-    id: 'ss384ddu8',
-    role: 'ai',
-    type: 'meme'
-  },
-  {
-    message: 'Can I get details of my last transaction I made last month? 🤔',
-    timestamp: 'Mon Dec 11 2018 07:46:10 GMT+0000 (GMT)',
-    id: 'ss384u8',
-    role: 'user',
-    type: 'text'
-  },
-  {
-    message: 'We need to check if we can provide you such information.',
-    timestamp: 'Mon Dec 11 2018 07:45:15 GMT+0000 (GMT)',
-    id: 'ss38sdds4u8',
-    role: 'ai',
-    type: 'video'
-  },
-  {
-    message: 'I will inform you as I get update on this.',
-    timestamp: 'Mon Dec 11 2018 07:46:15 GMT+0000 (GMT)',
-    id: 'ss383r34u8',
-    role: 'ai',
-    type: 'text'
-  },
-  {
-    message: 'If it takes long you can mail me at my mail address.',
-    timestamp: '2024-12-05T11:57:12.761Z',
-    id: 'ss3r3r384u8',
-    role: 'user',
-    type: 'text'
-  }
-]
 
 export const dataSample: Content[] = [
   {
