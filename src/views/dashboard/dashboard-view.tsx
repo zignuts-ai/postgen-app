@@ -19,6 +19,8 @@ import CustomTextField from 'src/components/common/form/CustomTextField'
 import themeConfig from 'src/configs/themeConfig'
 import { platformTypes, toneTypes } from 'src/types/constantTypes'
 import { PLATFORM_TYPE, TONE_TYPE } from 'src/constants/constant'
+import { UUID } from 'src/utils/utils'
+import { useChat } from 'src/hooks/useChat'
 
 export type postTypes = 'text' | 'image' | 'memes'
 
@@ -80,6 +82,8 @@ const DashboardView = () => {
   const [toneAnchorEl, setToneAnchorEl] = useState<null | HTMLElement>(null)
   const [postTypeAnchorEl, setPostTypeAnchorEl] = useState<null | HTMLElement>(null)
 
+  const { handleCraeteSessionChat } = useChat()
+
   const {
     handleSubmit,
     control,
@@ -89,13 +93,17 @@ const DashboardView = () => {
     resolver: yupResolver(schema)
   })
 
-  const onSubmit = (data: FormData) => {
-    console.log('Form Data:', {
+  const onSubmit = async (data: FormData) => {
+    const sessionId = UUID()
+    const payLoad = {
       platform: selectedPlatform,
       tone: selectedTone,
       postType: selectedPostType,
-      prompt: data.prompt
-    })
+      prompt: data.prompt,
+      sessionId
+    }
+
+    await handleCraeteSessionChat.mutate(payLoad)
   }
 
   // Dropdown handlers
