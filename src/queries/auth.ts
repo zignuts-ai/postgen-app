@@ -1,7 +1,6 @@
-import Cookies from 'js-cookie'
 import { api } from 'src/api/api'
-import { REFRESH_TOKEN_KEY } from 'src/constants/constant'
 import endpoints from 'src/constants/endpoints'
+import { apiClient } from 'src/utils/client'
 
 export async function signup(dto: any): Promise<any> {
   const { data } = await api(endpoints.auth.registration, dto, 'postWithoutToken')
@@ -15,14 +14,16 @@ export async function login(dto: any): Promise<any> {
   return data
 }
 
-export async function refreshToken(): Promise<any> {
-  const { data } = await api(endpoints.auth.refresh, { refresh: Cookies.get(REFRESH_TOKEN_KEY) }, 'post')
-
-  return data
-}
-
-export async function fetchUser(): Promise<any> {
-  const { data } = await api(endpoints.user.userDetails, {}, 'get')
+export async function logout(dto: any): Promise<any> {
+  const { data } = await apiClient.post(
+    endpoints.auth.logout,
+    {},
+    {
+      headers: {
+        Authorization: `Barrer ${dto}`
+      }
+    }
+  )
 
   return data
 }

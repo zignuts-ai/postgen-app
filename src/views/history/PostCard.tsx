@@ -1,18 +1,13 @@
-import React, { useState } from 'react'
-import { Card, CardMedia, CardContent, Typography, Button, Box, Chip, IconButton } from '@mui/material'
-import { Share as ShareIcon, Favorite as FavoriteIcon } from '@mui/icons-material'
+import React from 'react'
+import { Card, CardMedia, CardContent, Typography, Button, Box, Chip } from '@mui/material'
 import { Content } from 'src/types/contentTypes'
 import Link from 'next/link'
 
-const PostCard = ({ image, title, description, platform, type = 'image', aiGenerated = true, id }: Content) => {
-  const [liked, setLiked] = useState(false)
-
+const PostCard = ({ image, title, description, platform, type = 'image', id }: Content) => {
   return (
     <>
       <Card
         sx={{
-          maxWidth: 400,
-          minWidth: 280,
           position: 'relative',
           transition: 'transform 0.3s ease-in-out',
           boxShadow: 4,
@@ -44,60 +39,50 @@ const PostCard = ({ image, title, description, platform, type = 'image', aiGener
           )}
         </Link>
 
-        {/* Platform and AI Generated Chip */}
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 10,
-            left: 10,
-            display: 'flex',
-            gap: 1
-          }}
-        >
-          <Chip label={platform.toUpperCase()} color='primary' size='small' />
-          {aiGenerated && <Chip label='AI Generated' color='secondary' size='small' />}
-        </Box>
+        {platform && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 10,
+              left: 10,
+              display: 'flex',
+              gap: 1
+            }}
+          >
+            <Chip label={platform?.toUpperCase()} color='primary' size='small' />
+          </Box>
+        )}
 
         {/* Card Content */}
         <CardContent>
-          <Typography gutterBottom variant='h6' component='div'>
-            {title}
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
-            {description}
-          </Typography>
+          {title && (
+            <Typography gutterBottom variant='h6' component='div'>
+              {title.length > 20 ? `${title.slice(0, 20)}...` : title}
+            </Typography>
+          )}
+          {description && (
+            <Typography variant='body2' color='text.secondary'>
+              {description.length > 40 ? `${description.slice(0, 40)}...` : description}
+            </Typography>
+          )}
         </CardContent>
 
-        {/* Action Buttons */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            p: 2
-          }}
-        >
-          <IconButton aria-label='add to favorites' onClick={() => setLiked(!liked)}>
-            <FavoriteIcon color={(liked ? 'error' : 'default') as any} />
-          </IconButton>
-          <IconButton aria-label='share'>
-            <ShareIcon />
-          </IconButton>
-        </Box>
-
-        <Button
-          variant='contained'
-          fullWidth
-          sx={{
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
-            bgcolor: 'primary.main',
-            '&:hover': {
-              bgcolor: 'primary.dark'
-            }
-          }}
-        >
-          Dowonload
-        </Button>
+        {(type === 'image' || type === 'video') && (
+          <Button
+            variant='contained'
+            fullWidth
+            sx={{
+              borderTopLeftRadius: 0,
+              borderTopRightRadius: 0,
+              bgcolor: 'primary.main',
+              '&:hover': {
+                bgcolor: 'primary.dark'
+              }
+            }}
+          >
+            Dowonload
+          </Button>
+        )}
       </Card>
     </>
   )

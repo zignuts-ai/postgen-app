@@ -1,9 +1,7 @@
 import React from 'react'
 import HistoryView from 'src/views/history/view'
 
-const Home = () => {
-  return <HistoryView />
-}
+const Home = () => <HistoryView />
 
 Home.publicGuard = true
 

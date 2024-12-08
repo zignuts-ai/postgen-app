@@ -10,7 +10,7 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
-  Typography
+  CircularProgress
 } from '@mui/material'
 import { Icon } from '@iconify/react'
 import * as yup from 'yup'
@@ -20,6 +20,8 @@ import CustomTextField from 'src/components/common/form/CustomTextField'
 import themeConfig from 'src/configs/themeConfig'
 import { platformTypes, toneTypes } from 'src/types/constantTypes'
 import { PLATFORM_TYPE, TONE_TYPE } from 'src/constants/constant'
+import { UUID } from 'src/utils/utils'
+import { useChat } from 'src/hooks/useChat'
 
 export type postTypes = 'text' | 'image' | 'memes'
 
@@ -82,6 +84,10 @@ const DashboardView = () => {
   const [postTypeAnchorEl, setPostTypeAnchorEl] = useState<null | HTMLElement>(null)
 
   const {
+    handleCraeteSessionChat: { mutate, isPending }
+  } = useChat()
+
+  const {
     handleSubmit,
     control,
     formState: { errors }
@@ -90,13 +96,16 @@ const DashboardView = () => {
     resolver: yupResolver(schema)
   })
 
-  const onSubmit = (data: FormData) => {
-    console.log('Form Data:', {
+  const onSubmit = async (data: FormData) => {
+    const sessionId = UUID()
+    const payLoad = {
       platform: selectedPlatform,
       tone: selectedTone,
       postType: selectedPostType,
-      prompt: data.prompt
-    })
+      prompt: data.prompt,
+      sessionId
+    }
+    await mutate(payLoad)
   }
 
   // Dropdown handlers
@@ -127,13 +136,15 @@ const DashboardView = () => {
   return (
     <Box sx={{ my: 10, mt: 15 }}>
       <Box sx={{ my: 10, mt: 10 }}>
-        <Typography textAlign={'center'} variant='h5' fontWeight={700} color='white'>
-          Generate social media posts in seconds for free
-        </Typography>
-        <Typography textAlign={'center'} variant='subtitle1' fontWeight={400}>
-          Stay consistent, creative, and productive with {themeConfig.templateName}'s free AI social media post
-          generator.
-        </Typography>
+        <div className='max-w-3xl mx-auto text-center'>
+          <h2 className='text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-primary mb-6 drop-shadow-md'>
+            Generate social media posts in seconds for free
+          </h2>
+          <p className='text-base sm:text-lg text-muted-foreground mb-8'>
+            Stay consistent, creative, and productive with {themeConfig.templateName}'s free AI social media post
+            generator.
+          </p>
+        </div>
       </Box>
       <Card
         sx={{
@@ -253,7 +264,7 @@ const DashboardView = () => {
               <Grid item xs={12}>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                   <Button
-                    endIcon={<Icon icon='ri:quill-pen-ai-line' />}
+                    endIcon={isPending ? <CircularProgress size={20} /> : <Icon icon='ri:quill-pen-ai-line' />}
                     type='submit'
                     variant='contained'
                     sx={{
@@ -265,7 +276,7 @@ const DashboardView = () => {
                       }
                     }}
                   >
-                    Generate
+                    {isPending ? 'generating...' : 'Generater'}
                   </Button>
                 </Box>
               </Grid>

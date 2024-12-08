@@ -14,6 +14,7 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 
 // ** Utils Imports
 import { getInitials } from 'src/@core/utils/get-initials'
+import moment from 'moment'
 
 // ** Types Imports
 import { useChat } from 'src/hooks/useChat'
@@ -71,8 +72,7 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
           <Card sx={{ border: 0, boxShadow: 0, color: 'common.white', backgroundColor: '#535353' }}>
             <CardContent sx={{ p: theme => `${theme.spacing(3.25, 5, 4.5)} !important` }}>
               <Typography variant='body2' sx={{ mb: 3, color: 'common.white' }}>
-                Turns out semicolon-less style is easier and safer in TS because most gotcha edge cases are type invalid
-                as well.
+                {item?.message ?? 'Generating..'}
               </Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
@@ -122,7 +122,7 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
 
   // ** Renders user chat
   const renderChats = () => {
-    return messages.map((item: ChatMessage, index: number) => {
+    return (messages ?? []).map((item: ChatMessage, index: number) => {
       const isSender = item.role === 'user'
 
       return (
@@ -131,7 +131,7 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
           sx={{
             display: 'flex',
             flexDirection: !isSender ? 'row' : 'row-reverse',
-            mb: index !== messages.length - 1 ? 4 : undefined
+            mb: index !== (messages?.length ?? 0) - 1 ? 4 : undefined
           }}
         >
           <div>
@@ -181,22 +181,20 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
                     backgroundColor: isSender ? 'primary.main' : 'background.paper'
                   }}
                 >
-                  {item.message}
-                  {!isSender && <div className='my-3'>{renderMessageType(item)}</div>}
+                  {isSender ? item.message : <div className='my-3'>{renderMessageType(item)}</div>}
                 </Typography>
               </div>
-              {index + 1 === length ? (
-                <Box
-                  sx={{
-                    mt: 1,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: isSender ? 'flex-end' : 'flex-start'
-                  }}
-                >
-                  <Typography variant='caption'>{item.timestamp}</Typography>
-                </Box>
-              ) : null}
+
+              <Box
+                sx={{
+                  mt: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: isSender ? 'flex-end' : 'flex-start'
+                }}
+              >
+                <Typography variant='caption'>{moment(item.created_at).format('h:mm A')}</Typography>
+              </Box>
             </Box>
           </Box>
         </Box>
@@ -213,7 +211,7 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
       )
     } else {
       return (
-        <PerfectScrollbar ref={chatArea} options={{ wheelPropagation: false }}>
+        <PerfectScrollbar ref={chatArea} options={{ wheelPropagation: false, suppressScrollX: true }}>
           {children}
         </PerfectScrollbar>
       )
@@ -221,7 +219,7 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
   }
 
   return (
-    <Box sx={{ height: 'calc(100% - 8.4375rem)' }}>
+    <Box sx={{ height: 'calc(100% - 8.4375rem)' }} className='common-scroll'>
       <ScrollWrapper>{renderChats()}</ScrollWrapper>
     </Box>
   )

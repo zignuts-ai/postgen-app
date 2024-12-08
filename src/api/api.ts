@@ -1,6 +1,5 @@
 // ***** start - import from packages *****
 import { AxiosRequestConfig } from 'axios'
-import Cookies from 'js-cookie'
 import { ACCESS_TOKEN_KEY } from 'src/constants/constant'
 import { apiClient, userClient } from 'src/utils/client'
 
@@ -11,7 +10,7 @@ type requestType = 'get' | 'post' | 'delete' | 'postFormData' | 'postWithoutToke
 // ***** start - Api function for call any type of apis *****
 export const api = async (endpoint: string, data: any, type: requestType, configs?: AxiosRequestConfig<any>) => {
   let res: any
-  const token = Cookies.get(ACCESS_TOKEN_KEY)
+  const token = localStorage.getItem(ACCESS_TOKEN_KEY)
 
   const BASIC_HEADER = {
     Accept: 'application/json',

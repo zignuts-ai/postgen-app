@@ -1,29 +1,45 @@
 // ** React Imports
-import { createContext, ReactNode, useEffect, useState } from 'react'
+import { createContext, ReactNode, useEffect, useMemo, useState } from 'react'
 import { useForm, UseFormReturn } from 'react-hook-form'
-import { CHAT_DATA } from 'src/constants/fakeData'
 
 // ** Third Party Imports
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Types
-import { ChatMessage, FormType, PreviewDataType } from 'src/types/chatContextType'
+import {
+  ChatMessage,
+  CreateSessionResponseTypes,
+  FormType,
+  GetChatByIdResponseTypes,
+  GuestHistoryType,
+  PreviewDataType
+} from 'src/types/chatContextType'
 import { useRouter } from 'next/router'
 import { io, Socket } from 'socket.io-client'
 import endpoints from 'src/constants/endpoints'
 import useLoading from 'src/hooks/useLoading'
+import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query'
+import { CHAT } from 'src/queries/query-keys'
+import { createChatSession, getAllChats, getChatById } from 'src/queries/chat'
+import { AxiosError } from 'axios'
+import { useAuth } from 'src/hooks/useAuth'
+import { LOCAL_CHAT_SESSION_KEY } from 'src/constants/constant'
 
 export type ChatValuesTypes = {
-  store: any
   methods: UseFormReturn<FormType, any>
   chatId: string | string[] | undefined
   sendMessage: (content: string) => void
-  messages: ChatMessage[]
+  messages: ChatMessage[] | null
   isPendingChat: boolean
   isSocketInit: boolean
   setPreviewData: (data: PreviewDataType) => void
   previewData: PreviewDataType
+  handleCraeteSessionChat: UseMutationResult<CreateSessionResponseTypes, AxiosError<unknown, any>, any, unknown>
+  chatDetails: GetChatByIdResponseTypes | null
+  chatDetailQuery: UseQueryResult<GetChatByIdResponseTypes, Error>
+  allUserChatsQuery: UseQueryResult<GetChatByIdResponseTypes, Error>
+  guestHistory: GuestHistoryType[]
 }
 
 // ** Defaults
@@ -40,9 +56,11 @@ const schema = yup.object().shape({
 const ChatProvider = ({ children }: Props) => {
   const router = useRouter()
   const { chatId } = router.query
-  const [messages, setMessages] = useState<ChatMessage[]>(CHAT_DATA)
+  const { user } = useAuth()
+  const [messages, setMessages] = useState<ChatMessage[] | null>(null)
+  const [chatDetails, setChatDetails] = useState<GetChatByIdResponseTypes | null>(null)
   const [previewData, setPreviewData] = useState<PreviewDataType>({} as PreviewDataType)
-
+  const [guestHistory, setGuestHistory] = useState<GuestHistoryType[]>([])
   const { isLoading: isPendingChat, startLoading: startLoadingChat, stopLoading: stopLoadingChat } = useLoading()
   const { isLoading: isSocketInit, startLoading: startLoadingSocket, stopLoading: stopLoadingSocket } = useLoading()
 
@@ -53,7 +71,38 @@ const ChatProvider = ({ children }: Props) => {
     defaultValues: {
       prompt: ''
     },
+    mode: 'onSubmit',
     resolver: yupResolver(schema)
+  })
+
+  const chatDetailQuery = useQuery({
+    queryKey: [CHAT.GET_DETIAL_BY_ID],
+    queryFn: () => getChatById(chatId as string),
+    enabled: !!chatId
+  })
+
+  const allUserChatsQuery = useQuery({
+    queryKey: [CHAT.ALL_USER_CHATS],
+    queryFn: getAllChats,
+    enabled: false
+  })
+
+  const handleCraeteSessionChat = useMutation({
+    mutationFn: dto => createChatSession(dto, user),
+    onSuccess: data => {
+      if (!user) {
+        const guestHistory = JSON.parse(localStorage.getItem(LOCAL_CHAT_SESSION_KEY) || '[]')
+        guestHistory.push({
+          sessionId: data.data.sessionId,
+          sessionName: data.data.message
+        })
+        localStorage.setItem(LOCAL_CHAT_SESSION_KEY, JSON.stringify(guestHistory))
+      }
+      router.push(`/chat/${data.data.sessionId}`)
+    },
+    onError: async (err: AxiosError) => {
+      console.log(err)
+    }
   })
 
   const sendMessage = async (content: string) => {
@@ -61,15 +110,17 @@ const ChatProvider = ({ children }: Props) => {
     try {
       if (socket && chatId) {
         const message: ChatMessage = {
-          id: chatId.toString(),
+          messageId: chatId as string,
           message: content,
-          timestamp: Date.now().toString(),
           role: 'user',
-          type: 'text'
+          type: 'text',
+          created_at: Date.now(),
+          created_by: 'user',
+          metadata: null
         }
 
         socket.emit('send-message', message)
-        setMessages(prevMessages => [...prevMessages, message])
+        setMessages(prevMessages => [...(prevMessages || []), message])
       }
     } finally {
       stopLoadingChat()
@@ -77,6 +128,7 @@ const ChatProvider = ({ children }: Props) => {
   }
 
   useEffect(() => {
+    return
     startLoadingSocket()
     const newSocket = io(endpoints.chat.connection, {
       query: { chatId }
@@ -86,8 +138,8 @@ const ChatProvider = ({ children }: Props) => {
 
     newSocket.on('connect', () => stopLoadingSocket())
     newSocket.on('chat-message', (message: ChatMessage) => {
-      if (message.id === chatId) {
-        setMessages(prevMessages => [...prevMessages, message])
+      if (message.messageId === chatId) {
+        setMessages(prevMessages => [...(prevMessages || []), message])
       }
     })
 
@@ -101,18 +153,41 @@ const ChatProvider = ({ children }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatId])
 
-  const values = {
-    store: CHAT_DATA,
-    methods,
-    chatId,
-    socket,
-    sendMessage,
-    messages,
-    isPendingChat,
-    isSocketInit,
-    previewData,
-    setPreviewData
-  }
+  useEffect(() => {
+    if (chatDetailQuery?.data) {
+      setMessages(chatDetailQuery?.data?.data?.[0]?.messages)
+      setChatDetails(chatDetailQuery?.data)
+    }
+  }, [chatDetailQuery])
+
+  useEffect(() => {
+    if (!user) {
+      if (localStorage.getItem(LOCAL_CHAT_SESSION_KEY)) {
+        setGuestHistory(JSON.parse(localStorage.getItem(LOCAL_CHAT_SESSION_KEY)! ?? []))
+      }
+    }
+  }, [user])
+
+  const values = useMemo(
+    () => ({
+      methods,
+      chatId,
+      socket,
+      sendMessage,
+      messages,
+      isPendingChat,
+      isSocketInit,
+      previewData,
+      setPreviewData,
+      handleCraeteSessionChat,
+      chatDetails,
+      chatDetailQuery,
+      guestHistory,
+      allUserChatsQuery
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [chatId, socket, messages, isPendingChat, isSocketInit, previewData, methods]
+  )
 
   return <ChatContext.Provider value={values}>{children}</ChatContext.Provider>
 }

@@ -8,7 +8,6 @@ import Box, { BoxProps } from '@mui/material/Box'
 import { useChat } from 'src/hooks/useChat'
 import { Controller } from 'react-hook-form'
 import { FormType } from 'src/types/chatContextType'
-import { useRef } from 'react'
 
 // ** Styled Components
 const ChatFormWrapper = styled(Box)<BoxProps & { hasError: boolean }>(({ theme, hasError }) => ({
@@ -28,9 +27,13 @@ const Form = styled('form')(({ theme }) => ({
 }))
 
 const SendMsgForm = () => {
-  const { methods, sendMessage } = useChat()
+  const {
+    methods,
 
-  const textFieldRef = useRef(null)
+    // sendMessage,
+    chatId,
+    handleCraeteSessionChat: { mutate }
+  } = useChat()
 
   const {
     control,
@@ -38,8 +41,12 @@ const SendMsgForm = () => {
     formState: { errors }
   } = methods
 
-  const onSubmit = (data: FormType) => {
-    sendMessage(data.prompt)
+  const onSubmit = async (data: FormType) => {
+    // sendMessage(data.prompt)
+    await mutate({
+      sessionId: chatId,
+      prompt: data?.prompt
+    })
     methods.reset()
   }
 
@@ -56,7 +63,6 @@ const SendMsgForm = () => {
                 {...field}
                 fullWidth
                 size='small'
-                inputRef={textFieldRef}
                 placeholder='Type your message here…'
                 sx={{
                   '& .MuiOutlinedInput-input': { pl: 0 },
