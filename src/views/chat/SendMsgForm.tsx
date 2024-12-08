@@ -8,6 +8,7 @@ import Box, { BoxProps } from '@mui/material/Box'
 import { useChat } from 'src/hooks/useChat'
 import { Controller } from 'react-hook-form'
 import { FormType } from 'src/types/chatContextType'
+import { useRef } from 'react'
 
 // ** Styled Components
 const ChatFormWrapper = styled(Box)<BoxProps & { hasError: boolean }>(({ theme, hasError }) => ({
@@ -27,18 +28,19 @@ const Form = styled('form')(({ theme }) => ({
 }))
 
 const SendMsgForm = () => {
-  const { methods } = useChat()
+  const { methods, sendMessage } = useChat()
+
+  const textFieldRef = useRef(null)
 
   const {
     control,
     handleSubmit,
-    reset,
     formState: { errors }
   } = methods
 
   const onSubmit = (data: FormType) => {
-    console.log('Message Sent:', data.prompt)
-    reset({ prompt: '' })
+    sendMessage(data.prompt)
+    methods.reset()
   }
 
   return (
@@ -54,6 +56,7 @@ const SendMsgForm = () => {
                 {...field}
                 fullWidth
                 size='small'
+                inputRef={textFieldRef}
                 placeholder='Type your message here…'
                 sx={{
                   '& .MuiOutlinedInput-input': { pl: 0 },
@@ -61,8 +64,12 @@ const SendMsgForm = () => {
                   '& .Mui-focused': { boxShadow: 'none !important' }
                 }}
                 rows={2}
-
-                // error={!!errors?.prompt}
+                onKeyDown={event => {
+                  if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault()
+                    handleSubmit(onSubmit)()
+                  }
+                }}
               />
             )}
           />

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Card, CardContent } from '@mui/material'
-import InstagramPreview from './InstagramPreview'
+import InstagramPreview from './preview/InstagramPreview'
 
 const ChatPreview = () => {
   return (
