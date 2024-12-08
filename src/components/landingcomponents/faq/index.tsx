@@ -13,11 +13,11 @@ export default function () {
           <div className='mt-4 text-center text-sm font-semibold tracking-wide'>{LANDING_DATA.faq?.description}</div>
           <Accordion type='single' collapsible className='space-y-4 mt-8'>
             {LANDING_DATA.faq?.items?.map((item: Item, idx: number) => (
-              <AccordionItem key={idx} value={`item-${idx}`} className='rounded-lg shadow-sm border'>
+              <AccordionItem key={idx} value={`item-${idx}`} className='rounded-lg shadow-sm '>
                 <AccordionTrigger className='px-4 py-4'>
                   <span className='text-left font-medium'>{item.title}</span>
                 </AccordionTrigger>
-                <AccordionContent className='px-4 pb-4 pt-2 text-gray-600'>{item.description}</AccordionContent>
+                <AccordionContent className='px-4 pb-4 pt-2 text-gray-300'>{item.description}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>

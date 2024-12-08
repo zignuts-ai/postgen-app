@@ -182,13 +182,14 @@ export const LANDING_DATA: Page = {
     show_proof: true
   },
   section: {
+    title: 'Our Innovation Platform',
+    description: 'Discover the powerful features that set our AI News Agent apart.',
     items: [
       {
         // name: "challenge",
         title: 'AI NEWS AGENT',
-
-        // description:
-        // "Build an AI agent capable of summarizing and reformatting daily news into digestible content, making information more accessible for diverse audiences.",
+        description:
+          'Build an AI agent capable of summarizing and reformatting daily news into digestible content, making information more accessible for diverse audiences.',
         image: {
           src: '/imgs/section1-news.png'
         },
@@ -262,7 +263,7 @@ export const LANDING_DATA: Page = {
         buttons: [
           {
             title: 'Start Building',
-            url: '/demo'
+            url: '/chat'
           }
         ]
       }
@@ -308,7 +309,7 @@ export const LANDING_DATA: Page = {
     buttons: [
       {
         title: 'Try Demo',
-        url: '/demo'
+        url: '/chat'
       }
     ]
   },

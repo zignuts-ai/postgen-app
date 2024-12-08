@@ -1,7 +1,7 @@
 import React from 'react'
 import { LANDING_DATA } from 'src/constants/fakeData'
 import { Item } from 'src/types/landing'
-import { Avatar, AvatarFallback, AvatarImage } from 'src/ui/avatar'
+import { Avatar, AvatarImage } from 'src/ui/avatar'
 import { Card, CardContent } from 'src/ui/card'
 
 const TestimonialCard = ({ item }: { item: Item }) => (
@@ -13,11 +13,10 @@ const TestimonialCard = ({ item }: { item: Item }) => (
       <div className='mt-6 flex items-center gap-x-4'>
         <Avatar>
           <AvatarImage src={item.avatar?.src} alt={item.avatar?.title} />
-          <AvatarFallback>{item.title?.charAt(0)}</AvatarFallback>
         </Avatar>
         <div>
           <div className='font-semibold'>{item.name}</div>
-          <div className='text-zinc-600'>{item.title}</div>
+          <div className='text-zinc-200'>{item.title}</div>
         </div>
       </div>
     </CardContent>

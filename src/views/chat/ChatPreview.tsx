@@ -15,16 +15,16 @@ const ChatPreview = () => {
               caption: 'Excited to share our latest project updates! #FeatureFriday',
               imageUrl: ['/images/testimonials/jessica-saunders.png']
             }}
-          />
-          <LinkedInPreview
+          /> */}
+          {/* <LinkedInPreview
             metadata={{
               caption:
                 'React has become one of the most popular JavaScript libraries for building user interfaces. In this post ll share some tips and best practices Ive learned over the years.',
               imageUrl:
                 'https://www.socialchamp.io/wp-content/uploads/2023/12/Content-Blog-Banner_Q4-2023_1125x600_30_What-to-Post-on-LinkedIn.png'
             }}
-          />
-          <RedditPreview
+          /> */}
+          {/* <RedditPreview
             metadata={{
               caption:
                 'React has become one of the most popular JavaScript libraries for building user interfaces. In this post ll share some tips and best practices Ive learned over the years.',
@@ -32,8 +32,8 @@ const ChatPreview = () => {
                 'https://images.fastcompany.com/image/upload/f_auto,q_auto,c_fit/wp-cms/uploads/2023/11/007-90989375-reddit-redesign.jpg',
               title: 'Learning React: Best Practices and Tips'
             }}
-          />
-          <FacebookPreview
+          /> */}
+          {/* <FacebookPreview
             metadata={{
               caption:
                 'It’s better to be an initial noted version of yourself, rather than a second noted version of someone else. ',
