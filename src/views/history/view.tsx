@@ -1,32 +1,51 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, Typography, Grid, Card, CardContent, Fade, Container } from '@mui/material'
 import PostCard from '../../views/history/PostCard'
 import { Content } from 'src/types/contentTypes'
-import { dataSample } from 'src/constants/fakeData'
+import { useAuth } from 'src/hooks/useAuth'
+import { useChat } from 'src/hooks/useChat'
 
 const HistoryView = () => {
-  const groupedData = dataSample
-    .slice()
-    .sort((a, b) => b.createdAt - a.createdAt)
-    .reduce((acc: Record<string, Content[]>, meme) => {
-      const date = new Date(meme.createdAt * 1000).toDateString()
-      if (!acc[date]) {
-        acc[date] = []
-      }
-      acc[date].push(meme)
+  const [groupedData, setGroupedData] = React.useState<Record<string, Content[]>>({})
+  const { user } = useAuth()
+  const { guestHistory, allUserChatsQuery } = useChat()
 
-      return acc
-    }, {})
+  const formatData = (data: any) =>
+    data
+      .slice()
+      .sort((a: any, b: any) => b.createdAt - a.createdAt)
+      .reduce((acc: Record<string, Content[]>, post: any) => {
+        const date = new Date(post.createdAt * 1000).toDateString()
+        if (!acc[date]) {
+          acc[date] = []
+        }
+        acc[date].push(post)
+
+        return acc
+      }, {})
 
   const hasData = Object.keys(groupedData).length > 0
+
+  useEffect(() => {
+    if (user) {
+      setGroupedData(formatData(allUserChatsQuery?.data ?? []))
+    } else {
+      setGroupedData(formatData(guestHistory))
+    }
+  }, [user, guestHistory, allUserChatsQuery?.data])
+
+  useEffect(() => {
+    if (user) {
+      allUserChatsQuery.refetch()
+    }
+  }, [user, allUserChatsQuery])
 
   return (
     <Container maxWidth='xl'>
       <Box
         sx={{
           padding: { xs: 2, md: 4 },
-          backgroundColor: 'background.default',
-          minHeight: '100vh'
+          backgroundColor: 'background.default'
         }}
       >
         {hasData ? (
@@ -38,6 +57,8 @@ const HistoryView = () => {
                   sx={{
                     marginBottom: 6,
                     padding: 2,
+                    paddingBottom: 4,
+                    paddingInline: 6,
                     borderRadius: 3,
                     backgroundColor: 'background.paper',
                     boxShadow: 3
@@ -45,7 +66,7 @@ const HistoryView = () => {
                 >
                   <Typography
                     fontWeight={700}
-                    variant='h4'
+                    variant='h6'
                     color='text.primary'
                     sx={{
                       marginBottom: 3,

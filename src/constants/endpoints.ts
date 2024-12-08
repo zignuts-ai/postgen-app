@@ -14,7 +14,8 @@ const endpoints = {
   chat: {
     connection: 'http://localhost:3001/',
     craeteSession: GET_URL('/session/create'),
-    getChatById: (id: string) => GET_URL(`/session/getbyid/?sessionId=${id}`)
+    getChatById: (id: string) => GET_URL(`/session/getbyid/?sessionId=${id}`),
+    allChats: GET_URL('/session/list')
   }
 }
 export default endpoints
