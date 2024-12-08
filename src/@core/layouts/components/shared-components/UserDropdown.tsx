@@ -22,6 +22,7 @@ import { useAuth } from 'src/hooks/useAuth'
 
 // ** Type Imports
 import { Settings } from 'src/@core/context/settingsContext'
+import { ACCESS_TOKEN_KEY } from 'src/constants/constant'
 
 interface Props {
   settings: Settings
@@ -46,6 +47,7 @@ const UserDropdown = (props: Props) => {
   // ** Hooks
   const router = useRouter()
   const { logout } = useAuth()
+  const { mutate } = logout!
 
   // ** Vars
   const { direction } = settings
@@ -76,8 +78,9 @@ const UserDropdown = (props: Props) => {
   //   }
   // }
 
-  const handleLogout = () => {
-    logout()
+  const handleLogout = async () => {
+    const token = localStorage.getItem(ACCESS_TOKEN_KEY)
+    await mutate(token)
     handleDropdownClose()
   }
 

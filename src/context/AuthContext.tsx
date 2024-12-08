@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 // ** Types
 import { AuthValuesType, UserDataType } from './types'
 import { useMutation } from '@tanstack/react-query'
-import { login, signup } from 'src/queries/auth'
+import { login, logout, signup } from 'src/queries/auth'
 import toast from 'react-hot-toast'
 import { formatMessage } from 'src/utils/utils'
 import { ACCESS_TOKEN_KEY, USER_DATA_KEY } from 'src/constants/constant'
@@ -76,12 +76,25 @@ const AuthProvider = ({ children }: Props) => {
     }
   })
 
-  const handleLogout = () => {
-    setUser(null)
-    localStorage.removeItem('user')
-    window.localStorage.removeItem(ACCESS_TOKEN_KEY)
-    router.push('/login')
-  }
+  // const handleLogout = () => {
+  //   setUser(null)
+  //   localStorage.removeItem('user')
+  //   window.localStorage.removeItem(ACCESS_TOKEN_KEY)
+  //   router.push('/login')
+  // }
+  const handleLogout = useMutation({
+    mutationFn: logout,
+    onSuccess: () => {
+      localStorage.removeItem(ACCESS_TOKEN_KEY)
+      setUser(null)
+      setLoading(false)
+      toast.success('Logout successful')
+      router.push('/login')
+    },
+    onError: (err: any) => {
+      toast.error(formatMessage(err.response?.data?.message) ?? 'Something Went Wrong')
+    }
+  })
 
   const values = {
     user,
