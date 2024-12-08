@@ -1,10 +1,13 @@
 import React from 'react'
 import { Box, Card, CardContent } from '@mui/material'
 import InstagramPreview from './preview/InstagramPreview'
+import { useChat } from 'src/hooks/useChat'
 
 const ChatPreview = () => {
+  const { previewData } = useChat()
+
   return (
-    <Box display='flex' justifyContent='center' flexDirection='column' height='100%'>
+    <Box display='flex' justifyContent='center' flexDirection='column' height='100%' maxWidth={500} margin='auto'>
       <Card>
         <CardContent>
           {/* <XPreview
@@ -40,9 +43,11 @@ const ChatPreview = () => {
           /> */}
           <InstagramPreview
             metadata={{
-              caption: 'Responsive clone of Instagram UI. Made with ❤ for study purposes.',
+              caption: previewData?.caption ?? 'Please add a caption',
               imageUrl:
-                'https://plus.unsplash.com/premium_photo-1688645554172-d3aef5f837ce?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW5kaWFuJTIwbW91bnRhaW5zfGVufDB8fDB8fHww'
+                previewData.imageUrl ??
+                'https://t3.ftcdn.net/jpg/03/45/05/92/360_F_345059232_CPieT8RIWOUk4JqBkkWkIETYAkmz2b75.jpg',
+              type: previewData.type ?? 'image'
             }}
           />
         </CardContent>

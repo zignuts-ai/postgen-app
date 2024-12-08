@@ -1,4 +1,4 @@
-import { LANDING_DATA } from 'src/data/demo'
+import { LANDING_DATA } from 'src/constants/fakeData'
 import { Item } from 'src/types/landing'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from 'src/ui/accordion'
 

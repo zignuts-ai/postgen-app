@@ -20,7 +20,8 @@ import { useChat } from 'src/hooks/useChat'
 import { useAuth } from 'src/hooks/useAuth'
 import { ChatMessage } from 'src/types/chatContextType'
 import themeConfig from 'src/configs/themeConfig'
-import MediaCard from './MediaCardPreview'
+import MediaCard from './MediaCard'
+import { Avatar, Card, CardContent } from '@mui/material'
 
 const PerfectScrollbar = styled(PerfectScrollbarComponent)<ScrollBarProps & { ref: Ref<unknown> }>(({ theme }) => ({
   padding: theme.spacing(5)
@@ -67,16 +68,22 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
     switch (item.type) {
       case 'text':
         return (
-          <Typography
-            sx={{
-              p: theme => theme.spacing(2, 3),
-              borderRadius: 2,
-              maxWidth: '100%',
-              wordBreak: 'break-word'
-            }}
-          >
-            {item.message}
-          </Typography>
+          <Card sx={{ border: 0, boxShadow: 0, color: 'common.white', backgroundColor: '#535353' }}>
+            <CardContent sx={{ p: theme => `${theme.spacing(3.25, 5, 4.5)} !important` }}>
+              <Typography variant='body2' sx={{ mb: 3, color: 'common.white' }}>
+                Turns out semicolon-less style is easier and safer in TS because most gotcha edge cases are type invalid
+                as well.
+              </Typography>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
+                  <Avatar alt='Mary Vaughn' src='/images/avatars/1.png' sx={{ width: 22, height: 22, mr: 2.75 }} />
+                  <Typography variant='body2' sx={{ color: 'common.white' }}>
+                    {user?.name ?? 'John Doe'}
+                  </Typography>
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
         )
 
       case 'image':
@@ -87,11 +94,14 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
               'https://plus.unsplash.com/premium_photo-1688645554172-d3aef5f837ce?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW5kaWFuJTIwbW91bnRhaW5zfGVufDB8fDB8fHww'
             }
             alt='Uploaded image'
+            item={item}
           />
         )
 
       case 'video':
-        return <MediaCard type='video' src={'https://www.w3schools.com/html/movie.mp4'} alt='Uploaded video' />
+        return (
+          <MediaCard item={item} type='video' src={'https://www.w3schools.com/html/movie.mp4'} alt='Uploaded video' />
+        )
 
       case 'meme':
         return (
@@ -101,6 +111,7 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
               'https://global.discourse-cdn.com/flex028/uploads/daml/optimized/2X/0/07c87a4e2885ff7d9674efb218e08a5d354612f6_2_500x500.jpeg'
             }
             alt='Meme'
+            item={item}
           />
         )
 
@@ -171,7 +182,7 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
                   }}
                 >
                   {item.message}
-                  {!isSender && renderMessageType(item)}
+                  {!isSender && <div className='my-3'>{renderMessageType(item)}</div>}
                 </Typography>
               </div>
               {index + 1 === length ? (

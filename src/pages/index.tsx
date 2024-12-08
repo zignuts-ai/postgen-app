@@ -12,7 +12,7 @@ import Testimonial from 'src/components/landingcomponents/testimonial'
 import Footer from 'src/components/landingcomponents/footer'
 import Cta from 'src/components/landingcomponents/cta'
 import Faq from 'src/components/landingcomponents/faq'
-import { LANDING_DATA } from 'src/data/demo'
+import { LANDING_DATA } from 'src/constants/fakeData'
 import Hero from 'src/components/landingcomponents/hero'
 
 const Home = () => {

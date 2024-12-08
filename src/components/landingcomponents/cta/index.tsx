@@ -1,6 +1,6 @@
 import { Button } from '@mui/material'
 import Link from 'next/link'
-import { LANDING_DATA } from 'src/data/demo'
+import { LANDING_DATA } from 'src/constants/fakeData'
 
 export default function () {
   return (
