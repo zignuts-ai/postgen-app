@@ -122,7 +122,7 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
 
   // ** Renders user chat
   const renderChats = () => {
-    return messages.map((item: ChatMessage, index: number) => {
+    return (messages ?? []).map((item: ChatMessage, index: number) => {
       const isSender = item.role === 'user'
 
       return (
@@ -131,7 +131,7 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
           sx={{
             display: 'flex',
             flexDirection: !isSender ? 'row' : 'row-reverse',
-            mb: index !== messages.length - 1 ? 4 : undefined
+            mb: index !== (messages?.length ?? 0) - 1 ? 4 : undefined
           }}
         >
           <div>

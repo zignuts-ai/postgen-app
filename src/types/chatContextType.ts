@@ -57,3 +57,8 @@ export type PreviewDataType = {
   title: string
   type: 'image' | 'video' | 'text' | 'meme'
 }
+
+export type GuestHistoryType = {
+  sessionName: string
+  sessionId: string
+}
