@@ -22,6 +22,7 @@ import { platformTypes, toneTypes } from 'src/types/constantTypes'
 import { PLATFORM_TYPE, TONE_TYPE } from 'src/constants/constant'
 import { UUID } from 'src/utils/utils'
 import { useChat } from 'src/hooks/useChat'
+import useLoading from 'src/hooks/useLoading'
 
 export type postTypes = 'text' | 'image' | 'memes'
 
@@ -83,8 +84,10 @@ const DashboardView = () => {
   const [toneAnchorEl, setToneAnchorEl] = useState<null | HTMLElement>(null)
   const [postTypeAnchorEl, setPostTypeAnchorEl] = useState<null | HTMLElement>(null)
 
+  const { isLoading, startLoading, stopLoading } = useLoading()
+
   const {
-    handleCraeteSessionChat: { mutate, isPending }
+    handleCraeteSessionChat: { mutate }
   } = useChat()
 
   const {
@@ -105,7 +108,9 @@ const DashboardView = () => {
       prompt: data.prompt,
       sessionId
     }
+    startLoading()
     await mutate(payLoad)
+    stopLoading()
   }
 
   // Dropdown handlers
@@ -187,6 +192,7 @@ const DashboardView = () => {
                     <Button
                       onClick={handlePlatformOpen}
                       variant='outlined'
+                      size='small'
                       startIcon={<Icon icon={PLATFORM_TYPE.find(p => p.value === selectedPlatform)?.icon || ''} />}
                     >
                       {PLATFORM_TYPE.find(p => p.value === selectedPlatform)?.name ?? 'Platform'}
@@ -211,7 +217,7 @@ const DashboardView = () => {
 
                   {/* Tone Selection */}
                   <Grid item>
-                    <Button onClick={handleToneOpen} variant='outlined'>
+                    <Button size='small' onClick={handleToneOpen} variant='outlined'>
                       {selectedTone ? selectedTone : 'TONE'}
                     </Button>
                     <Menu anchorEl={toneAnchorEl} open={Boolean(toneAnchorEl)} onClose={handleToneClose}>
@@ -232,13 +238,14 @@ const DashboardView = () => {
                   {/* Post Type Selection */}
                   <Grid item>
                     <Button
+                      size='small'
                       onClick={handlePostTypeOpen}
                       variant='outlined'
                       startIcon={<Icon icon={POST_TYPE.find(p => p.value === selectedPostType)?.icon || ''} />}
                     >
                       {POST_TYPE.find(p => p.value === selectedPostType)?.name
                         ? POST_TYPE.find(p => p.value === selectedPostType)?.name
-                        : 'POSTTYPE'}
+                        : 'POST TYPE'}
                     </Button>
                     <Menu anchorEl={postTypeAnchorEl} open={Boolean(postTypeAnchorEl)} onClose={handlePostTypeClose}>
                       {POST_TYPE.map(postType => (
@@ -264,7 +271,7 @@ const DashboardView = () => {
               <Grid item xs={12}>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                   <Button
-                    endIcon={isPending ? <CircularProgress size={20} /> : <Icon icon='ri:quill-pen-ai-line' />}
+                    endIcon={isLoading ? <CircularProgress size={20} /> : <Icon icon='ri:quill-pen-ai-line' />}
                     type='submit'
                     variant='contained'
                     sx={{
@@ -276,7 +283,7 @@ const DashboardView = () => {
                       }
                     }}
                   >
-                    {isPending ? 'generating...' : 'Generate'}
+                    {isLoading ? 'generating...' : 'Generate'}
                   </Button>
                 </Box>
               </Grid>

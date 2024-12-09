@@ -20,7 +20,7 @@ export async function logout(dto: any): Promise<any> {
     {},
     {
       headers: {
-        Authorization: `Barrer ${dto}`
+        Authorization: `Bearer ${dto}`
       }
     }
   )
