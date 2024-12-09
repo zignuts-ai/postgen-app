@@ -1,4 +1,4 @@
-export type platformTypes = 'instagram' | 'linkedin' | 'reddit' | 'x'
+export type platformTypes = 'instagram' | 'linkedin' | 'reddit' | 'x' | 'none'
 export type toneTypes =
   | 'Polite'
   | 'Witty'
@@ -12,6 +12,7 @@ export type toneTypes =
   | 'Serious'
   | 'Optimistic'
   | 'Motivating'
+  | 'none'
 
 export type platformArrayTypes = {
   name: string
