@@ -6,13 +6,14 @@ type Props = {
   metadata: {
     caption: string
     imageUrl: string
+    type: 'image' | 'video' | 'text' | 'meme'
   }
 }
 
 const FacebookPreview = ({ metadata }: Props) => {
   const { user } = useAuth()
 
-  const { caption, imageUrl } = metadata
+  const { caption, imageUrl, type } = metadata
 
   return (
     <div className='post'>
@@ -33,7 +34,11 @@ const FacebookPreview = ({ metadata }: Props) => {
       </div>
 
       <div className='post__image'>
-        <img src={imageUrl} alt='' />
+        {type === 'image' || type === 'meme' ? (
+          <img src={imageUrl} alt='Post Content' />
+        ) : type === 'video' ? (
+          <video autoPlay src={imageUrl} controls />
+        ) : null}
       </div>
 
       <div className='post__options'>

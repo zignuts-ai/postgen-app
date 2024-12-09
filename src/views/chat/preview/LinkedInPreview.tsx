@@ -7,12 +7,13 @@ type Props = {
   metadata: {
     caption: string
     imageUrl: string
+    type: string
   }
 }
 
 const LinkedInPreview = ({ metadata }: Props) => {
   const { user } = useAuth()
-  const { imageUrl, caption } = metadata
+  const { imageUrl, caption, type } = metadata
   const theme = useTheme()
 
   return (
@@ -53,9 +54,13 @@ const LinkedInPreview = ({ metadata }: Props) => {
           ? caption
           : 'React has become one of the most popular JavaScript libraries for building user interfaces. In this post I will share some tips and best practices I have learned over the years.'}
       </Typography>
-      {imageUrl && (
+
+      {type === 'image' || type === 'meme' ? (
         <CardMedia component='img' image={imageUrl} alt='Post content' sx={{ width: '100%', height: 'auto' }} />
-      )}
+      ) : type === 'video' ? (
+        <CardMedia component='video' src={imageUrl} autoPlay controls sx={{ width: '100%', height: 'auto' }} />
+      ) : null}
+
       <Box
         sx={{
           display: 'flex',
@@ -64,13 +69,13 @@ const LinkedInPreview = ({ metadata }: Props) => {
           padding: '16px'
         }}
       >
-        <Button startIcon={<ThumbUp />} sx={{ textTransform: 'none' }}>
+        <Button color='secondary' startIcon={<ThumbUp color='secondary' />} sx={{ textTransform: 'none' }}>
           Like 20
         </Button>
-        <Button startIcon={<Message />} sx={{ textTransform: 'none' }}>
+        <Button color='secondary' startIcon={<Message color='secondary' />} sx={{ textTransform: 'none' }}>
           Comment 65
         </Button>
-        <Button startIcon={<Share />} sx={{ textTransform: 'none' }}>
+        <Button color='secondary' startIcon={<Share color='secondary' />} sx={{ textTransform: 'none' }}>
           Share
         </Button>
       </Box>

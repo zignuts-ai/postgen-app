@@ -14,7 +14,6 @@ const ChatPreview = () => {
   const isDownMd = useMediaQuery('(min-width:1200px)')
 
   const platformType: 'instagram' | 'linkedin' | 'x' | 'facebook' | 'reddit' | '' = useMemo(() => {
-    return 'reddit'
     const validData = validType(chatDetails?.data.messages ?? [])
     const platform = validData?.item?.metadata?.platform
     if (['instagram', 'linkedin', 'x', 'facebook', 'reddit'].includes(platform)) {
@@ -72,7 +71,8 @@ const ChatPreview = () => {
             <XPreview
               metadata={{
                 caption: previewData?.caption ?? 'Excited to share our latest project updates! #FeatureFriday',
-                imageUrl: [previewData.imageUrl] ?? ['/images/testimonials/jessica-saunders.png']
+                imageUrl: previewData.imageUrl ?? '/images/testimonials/jessica-saunders.png',
+                type: previewData.type ?? 'image'
               }}
             />
           )}
@@ -84,7 +84,8 @@ const ChatPreview = () => {
                   'React has become one of the most popular JavaScript libraries for building user interfaces. In this post ll share some tips and best practices Ive learned over the years.',
                 imageUrl:
                   previewData.imageUrl ??
-                  'https://www.socialchamp.io/wp-content/uploads/2023/12/Content-Blog-Banner_Q4-2023_1125x600_30_What-to-Post-on-LinkedIn.png'
+                  'https://www.socialchamp.io/wp-content/uploads/2023/12/Content-Blog-Banner_Q4-2023_1125x600_30_What-to-Post-on-LinkedIn.png',
+                type: previewData.type ?? 'image'
               }}
             />
           )}
@@ -97,7 +98,8 @@ const ChatPreview = () => {
                 imageUrl:
                   previewData.imageUrl ??
                   'https://images.fastcompany.com/image/upload/f_auto,q_auto,c_fit/wp-cms/uploads/2023/11/007-90989375-reddit-redesign.jpg',
-                title: 'Learning React: Best Practices and Tips'
+                title: 'Learning React: Best Practices and Tips',
+                type: previewData.type ?? 'image'
               }}
             />
           )}
@@ -109,7 +111,8 @@ const ChatPreview = () => {
                   'Its better to be an initial noted version of yourself, rather than a second noted version of someone else. ',
                 imageUrl:
                   previewData.imageUrl ??
-                  'https://imageio.forbes.com/specials-images/imageserve/5d35eacaf1176b0008974b54/0x0.jpg?format=jpg&crop=4560,2565,x790,y784,safe&height=900&width=1600&fit=bounds'
+                  'https://imageio.forbes.com/specials-images/imageserve/5d35eacaf1176b0008974b54/0x0.jpg?format=jpg&crop=4560,2565,x790,y784,safe&height=900&width=1600&fit=bounds',
+                type: previewData.type ?? 'image'
               }}
             />
           )}
