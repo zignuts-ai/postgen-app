@@ -119,14 +119,9 @@ const LoginPage = () => {
                   errors={errors?.password}
                 />
               </FormControl>
-              <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'end' }}>
-                {/* <FormControlLabel
-                  label='Remember Me'
-                  control={<Checkbox />}
-                  sx={{ '& .MuiFormControlLabel-label': { fontSize: '0.875rem', color: 'text.secondary' } }}
-                /> */}
+              {/* <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'end' }}>
                 <LinkStyled href='/forgot-password'>Forgot Password?</LinkStyled>
-              </Box>
+              </Box> */}
               <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 4 }}>
                 Sign in
               </Button>

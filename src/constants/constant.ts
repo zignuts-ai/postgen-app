@@ -11,6 +11,11 @@ export const PLATFORM_TYPE: platformArrayTypes[] = [
     icon: 'devicon:linkedin'
   },
   {
+    name: 'Facebook',
+    value: 'facebook',
+    icon: 'devicon:facebook'
+  },
+  {
     name: 'Instagram',
     value: 'instagram',
     icon: 'skill-icons:instagram'

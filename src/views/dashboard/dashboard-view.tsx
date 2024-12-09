@@ -98,14 +98,23 @@ const DashboardView = () => {
 
     try {
       startLoading()
-      const res = await updateCurrentChat({ sessionId, prompt: data.prompt }, user)
+      const res = await updateCurrentChat(
+        {
+          sessionId,
+          prompt: data.prompt,
+          tone: selectedTone ?? '',
+          postType: selectedPostType ?? '',
+          platform: selectedPlatform ?? ''
+        },
+        user
+      )
       stopLoading()
 
       if (!user) {
         const guestHistory = JSON.parse(localStorage.getItem(LOCAL_CHAT_SESSION_KEY) || '[]')
         guestHistory.push({
           sessionId: sessionId,
-          name: res?.data?.name,
+          name: res?.data?.name || data?.prompt,
           createdAt: res?.data?.createdAt
         })
         localStorage.setItem(LOCAL_CHAT_SESSION_KEY, JSON.stringify(guestHistory))

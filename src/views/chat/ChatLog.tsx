@@ -108,7 +108,7 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
             type='image'
             src={
               item?.message ||
-              'https://user-images.githubusercontent.com/24848110/33519396-7e56363c-d79d-11e7-969b-09782f5ccbab.png'
+              'https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg'
             }
             alt='Generated Image'
             item={item}

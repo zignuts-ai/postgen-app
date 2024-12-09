@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react'
-import { Box, Card, CardContent, DialogTitle, useMediaQuery } from '@mui/material'
+import { Box, Card, CardContent, DialogTitle, Typography, useMediaQuery } from '@mui/material'
 import InstagramPreview from './preview/InstagramPreview'
 import { useChat } from 'src/hooks/useChat'
 import { ChatMessage } from 'src/types/chatContextType'
@@ -7,20 +7,21 @@ import XPreview from './preview/XPreview'
 import RedditPreview from './preview/RedditPreview'
 import LinkedInPreview from './preview/LinkedInPreview'
 import FacebookPreview from './preview/FacebookPreview'
+import { formatMessage } from 'src/utils/utils'
 
 const ChatPreview = () => {
   const { previewData, chatDetails, setPreviewData } = useChat()
 
   const isDownMd = useMediaQuery('(min-width:1200px)')
 
-  const platformType: 'instagram' | 'linkedin' | 'x' | 'facebook' | 'reddit' | '' = useMemo(() => {
+  const platformType: 'instagram' | 'linkedin' | 'x' | 'facebook' | 'reddit' | 'text' | '' = useMemo(() => {
     const validData = validType(chatDetails?.data.messages ?? [])
     const platform = validData?.item?.metadata?.platform
-    if (['instagram', 'linkedin', 'x', 'facebook', 'reddit'].includes(platform)) {
-      return platform
+    if (['instagram', 'linkedin', 'x', 'facebook', 'reddit'].includes(platform?.toLowerCase())) {
+      return platform?.toLowerCase()
     }
 
-    return 'instagram'
+    return 'text'
   }, [chatDetails?.data?.messages])
 
   function validType(data: ChatMessage[]) {
@@ -42,20 +43,41 @@ const ChatPreview = () => {
     if (validData.type) {
       if (validData.type === 'image') {
         setPreviewData({
-          caption: '',
+          caption:
+            validData?.item?.metadata?.userPrompt?.length > 150
+              ? validData?.item?.metadata?.userPrompt?.slice(0, 150) + '...'
+              : validData?.item?.metadata?.userPrompt ?? '',
           imageUrl:
             validData?.item?.message ??
-            'https://user-images.githubusercontent.com/24848110/33519396-7e56363c-d79d-11e7-969b-09782f5ccbab.png',
-          title: '',
+            'https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg',
+          title:
+            validData?.item?.metadata?.userPrompt?.length > 150
+              ? validData?.item?.metadata?.userPrompt?.slice(0, 150) + '...'
+              : validData?.item?.metadata?.userPrompt ?? '',
           type: 'image'
+        })
+      } else if (validData.type === 'text') {
+        setPreviewData({
+          caption:
+            validData?.item?.metadata?.userPrompt?.length > 150
+              ? validData?.item?.metadata?.userPrompt?.slice(0, 150) + '...'
+              : validData?.item?.metadata?.userPrompt ?? '',
+          imageUrl:
+            validData?.item?.message ??
+            'https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg',
+          title:
+            validData?.item?.metadata?.userPrompt?.length > 150
+              ? validData?.item?.metadata?.userPrompt?.slice(0, 150) + '...'
+              : validData?.item?.metadata?.userPrompt ?? '',
+          type: 'text'
         })
       }
     } else {
       setPreviewData({
-        caption: '',
+        caption: 'An sample caption would be here',
         imageUrl:
-          'https://user-images.githubusercontent.com/24848110/33519396-7e56363c-d79d-11e7-969b-09782f5ccbab.png',
-        title: '',
+          'https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg',
+        title: 'This is an sample title of the post',
         type: 'image'
       })
     }
@@ -67,6 +89,27 @@ const ChatPreview = () => {
       <Card>
         {isDownMd && <DialogTitle id='alert-dialog-slide-title'>Social Preview</DialogTitle>}
         <CardContent sx={{ pt: 0 }}>
+          {platformType === 'text' && (
+            <Box
+              sx={{
+                p: 2,
+                minHeight: 200,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textAlign: 'center',
+                borderTopLeftRadius: 4,
+                borderTopRightRadius: 4,
+                backgroundColor: 'background.paper'
+              }}
+            >
+              <Typography variant='body1' color={'text.primary'}>
+                {formatMessage(previewData?.caption)?.length > 130
+                  ? formatMessage(previewData?.caption)?.slice(0, 130) + '...'
+                  : formatMessage(previewData?.caption) || 'Name not found'}
+              </Typography>
+            </Box>
+          )}
           {platformType === 'x' && (
             <XPreview
               metadata={{
@@ -79,9 +122,7 @@ const ChatPreview = () => {
           {platformType === 'linkedin' && (
             <LinkedInPreview
               metadata={{
-                caption:
-                  previewData?.caption ??
-                  'React has become one of the most popular JavaScript libraries for building user interfaces. In this post ll share some tips and best practices Ive learned over the years.',
+                caption: previewData?.caption ?? 'An sample caption would be here',
                 imageUrl:
                   previewData.imageUrl ??
                   'https://www.socialchamp.io/wp-content/uploads/2023/12/Content-Blog-Banner_Q4-2023_1125x600_30_What-to-Post-on-LinkedIn.png',
@@ -92,9 +133,7 @@ const ChatPreview = () => {
           {platformType === 'reddit' && (
             <RedditPreview
               metadata={{
-                caption:
-                  previewData?.caption ??
-                  'React has become one of the most popular JavaScript libraries for building user interfaces. In this post ll share some tips and best practices Ive learned over the years.',
+                caption: previewData?.caption ?? 'An sample caption would be here',
                 imageUrl:
                   previewData.imageUrl ??
                   'https://images.fastcompany.com/image/upload/f_auto,q_auto,c_fit/wp-cms/uploads/2023/11/007-90989375-reddit-redesign.jpg',
