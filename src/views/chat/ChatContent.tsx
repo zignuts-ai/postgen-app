@@ -14,7 +14,7 @@ import ChatLog from './ChatLog'
 import { ChatContentType } from 'src/types/apps/chatTypes'
 import SendMsgForm from './SendMsgForm'
 import { useChat } from 'src/hooks/useChat'
-import { Button } from '@mui/material'
+import { Button, IconButton, useMediaQuery } from '@mui/material'
 import { useRouter } from 'next/router'
 
 // ** Styled Components
@@ -33,8 +33,10 @@ const ChatContent = (props: ChatContentType) => {
   const { messages, chatDetails, chatDetailQuery } = useChat()
   const router = useRouter()
 
+  const isDownMd = useMediaQuery('(min-width:1200px)')
+
   // ** Props
-  const { hidden, mdAbove, handleLeftSidebarToggle, handleUserProfileRightSidebarToggle } = props
+  const { hidden, mdAbove, handleLeftSidebarToggle, handleUserProfileRightSidebarToggle, openModal } = props
 
   const handleStartConversation = () => {
     if (!mdAbove) {
@@ -102,16 +104,29 @@ const ChatContent = (props: ChatContentType) => {
                 borderBottom: theme => `1px solid ${theme.palette.divider}`
               }}
             >
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
                 <Box
                   onClick={handleUserProfileRightSidebarToggle}
-                  sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                    justifyContent: 'space-between',
+                    width: '100%'
+                  }}
                 >
-                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', width: '100%' }}>
                     <Typography sx={{ fontWeight: 700, fontSize: '0.975rem' }}>
                       {chatDetails?.data?.name ?? 'Not Found'}
                     </Typography>
                   </Box>
+                  {!isDownMd && (
+                    <div>
+                      <IconButton onClick={openModal}>
+                        <Icon icon='mdi:eye' fontSize={22} />
+                      </IconButton>
+                    </div>
+                  )}
                 </Box>
               </Box>
             </Box>

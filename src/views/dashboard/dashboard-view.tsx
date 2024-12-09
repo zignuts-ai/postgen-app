@@ -37,13 +37,23 @@ export const POST_TYPE = [
   },
   {
     value: 'image',
-    name: 'Image Post',
+    name: 'Post with Image',
     icon: 'ri:image-line'
   },
   {
+    value: 'video',
+    name: 'Post with Video',
+    icon: 'ri:video-line'
+  },
+  {
     value: 'memes',
-    name: 'Memes',
+    name: 'Meme',
     icon: 'ri:emotion-laugh-line'
+  },
+  {
+    value: 'all',
+    name: 'All',
+    icon: 'ic:round-border-all'
   }
 ]
 
@@ -184,7 +194,7 @@ const DashboardView = () => {
               </FormControl>
 
               {/* Platform Selection */}
-              <Grid item xs={4}>
+              <Grid item xs={12} sm={6} md={4}>
                 <Button
                   fullWidth
                   variant='outlined'
@@ -214,7 +224,7 @@ const DashboardView = () => {
               </Grid>
 
               {/* Tone Selection */}
-              <Grid item xs={4}>
+              <Grid item xs={12} sm={6} md={4}>
                 <Button fullWidth variant='outlined' onClick={handleToneOpen}>
                   {selectedTone ?? 'Tone'}
                 </Button>
@@ -234,7 +244,7 @@ const DashboardView = () => {
               </Grid>
 
               {/* Post Type Selection */}
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <Button
                   fullWidth
                   variant='outlined'

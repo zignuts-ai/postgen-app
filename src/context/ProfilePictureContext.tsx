@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react'
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react'
+import { useAuth } from 'src/hooks/useAuth'
 
 // Define the context type
 interface ProfilePictureContextType {
@@ -11,7 +12,14 @@ const ProfilePictureContext = createContext<ProfilePictureContextType | undefine
 
 // Provider component
 export const ProfilePictureProvider = ({ children }: { children: ReactNode }) => {
-  const [imgSrc, setImgSrc] = useState<string>('/images/avatars/1.png')
+  const { user } = useAuth()
+  const [imgSrc, setImgSrc] = useState<string>(
+    `https://avatar.vercel.sh/rauchg.svg?text=${user?.name?.slice(0, 2)?.toUpperCase()}`
+  )
+
+  useEffect(() => {
+    setImgSrc(`https://avatar.vercel.sh/rauchg.svg?text=${user?.name?.slice(0, 2)?.toUpperCase()}`)
+  }, [user])
 
   return <ProfilePictureContext.Provider value={{ imgSrc, setImgSrc }}>{children}</ProfilePictureContext.Provider>
 }

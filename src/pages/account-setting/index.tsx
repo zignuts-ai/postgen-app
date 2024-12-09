@@ -19,6 +19,7 @@ import Icon from 'src/@core/components/icon'
 import CustomTextField from 'src/components/common/form/CustomTextField'
 import { useProfilePictureGenerator } from '../../views/account-setting/profilepicturegenerator'
 import { useProfilePicture } from 'src/context/ProfilePictureContext'
+import { useAuth } from 'src/hooks/useAuth'
 
 const ImgStyled = styled('img')(({ theme }) => ({
   width: 100,
@@ -34,6 +35,7 @@ const TabAccount = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { generateProfilePicture } = useProfilePictureGenerator()
+  const { user } = useAuth()
 
   const { control, handleSubmit, watch, reset } = useForm({
     defaultValues: { prompt: '' }
@@ -51,7 +53,7 @@ const TabAccount = () => {
 
   const handleInputImageReset = () => {
     setInputValue('')
-    setImgSrc('/images/avatars/1.png')
+    setImgSrc(`https://avatar.vercel.sh/rauchg.svg?text=${user?.name?.slice(0, 2)?.toUpperCase()}`)
   }
 
   const onSubmitAIGeneration = async (data: { prompt: string }) => {

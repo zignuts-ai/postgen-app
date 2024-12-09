@@ -38,7 +38,7 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
 
   const senderData = {
     about: 'shsh',
-    avatar: '/images/avatars/1.png',
+    avatar: `https://avatar.vercel.sh/rauchg.svg?text=${user?.name?.slice(0, 2)?.toUpperCase()}`,
     fullName: user?.name ?? 'Guest',
     id: '4396b8e1-a77d-4aa4-adcf-0fed81d06c2e',
     role: 'user'
@@ -79,7 +79,11 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
               </Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
-                  <Avatar alt='Mary Vaughn' src='/images/avatars/1.png' sx={{ width: 22, height: 22, mr: 2.75 }} />
+                  <Avatar
+                    alt={user?.name}
+                    src={`https://avatar.vercel.sh/rauchg.svg?text=${user?.name?.slice(0, 2)?.toUpperCase()}`}
+                    sx={{ width: 22, height: 22, mr: 2.75 }}
+                  />
                   <Typography variant='body2' sx={{ color: 'common.white' }}>
                     {user?.name ?? 'John Doe'}
                   </Typography>

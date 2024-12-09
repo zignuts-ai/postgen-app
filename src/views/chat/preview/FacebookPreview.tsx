@@ -19,7 +19,7 @@ const FacebookPreview = ({ metadata }: Props) => {
       <div className='post__top'>
         <img
           className='user__avatar post__avatar object-cover rounded-full !w-11 !h-11'
-          src={'/images/avatars/1.png'}
+          src={`https://avatar.vercel.sh/rauchg.svg?text=${user?.name?.slice(0, 2)?.toUpperCase()}`}
           alt=''
         />
         <div className='post__topInfo'>

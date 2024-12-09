@@ -93,6 +93,7 @@ export type ChatContentType = {
   getInitials: (val: string) => string
   sendMsg: (params: SendMsgParamsType) => void
   handleUserProfileRightSidebarToggle: () => void
+  openModal: () => void
 }
 
 export type ChatSidebarLeftType = {
