@@ -5,7 +5,6 @@ import { useAuth } from 'src/hooks/useAuth'
 
 type Props = {
   metadata: {
-    name: string
     caption: string
     imageUrl: string
   }
@@ -13,7 +12,7 @@ type Props = {
 
 const LinkedInPreview = ({ metadata }: Props) => {
   const { user } = useAuth()
-  const { name, imageUrl, caption } = metadata
+  const { imageUrl, caption } = metadata
   const theme = useTheme()
 
   return (
@@ -37,7 +36,7 @@ const LinkedInPreview = ({ metadata }: Props) => {
       >
         <Avatar
           src={`https://avatar.vercel.sh/rauchg.svg?text=${user?.name?.slice(0, 2)?.toUpperCase()}`}
-          alt={name}
+          alt={'John Doe'}
           sx={{ width: 40, height: 40, marginRight: '12px' }}
         />
         <Box>

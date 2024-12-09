@@ -40,7 +40,7 @@ const RedditPreview = ({ metadata }: Props) => {
 
             <p className='text-sm text-gray-700 mb-2'>{caption}</p>
 
-            <div className='flex justify-center mb-2'>
+            <div className='flex justify-center mb-2 bg-[#f5f5f5]'>
               <img src={imageUrl} alt='Post Image' className='max-h-[460px] w-auto object-contain' />
             </div>
 
