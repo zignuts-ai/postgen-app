@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Typography, Grid, Card, CardContent, Fade, Container } from '@mui/material'
+import { Box, Typography, Grid, Card, CardContent, Fade, Container, useTheme } from '@mui/material'
 import PostCard from '../../views/history/PostCard'
 import { useAuth } from 'src/hooks/useAuth'
 import { GuestHistoryType, HistoryType } from 'src/types/chatContextType'
@@ -10,6 +10,9 @@ import BeatLoader from 'react-spinners/BeatLoader'
 import { LOCAL_CHAT_SESSION_KEY } from 'src/constants/constant'
 
 const HistoryView = () => {
+  const theme = useTheme()
+  const isDarkMode = theme.palette.mode === 'dark'
+
   const [groupedData, setGroupedData] = React.useState<Record<string, HistoryType[]>>({})
   const { user } = useAuth()
   const [guestHistory, setGuestHistory] = useState<GuestHistoryType[]>([])
@@ -60,6 +63,10 @@ const HistoryView = () => {
     }
   }, [user])
 
+  const loaderColor = isDarkMode ? '#7a88ee' : '#5c6bc0'
+  const dateBackgroundColor = isDarkMode ? '#41424f' : '#f0f0f0'
+  const emptyStateBackgroundColor = isDarkMode ? 'background.paper' : '#ffffff'
+
   return (
     <Container maxWidth='xl'>
       <Box
@@ -71,9 +78,11 @@ const HistoryView = () => {
         {allUserChatsQuery?.isFetching ? (
           <div className='flex flex-col items-center justify-center w-full min-h-[50vh]'>
             <div className='flex items-center space-x-4'>
-              <BeatLoader color='#7a88ee' size={15} />
+              <BeatLoader color={loaderColor} size={15} />
             </div>
-            <p className='mt-4 text-sm text-gray-500'>Please wait while we process your request...</p>
+            <p className={`mt-4 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+              Please wait while we process your request...
+            </p>
           </div>
         ) : hasData ? (
           <Fade in={true} timeout={500}>
@@ -87,8 +96,8 @@ const HistoryView = () => {
                     paddingBottom: 4,
                     paddingInline: 6,
                     borderRadius: 3,
-                    backgroundColor: '#41424f',
-                    boxShadow: 3
+                    backgroundColor: dateBackgroundColor,
+                    boxShadow: isDarkMode ? 3 : 1
                   }}
                 >
                   <Typography
@@ -97,7 +106,10 @@ const HistoryView = () => {
                     color='text.primary'
                     sx={{
                       marginBottom: 3,
-                      paddingBottom: 1
+                      paddingBottom: 1,
+                      borderBottomColor: isDarkMode ? 'divider' : 'rgba(0,0,0,0.12)',
+                      borderBottomWidth: 1,
+                      borderBottomStyle: 'solid'
                     }}
                   >
                     {date}
@@ -146,16 +158,31 @@ const HistoryView = () => {
                 maxWidth: 400,
                 textAlign: 'center',
                 padding: 4,
-                backgroundColor: 'background.paper',
-                boxShadow: 4,
+                backgroundColor: emptyStateBackgroundColor,
+                boxShadow: isDarkMode ? 4 : 2,
                 borderRadius: 3
               }}
             >
               <CardContent>
-                <Typography variant='h4' color='text.primary' gutterBottom sx={{ fontWeight: 700 }}>
+                <Typography
+                  variant='h4'
+                  color='text.primary'
+                  gutterBottom
+                  sx={{
+                    fontWeight: 700,
+                    color: isDarkMode ? 'text.primary' : 'primary.dark'
+                  }}
+                >
                   No History Found
                 </Typography>
-                <Typography variant='subtitle1' color='text.secondary' sx={{ mt: 2 }}>
+                <Typography
+                  variant='subtitle1'
+                  color='text.secondary'
+                  sx={{
+                    mt: 2,
+                    color: isDarkMode ? 'text.secondary' : 'text.primary'
+                  }}
+                >
                   Start creating chats to populate your history
                 </Typography>
               </CardContent>
