@@ -77,8 +77,6 @@ const AclGuard = (props: AclGuardProps) => {
     return <AbilityContext.Provider value={ability}>{children}</AbilityContext.Provider>
   }
 
-  console.log(ability)
-
   // Render Not Authorized component if the current user has limited access
   return (
     <BlankLayout>

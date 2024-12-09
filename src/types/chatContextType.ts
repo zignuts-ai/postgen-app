@@ -1,3 +1,5 @@
+import { platformTypes } from './constantTypes'
+
 export type FormType = {
   prompt: string
 }
@@ -10,6 +12,7 @@ export type ChatMessage = {
   metadata: any | null
   created_at: number
   created_by: string | null
+  isLoading?: boolean
 }
 
 type NewsItem = {
@@ -35,6 +38,18 @@ interface Session {
   messages: ChatMessage[]
 }
 
+interface MetadataType {
+  news: string // e.g., 'diwali'
+  title: string // e.g., 'Happy Diwali'
+  tone: string // e.g., 'exciting'
+  platform: platformTypes // e.g., 'instagram'
+  content_type: string // e.g., 'image, text'
+  preferences: string // defaulting to an empty string, can be a string describing preferences
+  search_engine: string // defaulting to an empty string, can specify a search engine
+  source: string // defaulting to an empty string, can specify a source
+  contextChanged: boolean // renamed to camelCase and changed to boolean
+}
+
 export interface GetChatByIdResponseTypes {
   data: Session
 }
@@ -47,7 +62,7 @@ export interface CreateSessionResponseTypes {
     isDeleted: boolean
     type: 'image' | 'video' | 'text' | 'meme' | null
     message: null
-    metadata: null
+    metadata: MetadataType | null
     userId: string
     name: string
     role: 'ai' | 'user'

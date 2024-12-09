@@ -21,9 +21,6 @@ const LinkedInPreview = ({ metadata }: Props) => {
             <Typography variant='subtitle1' fontWeight='bold'>
               John Doe
             </Typography>
-            <Typography variant='body2' color='text.secondary'>
-              Web Developer
-            </Typography>
             <Typography variant='caption' color='text.secondary'>
               1 Hour ago
             </Typography>
