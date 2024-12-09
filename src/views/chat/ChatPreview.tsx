@@ -16,8 +16,8 @@ const ChatPreview = () => {
   const platformType: 'instagram' | 'linkedin' | 'x' | 'facebook' | 'reddit' | '' = useMemo(() => {
     const validData = validType(chatDetails?.data.messages ?? [])
     const platform = validData?.item?.metadata?.platform
-    if (['instagram', 'linkedin', 'x', 'facebook', 'reddit'].includes(platform)) {
-      return platform
+    if (['instagram', 'linkedin', 'x', 'facebook', 'reddit'].includes(platform?.toLowerCase())) {
+      return platform?.toLowerCase()
     }
 
     return 'instagram'

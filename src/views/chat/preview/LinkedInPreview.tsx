@@ -70,10 +70,10 @@ const LinkedInPreview = ({ metadata }: Props) => {
         }}
       >
         <Button color='secondary' startIcon={<ThumbUp color='secondary' />} sx={{ textTransform: 'none' }}>
-          Like 20
+          Like
         </Button>
         <Button color='secondary' startIcon={<Message color='secondary' />} sx={{ textTransform: 'none' }}>
-          Comment 65
+          Comment
         </Button>
         <Button color='secondary' startIcon={<Share color='secondary' />} sx={{ textTransform: 'none' }}>
           Share
