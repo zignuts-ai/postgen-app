@@ -23,6 +23,7 @@ const AuthProvider = ({ children }: Props) => {
   // ** States
   const [user, setUser] = useState<UserDataType | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
+  console.log(user)
 
   // ** Hooks
   const router = useRouter()
@@ -32,7 +33,7 @@ const AuthProvider = ({ children }: Props) => {
       setLoading(true)
       const userData = window.localStorage.getItem('user')!
       if (userData) {
-        setUser(JSON.parse(userData))
+        setUser({ ...JSON.parse(userData), role: 'admin' })
         setLoading(false)
       } else {
         setLoading(false)

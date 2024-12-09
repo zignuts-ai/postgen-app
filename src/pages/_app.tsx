@@ -63,6 +63,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from 'src/utils/client'
 import { ChatProvider } from 'src/context/ChatContext'
 import PublicGuard from 'src/@core/components/auth/PublicGuard'
+import { ProfilePictureProvider } from 'src/context/ProfilePictureContext'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -125,6 +126,13 @@ const App = (props: ExtendedAppProps) => {
 
   const aclAbilities = Component.acl ?? defaultACLObj
 
+  console.log({
+    authGuard,
+    publicGuard,
+    guestGuard,
+    aclAbilities
+  })
+
   return (
     <CacheProvider value={emotionCache}>
       <Head>
@@ -138,34 +146,36 @@ const App = (props: ExtendedAppProps) => {
       </Head>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <ChatProvider>
-            <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
-              <SettingsConsumer>
-                {({ settings }) => {
-                  return (
-                    <ThemeComponent settings={settings}>
-                      <Guard authGuard={authGuard} guestGuard={guestGuard} publicGuard={publicGuard}>
-                        {publicGuard ? (
-                          <>
-                            {/* @ts-ignore */}
-                            {getLayout(<Component {...pageProps} />)}
-                          </>
-                        ) : (
-                          <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}>
-                            {/* @ts-ignore */}
-                            {getLayout(<Component {...pageProps} />)}
-                          </AclGuard>
-                        )}
-                      </Guard>
-                      <ReactHotToast>
-                        <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
-                      </ReactHotToast>
-                    </ThemeComponent>
-                  )
-                }}
-              </SettingsConsumer>
-            </SettingsProvider>
-          </ChatProvider>
+          <ProfilePictureProvider>
+            <ChatProvider>
+              <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
+                <SettingsConsumer>
+                  {({ settings }) => {
+                    return (
+                      <ThemeComponent settings={settings}>
+                        <Guard authGuard={authGuard} guestGuard={guestGuard} publicGuard={publicGuard}>
+                          {publicGuard ? (
+                            <>
+                              {/* @ts-ignore */}
+                              {getLayout(<Component {...pageProps} />)}
+                            </>
+                          ) : (
+                            <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}>
+                              {/* @ts-ignore */}
+                              {getLayout(<Component {...pageProps} />)}
+                            </AclGuard>
+                          )}
+                        </Guard>
+                        <ReactHotToast>
+                          <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
+                        </ReactHotToast>
+                      </ThemeComponent>
+                    )
+                  }}
+                </SettingsConsumer>
+              </SettingsProvider>
+            </ChatProvider>
+          </ProfilePictureProvider>
         </AuthProvider>
       </QueryClientProvider>
     </CacheProvider>
