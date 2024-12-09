@@ -14,6 +14,7 @@ const ChatPreview = () => {
   const isDownMd = useMediaQuery('(min-width:1200px)')
 
   const platformType: 'instagram' | 'linkedin' | 'x' | 'facebook' | 'reddit' | '' = useMemo(() => {
+    return 'reddit'
     const validData = validType(chatDetails?.data.messages ?? [])
     const platform = validData?.item?.metadata?.platform
     if (['instagram', 'linkedin', 'x', 'facebook', 'reddit'].includes(platform)) {
