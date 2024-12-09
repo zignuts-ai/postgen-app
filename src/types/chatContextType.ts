@@ -51,6 +51,27 @@ export interface CreateSessionResponseTypes {
   }
 }
 
+export type HistoryType = {
+  name: string
+  userId: string
+  sessionId: string | null
+  news: string | null
+  prompt: string
+  id: string
+  isActive: boolean
+  createdAt: string
+  createdBy: string
+  updatedAt: string
+  updatedBy: string
+  deletedAt: string | null
+  deletedBy: string | null
+  isDeleted: boolean
+}
+
+export interface UserHistoryType {
+  data: HistoryType[]
+}
+
 export type PreviewDataType = {
   imageUrl: string
   caption: string
@@ -59,6 +80,7 @@ export type PreviewDataType = {
 }
 
 export type GuestHistoryType = {
-  sessionName: string
   sessionId: string
+  name: string
+  createdAt: string
 }

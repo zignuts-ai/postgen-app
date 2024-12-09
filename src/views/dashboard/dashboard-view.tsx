@@ -22,6 +22,7 @@ import { platformTypes, toneTypes } from 'src/types/constantTypes'
 import { PLATFORM_TYPE, TONE_TYPE } from 'src/constants/constant'
 import { UUID } from 'src/utils/utils'
 import { useChat } from 'src/hooks/useChat'
+import useLoading from 'src/hooks/useLoading'
 
 export type postTypes = 'text' | 'image' | 'memes'
 
@@ -83,15 +84,17 @@ const DashboardView = () => {
   const [toneAnchorEl, setToneAnchorEl] = useState<null | HTMLElement>(null)
   const [postTypeAnchorEl, setPostTypeAnchorEl] = useState<null | HTMLElement>(null)
 
+  const { isLoading, startLoading, stopLoading } = useLoading()
+
   const {
-    handleCraeteSessionChat: { mutate, isPending }
+    handleCraeteSessionChat: { mutate }
   } = useChat()
 
   const {
     handleSubmit,
     control,
     formState: { errors }
-  } = useForm({
+  } = useForm<FormData>({
     mode: 'onBlur',
     resolver: yupResolver(schema)
   })
@@ -105,7 +108,10 @@ const DashboardView = () => {
       prompt: data.prompt,
       sessionId
     }
+
+    startLoading()
     await mutate(payLoad)
+    stopLoading()
   }
 
   // Dropdown handlers
@@ -138,7 +144,7 @@ const DashboardView = () => {
       <Box sx={{ my: 10, mt: 10 }}>
         <div className='max-w-3xl mx-auto text-center'>
           <h2 className='text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-primary mb-2 md:mb-6 drop-shadow-md'>
-            Generate social media posts in seconds for free
+            AI Social Media Post Generator
           </h2>
           <p className='text-sm sm:text-lg text-muted-foreground mb-8'>
             Stay consistent, creative, and productive with {themeConfig.templateName}'s free AI social media post
@@ -154,133 +160,124 @@ const DashboardView = () => {
           borderRadius: 3
         }}
       >
-        <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit as any)}>
-          <CardContent>
-            <Grid container spacing={3}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <CardContent sx={{ p: 3 }}>
+            {/* Selection Row */}
+            <Grid container spacing={2}>
               {/* Prompt Input */}
-              <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <CustomTextField
-                    control={control}
-                    name='prompt'
-                    label='Write your prompt here'
-                    multiline
-                    rows={5}
-                    errors={errors?.prompt}
-                  />
-                </FormControl>
-              </Grid>
+              <FormControl fullWidth>
+                <CustomTextField
+                  control={control}
+                  name='prompt'
+                  label='Write your prompt here'
+                  multiline
+                  rows={5}
+                  errors={errors?.prompt}
+                />
+              </FormControl>
 
-              {/* Selection Row */}
-              <Grid item xs={12}>
-                <Grid
-                  container
-                  spacing={2}
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                  }}
+              {/* Platform Selection */}
+              <Grid item xs={4}>
+                <Button
+                  fullWidth
+                  variant='outlined'
+                  onClick={handlePlatformOpen}
+                  startIcon={
+                    <Icon icon={PLATFORM_TYPE.find(p => p.value === selectedPlatform)?.icon || 'ri:smartphone-line'} />
+                  }
                 >
-                  {/* Platform Selection */}
-                  <Grid item>
-                    <Button
-                      onClick={handlePlatformOpen}
-                      variant='outlined'
-                      startIcon={<Icon icon={PLATFORM_TYPE.find(p => p.value === selectedPlatform)?.icon || ''} />}
+                  {PLATFORM_TYPE.find(p => p.value === selectedPlatform)?.name ?? 'Platform'}
+                </Button>
+                <Menu anchorEl={platformAnchorEl} open={Boolean(platformAnchorEl)} onClose={handlePlatformClose}>
+                  {PLATFORM_TYPE.map(platform => (
+                    <MenuItem
+                      key={platform.value}
+                      onClick={() => {
+                        setSelectedPlatform(platform.value as any)
+                        handlePlatformClose()
+                      }}
                     >
-                      {PLATFORM_TYPE.find(p => p.value === selectedPlatform)?.name ?? 'Platform'}
-                    </Button>
-                    <Menu anchorEl={platformAnchorEl} open={Boolean(platformAnchorEl)} onClose={handlePlatformClose}>
-                      {PLATFORM_TYPE.map(platform => (
-                        <MenuItem
-                          key={platform.value}
-                          onClick={() => {
-                            setSelectedPlatform(platform.value as any)
-                            handlePlatformClose()
-                          }}
-                        >
-                          <ListItemIcon>
-                            <Icon icon={platform.icon} />
-                          </ListItemIcon>
-                          <ListItemText primary={platform.name} />
-                        </MenuItem>
-                      ))}
-                    </Menu>
-                  </Grid>
-
-                  {/* Tone Selection */}
-                  <Grid item>
-                    <Button onClick={handleToneOpen} variant='outlined'>
-                      {selectedTone ? selectedTone : 'TONE'}
-                    </Button>
-                    <Menu anchorEl={toneAnchorEl} open={Boolean(toneAnchorEl)} onClose={handleToneClose}>
-                      {TONE_TYPE.map(tone => (
-                        <MenuItem
-                          key={tone.value}
-                          onClick={() => {
-                            setSelectedTone(tone.value as any)
-                            handleToneClose()
-                          }}
-                        >
-                          <ListItemText primary={tone.value} />
-                        </MenuItem>
-                      ))}
-                    </Menu>
-                  </Grid>
-
-                  {/* Post Type Selection */}
-                  <Grid item>
-                    <Button
-                      onClick={handlePostTypeOpen}
-                      variant='outlined'
-                      startIcon={<Icon icon={POST_TYPE.find(p => p.value === selectedPostType)?.icon || ''} />}
-                    >
-                      {POST_TYPE.find(p => p.value === selectedPostType)?.name
-                        ? POST_TYPE.find(p => p.value === selectedPostType)?.name
-                        : 'POSTTYPE'}
-                    </Button>
-                    <Menu anchorEl={postTypeAnchorEl} open={Boolean(postTypeAnchorEl)} onClose={handlePostTypeClose}>
-                      {POST_TYPE.map(postType => (
-                        <MenuItem
-                          key={postType.value}
-                          onClick={() => {
-                            setSelectedPostType(postType.value as any)
-                            handlePostTypeClose()
-                          }}
-                        >
-                          <ListItemIcon>
-                            <Icon icon={postType.icon} />
-                          </ListItemIcon>
-                          <ListItemText primary={postType.name} />
-                        </MenuItem>
-                      ))}
-                    </Menu>
-                  </Grid>
-                </Grid>
+                      <ListItemIcon>
+                        <Icon icon={platform.icon} />
+                      </ListItemIcon>
+                      <ListItemText primary={platform.name} />
+                    </MenuItem>
+                  ))}
+                </Menu>
               </Grid>
 
-              {/* Submit Button */}
-              <Grid item xs={12}>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-                  <Button
-                    endIcon={isPending ? <CircularProgress size={20} /> : <Icon icon='ri:quill-pen-ai-line' />}
-                    type='submit'
-                    variant='contained'
-                    sx={{
-                      borderRadius: 1,
-                      padding: '5px 10px',
-                      background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-                      '&:hover': {
-                        background: 'linear-gradient(45deg, #FF8E53 30%, #FE6B8B 90%)'
-                      }
-                    }}
-                  >
-                    {isPending ? 'generating...' : 'Generate'}
-                  </Button>
-                </Box>
+              {/* Tone Selection */}
+              <Grid item xs={4}>
+                <Button fullWidth variant='outlined' onClick={handleToneOpen}>
+                  {selectedTone ?? 'Tone'}
+                </Button>
+                <Menu anchorEl={toneAnchorEl} open={Boolean(toneAnchorEl)} onClose={handleToneClose}>
+                  {TONE_TYPE.map(tone => (
+                    <MenuItem
+                      key={tone.value}
+                      onClick={() => {
+                        setSelectedTone(tone.value as any)
+                        handleToneClose()
+                      }}
+                    >
+                      <ListItemText primary={tone.value} />
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Grid>
+
+              {/* Post Type Selection */}
+              <Grid item xs={4}>
+                <Button
+                  fullWidth
+                  variant='outlined'
+                  onClick={handlePostTypeOpen}
+                  startIcon={
+                    <Icon icon={POST_TYPE.find(p => p.value === selectedPostType)?.icon || 'ri:file-text-line'} />
+                  }
+                >
+                  {POST_TYPE.find(p => p.value === selectedPostType)?.name ?? 'Post Type'}
+                </Button>
+                <Menu anchorEl={postTypeAnchorEl} open={Boolean(postTypeAnchorEl)} onClose={handlePostTypeClose}>
+                  {POST_TYPE.map(postType => (
+                    <MenuItem
+                      key={postType.value}
+                      onClick={() => {
+                        setSelectedPostType(postType.value as any)
+                        handlePostTypeClose()
+                      }}
+                    >
+                      <ListItemIcon>
+                        <Icon icon={postType.icon} />
+                      </ListItemIcon>
+                      <ListItemText primary={postType.name} />
+                    </MenuItem>
+                  ))}
+                </Menu>
               </Grid>
             </Grid>
+
+            {/* Submit Button */}
+            <Button
+              type='submit'
+              fullWidth
+              variant='contained'
+              color='primary'
+              disabled={isLoading}
+              endIcon={
+                isLoading ? <CircularProgress size={20} color='inherit' /> : <Icon icon='ri:quill-pen-ai-line' />
+              }
+              sx={{
+                py: 1.5,
+                background: 'linear-gradient(45deg, #9333ea 30%, #ec4899 90%)',
+                '&:hover': {
+                  background: 'linear-gradient(45deg, #7e22ce 30%, #db2777 90%)'
+                },
+                mt: 4
+              }}
+            >
+              {isLoading ? 'Generating...' : 'Generate Post'}
+            </Button>
           </CardContent>
         </form>
       </Card>

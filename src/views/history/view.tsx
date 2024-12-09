@@ -1,20 +1,30 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Typography, Grid, Card, CardContent, Fade, Container } from '@mui/material'
 import PostCard from '../../views/history/PostCard'
-import { Content } from 'src/types/contentTypes'
 import { useAuth } from 'src/hooks/useAuth'
-import { useChat } from 'src/hooks/useChat'
+import { GuestHistoryType, HistoryType } from 'src/types/chatContextType'
+import { CHAT } from 'src/queries/query-keys'
+import { useQuery } from '@tanstack/react-query'
+import { getAllChats } from 'src/queries/chat'
+import BeatLoader from 'react-spinners/BeatLoader'
+import { LOCAL_CHAT_SESSION_KEY } from 'src/constants/constant'
 
 const HistoryView = () => {
-  const [groupedData, setGroupedData] = React.useState<Record<string, Content[]>>({})
+  const [groupedData, setGroupedData] = React.useState<Record<string, HistoryType[]>>({})
   const { user } = useAuth()
-  const { guestHistory, allUserChatsQuery } = useChat()
+  const [guestHistory, setGuestHistory] = useState<GuestHistoryType[]>([])
+
+  const allUserChatsQuery = useQuery({
+    queryKey: [CHAT.ALL_USER_CHATS],
+    queryFn: getAllChats,
+    enabled: !!user
+  })
 
   const formatData = (data: any) =>
     data
       .slice()
       .sort((a: any, b: any) => b.createdAt - a.createdAt)
-      .reduce((acc: Record<string, Content[]>, post: any) => {
+      .reduce((acc: Record<string, HistoryType[]>, post: any) => {
         const date = new Date(post.createdAt * 1000).toDateString()
         if (!acc[date]) {
           acc[date] = []
@@ -28,17 +38,27 @@ const HistoryView = () => {
 
   useEffect(() => {
     if (user) {
-      setGroupedData(formatData(allUserChatsQuery?.data ?? []))
+      setGroupedData(formatData(allUserChatsQuery.data?.data ?? []))
     } else {
       setGroupedData(formatData(guestHistory))
     }
-  }, [user, guestHistory, allUserChatsQuery?.data])
+    // eslint-disable-next-line
+  }, [user, allUserChatsQuery.data?.data, guestHistory])
 
   useEffect(() => {
-    if (user) {
-      allUserChatsQuery.refetch()
+    if (!user) {
+      const storedHistory = localStorage.getItem(LOCAL_CHAT_SESSION_KEY)
+      if (storedHistory) {
+        try {
+          const parsedHistory = JSON.parse(storedHistory)
+          setGuestHistory(parsedHistory)
+        } catch (error) {
+          console.error('Error parsing guest history', error)
+          localStorage.removeItem(LOCAL_CHAT_SESSION_KEY)
+        }
+      }
     }
-  }, [user, allUserChatsQuery])
+  }, [user])
 
   return (
     <Container maxWidth='xl'>
@@ -48,7 +68,14 @@ const HistoryView = () => {
           backgroundColor: 'background.default'
         }}
       >
-        {hasData ? (
+        {allUserChatsQuery?.isFetching ? (
+          <div className='flex flex-col items-center justify-center w-full min-h-[50vh]'>
+            <div className='flex items-center space-x-4'>
+              <BeatLoader color='#7a88ee' size={15} />
+            </div>
+            <p className='mt-4 text-sm text-gray-500'>Please wait while we process your request...</p>
+          </div>
+        ) : hasData ? (
           <Fade in={true} timeout={500}>
             <Box>
               {Object.entries(groupedData).map(([date, memes]) => (
@@ -60,7 +87,7 @@ const HistoryView = () => {
                     paddingBottom: 4,
                     paddingInline: 6,
                     borderRadius: 3,
-                    backgroundColor: 'background.paper',
+                    backgroundColor: '#41424f',
                     boxShadow: 3
                   }}
                 >

@@ -76,20 +76,15 @@ const AuthProvider = ({ children }: Props) => {
     }
   })
 
-  // const handleLogout = () => {
-  //   setUser(null)
-  //   localStorage.removeItem('user')
-  //   window.localStorage.removeItem(ACCESS_TOKEN_KEY)
-  //   router.push('/login')
-  // }
   const handleLogout = useMutation({
     mutationFn: logout,
     onSuccess: () => {
       localStorage.removeItem(ACCESS_TOKEN_KEY)
+      localStorage.removeItem(USER_DATA_KEY)
       setUser(null)
       setLoading(false)
-      toast.success('Logout successful')
-      router.push('/login')
+      toast.success('Logout Successfully')
+      router.push('/')
     },
     onError: (err: any) => {
       toast.error(formatMessage(err.response?.data?.message) ?? 'Something Went Wrong')
