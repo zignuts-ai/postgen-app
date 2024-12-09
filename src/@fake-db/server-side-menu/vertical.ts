@@ -144,7 +144,7 @@ const navigation: VerticalNavItemsType = [
         children: [
           {
             title: 'Account',
-            path: '/pages/account-settings/account'
+            path: '/pages/account-settings/'
           },
           {
             title: 'Security',
