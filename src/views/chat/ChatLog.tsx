@@ -181,8 +181,7 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
                     backgroundColor: isSender ? 'primary.main' : 'background.paper'
                   }}
                 >
-                  {item.message}
-                  {!isSender && <div className='my-3'>{renderMessageType(item)}</div>}
+                  {isSender ? item.message : <div className='my-3'>{renderMessageType(item)}</div>}
                 </Typography>
               </div>
 

@@ -27,7 +27,13 @@ const Form = styled('form')(({ theme }) => ({
 }))
 
 const SendMsgForm = () => {
-  const { methods, sendMessage } = useChat()
+  const {
+    methods,
+
+    // sendMessage,
+    chatId,
+    handleCraeteSessionChat: { mutate }
+  } = useChat()
 
   const {
     control,
@@ -35,8 +41,12 @@ const SendMsgForm = () => {
     formState: { errors }
   } = methods
 
-  const onSubmit = (data: FormType) => {
-    sendMessage(data.prompt)
+  const onSubmit = async (data: FormType) => {
+    // sendMessage(data.prompt)
+    await mutate({
+      sessionId: chatId,
+      prompt: data?.prompt
+    })
     methods.reset()
   }
 
