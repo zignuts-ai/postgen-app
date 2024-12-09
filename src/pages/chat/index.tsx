@@ -5,7 +5,7 @@ import DashboardView from 'src/views/dashboard/dashboard-view'
 const NewChatPage = () => {
   return (
     <Grid container spacing={6} justifyContent='center' alignItems='center'>
-      <Grid item xs={10}>
+      <Grid item xs={12}>
         <DashboardView />
       </Grid>
     </Grid>

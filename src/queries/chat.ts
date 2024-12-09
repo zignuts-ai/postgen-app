@@ -10,6 +10,13 @@ export async function createChatSession(dto: any, user: UserDataType | null): Pr
   return data
 }
 
+// ** Update Chat
+export async function updateCurrentChat(dto: any, user: UserDataType | null): Promise<CreateSessionResponseTypes> {
+  const { data } = await api(endpoints.chat.updateChat, dto, user ? 'post' : 'postWithoutToken')
+
+  return data
+}
+
 // ** Get chat by ID
 export async function getChatById(id: string): Promise<GetChatByIdResponseTypes> {
   const { data } = await api(endpoints.chat.getChatById(id), {}, 'get')
