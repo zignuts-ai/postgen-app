@@ -25,7 +25,7 @@ const Home = () => {
 
   return (
     <main className='overflow-hidden'>
-      <section className='relative pt-20 pb-20 max-lg:pt-52 max-lg:pb-10 max-md:pt-36 max-md:pb-32 bg-[#010101]'>
+      <section className='relative pb-20 max-lg:pb-10 pt-14 md:pt-20 lg:pt-28 bg-[#010101]'>
         <DashboardView />
       </section>
       {LANDING_DATA.hero && <Hero />}

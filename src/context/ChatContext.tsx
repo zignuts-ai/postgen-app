@@ -21,7 +21,7 @@ import endpoints from 'src/constants/endpoints'
 import useLoading from 'src/hooks/useLoading'
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query'
 import { CHAT } from 'src/queries/query-keys'
-import { createChatSession, getAllChats, getChatById } from 'src/queries/chat'
+import { createChatSession, getAllChats, getChatById, updateCurrentChat } from 'src/queries/chat'
 import { AxiosError } from 'axios'
 import { useAuth } from 'src/hooks/useAuth'
 import { LOCAL_CHAT_SESSION_KEY } from 'src/constants/constant'
@@ -31,6 +31,7 @@ export type ChatValuesTypes = {
   chatId: string | string[] | undefined
   sendMessage: (content: string) => void
   messages: ChatMessage[] | null
+  setMessages: React.Dispatch<React.SetStateAction<ChatMessage[] | null>>
   isPendingChat: boolean
   isSocketInit: boolean
   setPreviewData: (data: PreviewDataType) => void
@@ -40,6 +41,7 @@ export type ChatValuesTypes = {
   chatDetailQuery: UseQueryResult<GetChatByIdResponseTypes, Error>
   allUserChatsQuery: UseQueryResult<GetChatByIdResponseTypes, Error>
   guestHistory: GuestHistoryType[]
+  handleUpdateChat: UseMutationResult<CreateSessionResponseTypes, AxiosError<unknown, any>, any, unknown>
 }
 
 // ** Defaults
@@ -63,6 +65,7 @@ const ChatProvider = ({ children }: Props) => {
   const [guestHistory, setGuestHistory] = useState<GuestHistoryType[]>([])
   const { isLoading: isPendingChat, startLoading: startLoadingChat, stopLoading: stopLoadingChat } = useLoading()
   const { isLoading: isSocketInit, startLoading: startLoadingSocket, stopLoading: stopLoadingSocket } = useLoading()
+  console.log(messages)
 
   // ** States
   const [socket, setSocket] = useState<Socket | null>(null)
@@ -99,6 +102,16 @@ const ChatProvider = ({ children }: Props) => {
         localStorage.setItem(LOCAL_CHAT_SESSION_KEY, JSON.stringify(guestHistory))
       }
       router.push(`/chat/${data.data.sessionId}`)
+    },
+    onError: async (err: AxiosError) => {
+      console.log(err)
+    }
+  })
+
+  const handleUpdateChat = useMutation({
+    mutationFn: dto => updateCurrentChat(dto, user),
+    onSuccess: data => {
+      console.log(data)
     },
     onError: async (err: AxiosError) => {
       console.log(err)
@@ -175,6 +188,7 @@ const ChatProvider = ({ children }: Props) => {
       socket,
       sendMessage,
       messages,
+      setMessages,
       isPendingChat,
       isSocketInit,
       previewData,
@@ -183,7 +197,8 @@ const ChatProvider = ({ children }: Props) => {
       chatDetails,
       chatDetailQuery,
       guestHistory,
-      allUserChatsQuery
+      allUserChatsQuery,
+      handleUpdateChat
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [chatId, socket, messages, isPendingChat, isSocketInit, previewData, methods]

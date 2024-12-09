@@ -134,13 +134,13 @@ const DashboardView = () => {
   }
 
   return (
-    <Box sx={{ my: 10, mt: 15 }}>
+    <Box sx={{ my: 10, mt: 15, px: 2 }}>
       <Box sx={{ my: 10, mt: 10 }}>
         <div className='max-w-3xl mx-auto text-center'>
-          <h2 className='text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-primary mb-6 drop-shadow-md'>
+          <h2 className='text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-primary mb-2 md:mb-6 drop-shadow-md'>
             Generate social media posts in seconds for free
           </h2>
-          <p className='text-base sm:text-lg text-muted-foreground mb-8'>
+          <p className='text-sm sm:text-lg text-muted-foreground mb-8'>
             Stay consistent, creative, and productive with {themeConfig.templateName}'s free AI social media post
             generator.
           </p>
@@ -276,7 +276,7 @@ const DashboardView = () => {
                       }
                     }}
                   >
-                    {isPending ? 'generating...' : 'Generater'}
+                    {isPending ? 'generating...' : 'Generate'}
                   </Button>
                 </Box>
               </Grid>
