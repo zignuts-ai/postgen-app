@@ -6,7 +6,6 @@ import {
   RefetchOptions,
   RefetchQueryFilters
 } from '@tanstack/react-query'
-import { ACCESS_TOKEN_KEY, USER_DATA_KEY } from 'src/constants/constant'
 
 export const queryClient = new QueryClient({ defaultOptions: { queries: { refetchOnWindowFocus: false } } })
 
@@ -30,14 +29,14 @@ export const userClient = axios.create()
  */
 export const apiClient = axios.create()
 
-apiClient.interceptors.response.use(
-  resp => resp,
-  async error => {
-    if (error.response.status === 500 || error.response.status === 401) {
-      localStorage.removeItem(USER_DATA_KEY)
-      localStorage.removeItem(ACCESS_TOKEN_KEY)
+// apiClient.interceptors.response.use(
+//   resp => resp,
+//   async error => {
+//     if (error.response.status === 500 || error.response.status === 401) {
+//       localStorage.removeItem(USER_DATA_KEY)
+//       localStorage.removeItem(ACCESS_TOKEN_KEY)
 
-      return Promise.reject(error)
-    }
-  }
-)
+//       return Promise.reject(error)
+//     }
+//   }
+// )

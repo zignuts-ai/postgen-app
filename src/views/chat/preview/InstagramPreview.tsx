@@ -19,7 +19,10 @@ const InstagramPreview = ({ metadata }: Props) => {
       <div className='post__header'>
         <div className='post__profile'>
           <div className='post__avatar'>
-            <img src='/images/avatars/1.png' alt='User Picture' />
+            <img
+              src={`https://avatar.vercel.sh/rauchg.svg?text=${user?.name?.slice(0, 2)?.toUpperCase()}`}
+              alt='User Picture'
+            />
           </div>
           <div className='text-black font-bold'>{user?.name ?? 'John Doe'}</div>
         </div>
@@ -37,9 +40,9 @@ const InstagramPreview = ({ metadata }: Props) => {
         <div className='post__medias'>
           {type === 'image' || type === 'meme' ? (
             <img className='post__media max-h-[300px] object-contain' src={imageUrl} alt='Post Content' />
-          ) : (
+          ) : type === 'video' ? (
             <video autoPlay className='post__media' src={imageUrl} controls />
-          )}
+          ) : null}
         </div>
       </div>
 
@@ -97,7 +100,10 @@ const InstagramPreview = ({ metadata }: Props) => {
         <div className='post__infos'>
           <div className='post__likes'>
             <div className='post__likes-avatar'>
-              <img src='/images/avatars/1.png' alt='User Picture' />
+              <img
+                src={`https://avatar.vercel.sh/rauchg.svg?text=${user?.name?.slice(0, 2)?.toUpperCase()}`}
+                alt='User Picture'
+              />
             </div>
 
             <span>

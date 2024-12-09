@@ -20,15 +20,19 @@ import CustomTextField from 'src/components/common/form/CustomTextField'
 import themeConfig from 'src/configs/themeConfig'
 import { platformTypes, toneTypes } from 'src/types/constantTypes'
 import { LOCAL_CHAT_SESSION_KEY, PLATFORM_TYPE, TONE_TYPE } from 'src/constants/constant'
-import { UUID } from 'src/utils/utils'
+import { checkUserStatus, UUID } from 'src/utils/utils'
 import { useRouter } from 'next/router'
 import { updateCurrentChat } from 'src/queries/chat'
 import { useAuth } from 'src/hooks/useAuth'
 import useLoading from 'src/hooks/useLoading'
 import { toast } from 'react-hot-toast'
 
-export type postTypes = 'text' | 'image' | 'memes' | 'video'
+// Updated type to include 'none'
+export type postTypes = 'text' | 'image' | 'memes' | 'video' | 'none'
+export type platformTypesExtended = platformTypes | 'none'
+export type toneTypesExtended = toneTypes | 'None'
 
+// Update POST_TYPE to include 'none'
 export const POST_TYPE = [
   {
     value: 'text',
@@ -37,49 +41,42 @@ export const POST_TYPE = [
   },
   {
     value: 'image',
-    name: 'Image Post',
+    name: 'Post with Image',
     icon: 'ri:image-line'
   },
   {
+    value: 'video',
+    name: 'Post with Video',
+    icon: 'ri:video-line'
+  },
+  {
     value: 'memes',
-    name: 'Memes',
+    name: 'Meme',
     icon: 'ri:emotion-laugh-line'
+  },
+  {
+    value: 'none',
+    name: 'None',
+    icon: 'ri:delete-bin-line'
   }
 ]
 
-// Validation Schema
+// Validation Schema (commented out for flexibility)
 const schema = yup.object().shape({
-  // platform_type: yup
-  //   .mixed<platformTypes>()
-  //   .oneOf(['instagram', 'linkedin'], 'Please Select platform')
-  //   .required('Platform Type is required'),
-  // tone_types: yup
-  //   .mixed<toneTypes>()
-  //   .oneOf(
-  //     ['Informative', 'Educative', 'Humorous', 'Funny', 'Meme', 'Serious', 'Professional', 'Concerning', 'Exciting'],
-  //     'Please Select Tone'
-  //   )
-  //   .required('Tone is required'),
-  // post_type: yup
-  //   .mixed<postTypes>()
-  //   .oneOf(['text', 'image', 'memes'], 'Please Select Post Type')
-  //   .required('Post Type is required'),
   prompt: yup.string().min(5, 'Prompt should be at least 5 characters').required('Prompt is required')
 })
 
-// Form Data Interface
+// Updated Form Data Interface
 interface FormData {
-  platform_type: platformTypes
-  tone_types: toneTypes
+  platform_type: platformTypesExtended
+  tone_types: toneTypesExtended
   post_type: postTypes
   prompt: string
 }
 
-// Default Values
-
 const DashboardView = () => {
-  const [selectedPlatform, setSelectedPlatform] = useState<platformTypes | null>(null)
-  const [selectedTone, setSelectedTone] = useState<toneTypes | null>(null)
+  const [selectedPlatform, setSelectedPlatform] = useState<platformTypesExtended | null>(null)
+  const [selectedTone, setSelectedTone] = useState<toneTypesExtended | null>(null)
   const [selectedPostType, setSelectedPostType] = useState<postTypes | null>(null)
   const [platformAnchorEl, setPlatformAnchorEl] = useState<null | HTMLElement>(null)
   const [toneAnchorEl, setToneAnchorEl] = useState<null | HTMLElement>(null)
@@ -115,7 +112,8 @@ const DashboardView = () => {
       }
       router.push(`/chat/${sessionId}`)
     } catch (error: any) {
-      toast.error(error?.message || 'Failed to Generate Content')
+      checkUserStatus(error)
+      toast.error(error?.response?.data?.message || 'Failed to Generate Content')
       console.error('Error generating content:', error)
       stopLoading()
     }
@@ -145,6 +143,55 @@ const DashboardView = () => {
   const handlePostTypeClose = () => {
     setPostTypeAnchorEl(null)
   }
+
+  // Modified platform selection to handle 'none'
+  const handlePlatformSelection = (platform: platformTypesExtended) => {
+    if (platform === 'none') {
+      setSelectedPlatform(null)
+    } else {
+      setSelectedPlatform(platform)
+    }
+    handlePlatformClose()
+  }
+
+  // Modified tone selection to handle 'none'
+  const handleToneSelection = (tone: toneTypesExtended) => {
+    if (tone === 'None') {
+      setSelectedTone(null)
+    } else {
+      setSelectedTone(tone)
+    }
+    handleToneClose()
+  }
+
+  // Modified post type selection to handle 'none'
+  const handlePostTypeSelection = (postType: postTypes) => {
+    if (postType === 'none') {
+      setSelectedPostType(null)
+    } else {
+      setSelectedPostType(postType)
+    }
+    handlePostTypeClose()
+  }
+
+  // Add 'None' option to platform types
+  const PLATFORM_TYPE_WITH_NONE = [
+    ...PLATFORM_TYPE,
+    {
+      value: 'none',
+      name: 'None',
+      icon: 'ri:delete-bin-line'
+    }
+  ]
+
+  // Add 'None' option to tone types
+  const TONE_TYPE_WITH_NONE = [
+    ...TONE_TYPE,
+    {
+      value: 'None',
+      name: 'None'
+    }
+  ]
 
   return (
     <Box sx={{ my: 10, mt: 15, px: 2 }}>
@@ -184,25 +231,27 @@ const DashboardView = () => {
               </FormControl>
 
               {/* Platform Selection */}
-              <Grid item xs={4}>
+              <Grid item xs={12} sm={6} md={4}>
                 <Button
+                  size='small'
                   fullWidth
                   variant='outlined'
                   onClick={handlePlatformOpen}
                   startIcon={
-                    <Icon icon={PLATFORM_TYPE.find(p => p.value === selectedPlatform)?.icon || 'ri:smartphone-line'} />
+                    <Icon
+                      icon={
+                        PLATFORM_TYPE_WITH_NONE.find(p => p.value === selectedPlatform)?.icon || 'ri:smartphone-line'
+                      }
+                    />
                   }
                 >
-                  {PLATFORM_TYPE.find(p => p.value === selectedPlatform)?.name ?? 'Platform'}
+                  {PLATFORM_TYPE_WITH_NONE.find(p => p.value === selectedPlatform)?.name ?? 'Platform'}
                 </Button>
                 <Menu anchorEl={platformAnchorEl} open={Boolean(platformAnchorEl)} onClose={handlePlatformClose}>
-                  {PLATFORM_TYPE.map(platform => (
+                  {PLATFORM_TYPE_WITH_NONE.map(platform => (
                     <MenuItem
                       key={platform.value}
-                      onClick={() => {
-                        setSelectedPlatform(platform.value as any)
-                        handlePlatformClose()
-                      }}
+                      onClick={() => handlePlatformSelection(platform.value as platformTypesExtended)}
                     >
                       <ListItemIcon>
                         <Icon icon={platform.icon} />
@@ -214,19 +263,13 @@ const DashboardView = () => {
               </Grid>
 
               {/* Tone Selection */}
-              <Grid item xs={4}>
-                <Button fullWidth variant='outlined' onClick={handleToneOpen}>
+              <Grid item xs={12} sm={6} md={4}>
+                <Button size='small' fullWidth variant='outlined' onClick={handleToneOpen}>
                   {selectedTone ?? 'Tone'}
                 </Button>
                 <Menu anchorEl={toneAnchorEl} open={Boolean(toneAnchorEl)} onClose={handleToneClose}>
-                  {TONE_TYPE.map(tone => (
-                    <MenuItem
-                      key={tone.value}
-                      onClick={() => {
-                        setSelectedTone(tone.value as any)
-                        handleToneClose()
-                      }}
-                    >
+                  {TONE_TYPE_WITH_NONE.map(tone => (
+                    <MenuItem key={tone.value} onClick={() => handleToneSelection(tone.value as toneTypesExtended)}>
                       <ListItemText primary={tone.value} />
                     </MenuItem>
                   ))}
@@ -234,9 +277,10 @@ const DashboardView = () => {
               </Grid>
 
               {/* Post Type Selection */}
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <Button
                   fullWidth
+                  size='small'
                   variant='outlined'
                   onClick={handlePostTypeOpen}
                   startIcon={
@@ -247,13 +291,7 @@ const DashboardView = () => {
                 </Button>
                 <Menu anchorEl={postTypeAnchorEl} open={Boolean(postTypeAnchorEl)} onClose={handlePostTypeClose}>
                   {POST_TYPE.map(postType => (
-                    <MenuItem
-                      key={postType.value}
-                      onClick={() => {
-                        setSelectedPostType(postType.value as any)
-                        handlePostTypeClose()
-                      }}
-                    >
+                    <MenuItem key={postType.value} onClick={() => handlePostTypeSelection(postType.value as postTypes)}>
                       <ListItemIcon>
                         <Icon icon={postType.icon} />
                       </ListItemIcon>

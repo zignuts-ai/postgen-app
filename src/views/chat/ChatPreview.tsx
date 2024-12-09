@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react'
-import { Box, Card, CardContent } from '@mui/material'
+import { Box, Card, CardContent, DialogTitle, useMediaQuery } from '@mui/material'
 import InstagramPreview from './preview/InstagramPreview'
 import { useChat } from 'src/hooks/useChat'
 import { ChatMessage } from 'src/types/chatContextType'
@@ -11,6 +11,8 @@ import FacebookPreview from './preview/FacebookPreview'
 const ChatPreview = () => {
   const { previewData, chatDetails, setPreviewData } = useChat()
 
+  const isDownMd = useMediaQuery('(min-width:1200px)')
+
   const platformType: 'instagram' | 'linkedin' | 'x' | 'facebook' | 'reddit' | '' = useMemo(() => {
     const validData = validType(chatDetails?.data.messages ?? [])
     const platform = validData?.item?.metadata?.platform
@@ -19,7 +21,7 @@ const ChatPreview = () => {
     }
 
     return 'instagram'
-  }, [chatDetails?.data.messages])
+  }, [chatDetails?.data?.messages])
 
   function validType(data: ChatMessage[]) {
     if (!Array.isArray(data)) {
@@ -36,7 +38,7 @@ const ChatPreview = () => {
   }
 
   useEffect(() => {
-    const validData = validType(chatDetails?.data.messages ?? [])
+    const validData = validType(chatDetails?.data?.messages ?? [])
     if (validData.type) {
       if (validData.type === 'image') {
         setPreviewData({
@@ -63,12 +65,14 @@ const ChatPreview = () => {
   return (
     <Box display='flex' justifyContent='center' flexDirection='column' height='100%' maxWidth={500} margin='auto'>
       <Card>
-        <CardContent>
+        {isDownMd && <DialogTitle id='alert-dialog-slide-title'>Social Preview</DialogTitle>}
+        <CardContent sx={{ pt: 0 }}>
           {platformType === 'x' && (
             <XPreview
               metadata={{
                 caption: previewData?.caption ?? 'Excited to share our latest project updates! #FeatureFriday',
-                imageUrl: [previewData.imageUrl] ?? ['/images/testimonials/jessica-saunders.png']
+                imageUrl: previewData.imageUrl ?? '/images/testimonials/jessica-saunders.png',
+                type: previewData.type ?? 'image'
               }}
             />
           )}
@@ -80,7 +84,8 @@ const ChatPreview = () => {
                   'React has become one of the most popular JavaScript libraries for building user interfaces. In this post ll share some tips and best practices Ive learned over the years.',
                 imageUrl:
                   previewData.imageUrl ??
-                  'https://www.socialchamp.io/wp-content/uploads/2023/12/Content-Blog-Banner_Q4-2023_1125x600_30_What-to-Post-on-LinkedIn.png'
+                  'https://www.socialchamp.io/wp-content/uploads/2023/12/Content-Blog-Banner_Q4-2023_1125x600_30_What-to-Post-on-LinkedIn.png',
+                type: previewData.type ?? 'image'
               }}
             />
           )}
@@ -93,7 +98,8 @@ const ChatPreview = () => {
                 imageUrl:
                   previewData.imageUrl ??
                   'https://images.fastcompany.com/image/upload/f_auto,q_auto,c_fit/wp-cms/uploads/2023/11/007-90989375-reddit-redesign.jpg',
-                title: 'Learning React: Best Practices and Tips'
+                title: 'Learning React: Best Practices and Tips',
+                type: previewData.type ?? 'image'
               }}
             />
           )}
@@ -102,10 +108,11 @@ const ChatPreview = () => {
               metadata={{
                 caption:
                   previewData?.caption ??
-                  'It’s better to be an initial noted version of yourself, rather than a second noted version of someone else. ',
+                  'Its better to be an initial noted version of yourself, rather than a second noted version of someone else. ',
                 imageUrl:
                   previewData.imageUrl ??
-                  'https://imageio.forbes.com/specials-images/imageserve/5d35eacaf1176b0008974b54/0x0.jpg?format=jpg&crop=4560,2565,x790,y784,safe&height=900&width=1600&fit=bounds'
+                  'https://imageio.forbes.com/specials-images/imageserve/5d35eacaf1176b0008974b54/0x0.jpg?format=jpg&crop=4560,2565,x790,y784,safe&height=900&width=1600&fit=bounds',
+                type: previewData.type ?? 'image'
               }}
             />
           )}

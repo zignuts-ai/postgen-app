@@ -56,7 +56,7 @@ const PostCard = ({ id, type = 'text', prompt, name, image, platform, sessionId 
               textAlign: 'center',
               borderTopLeftRadius: 4,
               borderTopRightRadius: 4,
-              backgroundColor: isDarkMode ? theme.palette.background.paper : theme.palette.grey[200]
+              backgroundColor: isDarkMode ? theme.palette.background.paper : '#fff'
             }}
           >
             <Typography variant='body1' color={isDarkMode ? 'text.primary' : 'text.secondary'}>

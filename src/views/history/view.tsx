@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getAllChats } from 'src/queries/chat'
 import BeatLoader from 'react-spinners/BeatLoader'
 import { LOCAL_CHAT_SESSION_KEY } from 'src/constants/constant'
+import { checkUserStatus } from 'src/utils/utils'
 
 const HistoryView = () => {
   const theme = useTheme()
@@ -20,7 +21,13 @@ const HistoryView = () => {
   const allUserChatsQuery = useQuery({
     queryKey: [CHAT.ALL_USER_CHATS],
     queryFn: getAllChats,
-    enabled: !!user
+    enabled: !!user,
+    retry: 1,
+    throwOnError: err => {
+      checkUserStatus(err)
+
+      return false
+    }
   })
 
   const formatData = (data: any) =>
