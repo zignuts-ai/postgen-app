@@ -6,35 +6,65 @@ import {
   FavoriteBorder as LikeIcon,
   IosShare as ShareIcon
 } from '@mui/icons-material'
+import { useAuth } from 'src/hooks/useAuth'
 
 type Props = {
   metadata: {
+    userName: string
+    userHandle: string
     caption: string
     imageUrl: string[]
+    commentCount: number
+    retweetCount: number
+    likeCount: number
+    timestamp: string
   }
 }
+
 const XPreview = ({ metadata }: Props) => {
-  const { caption, imageUrl } = metadata
+  const { userName, userHandle, caption, imageUrl, commentCount, retweetCount, likeCount, timestamp } = metadata
+
+  const { user } = useAuth()
 
   return (
-    <>
+    <Box
+      sx={{
+        border: 1,
+        borderColor: 'divider',
+        borderRadius: 2,
+        overflow: 'hidden'
+      }}
+    >
       {/* Post Header */}
-      <Box sx={{ display: 'flex', alignItems: 'center', pb: 1 }}>
-        <Avatar src={'/images/testimonials/jessica-saunders.png'} sx={{ width: 48, height: 48, mr: 2 }} />
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          p: 2,
+          backgroundColor: 'background.paper'
+        }}
+      >
+        <Avatar
+          src={`https://avatar.vercel.sh/rauchg.svg?text=${user?.name?.slice(0, 2)?.toUpperCase()}`}
+          alt={userName}
+          sx={{ width: 40, height: 40, mr: 2 }}
+        />
         <Box>
           <Typography variant='subtitle1' fontWeight='bold'>
-            John Doe
+            {user?.name ?? 'John Doe'}
           </Typography>
           <Typography variant='body2' color='text.secondary'>
-            @johndoe12
+            {userHandle}
           </Typography>
         </Box>
       </Box>
 
       {/* Post Content */}
-      <Box sx={{ px: 2, pb: 2 }}>
-        <Typography sx={{ ml: '1rem', pt: '1rem' }} variant='body1' paragraph>
-          {caption}
+      <Box sx={{ px: 2, py: 1 }}>
+        <Typography variant='body1' paragraph>
+          {caption
+            ? caption
+            : 'React has become one of the most popular JavaScript libraries for building user interfaces. In this post I will share some tips and best practices I have learned over the years.'}
         </Typography>
 
         {imageUrl && imageUrl.length > 0 && (
@@ -69,40 +99,57 @@ const XPreview = ({ metadata }: Props) => {
         sx={{
           display: 'flex',
           justifyContent: 'space-around',
-          py: 1
+          py: 1,
+          backgroundColor: 'background.paper'
         }}
       >
-        <IconButton color='primary'>
+        <IconButton
+          sx={{
+            color: 'darkgray'
+          }}
+        >
           <CommentIcon />
           <Typography variant='body2' sx={{ ml: 1 }}>
-            0
+            {commentCount}
           </Typography>
         </IconButton>
 
-        <IconButton color='primary'>
+        <IconButton
+          sx={{
+            color: 'darkgray'
+          }}
+        >
           <RetweetIcon />
           <Typography variant='body2' sx={{ ml: 1 }}>
-            0
+            {retweetCount}
           </Typography>
         </IconButton>
 
-        <IconButton color='primary'>
+        <IconButton
+          sx={{
+            color: 'darkgray'
+          }}
+        >
           <LikeIcon />
           <Typography variant='body2' sx={{ ml: 1 }}>
-            0
+            {likeCount}
           </Typography>
         </IconButton>
 
-        <IconButton color='primary'>
+        <IconButton
+          sx={{
+            color: 'darkgray'
+          }}
+        >
           <ShareIcon />
         </IconButton>
       </Box>
 
       {/* Timestamp */}
-      <Box sx={{ px: 2, pb: 2, color: 'text.secondary' }}>
-        <Typography variant='caption'>2 hours ago</Typography>
+      <Box sx={{ p: 2, color: 'text.secondary' }}>
+        <Typography variant='caption'>{timestamp}</Typography>
       </Box>
-    </>
+    </Box>
   )
 }
 

@@ -16,14 +16,14 @@ const RedditPreview = ({ metadata }: Props) => {
 
   return (
     <div className='max-w-2xl mx-auto'>
-      <div className='flex border border-gray-300 bg-white rounded-md overflow-hidden'>
+      <div className='flex border border-gray-300 bg-white rounded-md overflow-hidden  '>
         <div className='flex flex-col items-center bg-gray-100 p-2 w-10'>
           <Icon icon={'bx:upvote'} color='gray' fontSize={23} />
           <span className='text-xs font-semibold my-1 text-black'>42</span>
           <Icon icon={'bx:downvote'} color='gray' fontSize={23} />
         </div>
 
-        <div className='flex-grow'>
+        <div className='flex-grow py-2'>
           <div className='p-2.5'>
             <div className='flex items-center text-xs text-gray-500 mb-1 flex-wrap'>
               <img

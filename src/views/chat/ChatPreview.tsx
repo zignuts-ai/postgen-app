@@ -21,7 +21,7 @@ const ChatPreview = () => {
     }
 
     return 'instagram'
-  }, [chatDetails?.data.messages])
+  }, [chatDetails?.data?.messages])
 
   function validType(data: ChatMessage[]) {
     if (!Array.isArray(data)) {
@@ -38,7 +38,7 @@ const ChatPreview = () => {
   }
 
   useEffect(() => {
-    const validData = validType(chatDetails?.data.messages ?? [])
+    const validData = validType(chatDetails?.data?.messages ?? [])
     if (validData.type) {
       if (validData.type === 'image') {
         setPreviewData({
@@ -105,7 +105,7 @@ const ChatPreview = () => {
               metadata={{
                 caption:
                   previewData?.caption ??
-                  'It’s better to be an initial noted version of yourself, rather than a second noted version of someone else. ',
+                  'Its better to be an initial noted version of yourself, rather than a second noted version of someone else. ',
                 imageUrl:
                   previewData.imageUrl ??
                   'https://imageio.forbes.com/specials-images/imageserve/5d35eacaf1176b0008974b54/0x0.jpg?format=jpg&crop=4560,2565,x790,y784,safe&height=900&width=1600&fit=bounds'
