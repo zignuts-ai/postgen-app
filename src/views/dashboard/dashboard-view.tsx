@@ -19,12 +19,15 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import CustomTextField from 'src/components/common/form/CustomTextField'
 import themeConfig from 'src/configs/themeConfig'
 import { platformTypes, toneTypes } from 'src/types/constantTypes'
-import { PLATFORM_TYPE, TONE_TYPE } from 'src/constants/constant'
+import { LOCAL_CHAT_SESSION_KEY, PLATFORM_TYPE, TONE_TYPE } from 'src/constants/constant'
 import { UUID } from 'src/utils/utils'
-import { useChat } from 'src/hooks/useChat'
+import { useRouter } from 'next/router'
+import { updateCurrentChat } from 'src/queries/chat'
+import { useAuth } from 'src/hooks/useAuth'
 import useLoading from 'src/hooks/useLoading'
+import { toast } from 'react-hot-toast'
 
-export type postTypes = 'text' | 'image' | 'memes'
+export type postTypes = 'text' | 'image' | 'memes' | 'video'
 
 export const POST_TYPE = [
   {
@@ -78,18 +81,12 @@ const DashboardView = () => {
   const [selectedPlatform, setSelectedPlatform] = useState<platformTypes | null>(null)
   const [selectedTone, setSelectedTone] = useState<toneTypes | null>(null)
   const [selectedPostType, setSelectedPostType] = useState<postTypes | null>(null)
-
-  // Anchor states for dropdowns
   const [platformAnchorEl, setPlatformAnchorEl] = useState<null | HTMLElement>(null)
   const [toneAnchorEl, setToneAnchorEl] = useState<null | HTMLElement>(null)
   const [postTypeAnchorEl, setPostTypeAnchorEl] = useState<null | HTMLElement>(null)
-
+  const router = useRouter()
+  const { user } = useAuth()
   const { isLoading, startLoading, stopLoading } = useLoading()
-
-  const {
-    handleCraeteSessionChat: { mutate }
-  } = useChat()
-
   const {
     handleSubmit,
     control,
@@ -101,17 +98,27 @@ const DashboardView = () => {
 
   const onSubmit = async (data: FormData) => {
     const sessionId = UUID()
-    const payLoad = {
-      platform: selectedPlatform,
-      tone: selectedTone,
-      postType: selectedPostType,
-      prompt: data.prompt,
-      sessionId
-    }
 
-    startLoading()
-    await mutate(payLoad)
-    stopLoading()
+    try {
+      startLoading()
+      const res = await updateCurrentChat({ sessionId, prompt: data.prompt }, user)
+      stopLoading()
+
+      if (!user) {
+        const guestHistory = JSON.parse(localStorage.getItem(LOCAL_CHAT_SESSION_KEY) || '[]')
+        guestHistory.push({
+          sessionId: sessionId,
+          name: res?.data?.name,
+          createdAt: res?.data?.createdAt
+        })
+        localStorage.setItem(LOCAL_CHAT_SESSION_KEY, JSON.stringify(guestHistory))
+      }
+      router.push(`/chat/${sessionId}`)
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to Generate Content')
+      console.error('Error generating content:', error)
+      stopLoading()
+    }
   }
 
   // Dropdown handlers

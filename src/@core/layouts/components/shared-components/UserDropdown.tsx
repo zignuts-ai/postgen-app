@@ -23,6 +23,7 @@ import { useAuth } from 'src/hooks/useAuth'
 // ** Type Imports
 import { Settings } from 'src/@core/context/settingsContext'
 import { ACCESS_TOKEN_KEY } from 'src/constants/constant'
+import { useProfilePicture } from 'src/context/ProfilePictureContext'
 
 interface Props {
   settings: Settings
@@ -52,6 +53,8 @@ const UserDropdown = (props: Props) => {
   // ** Vars
   const { direction } = settings
 
+  const { imgSrc } = useProfilePicture()
+
   const handleDropdownOpen = (event: SyntheticEvent) => {
     setAnchorEl(event.currentTarget)
   }
@@ -63,25 +66,14 @@ const UserDropdown = (props: Props) => {
     setAnchorEl(null)
   }
 
-  // const styles = {
-  //   py: 2,
-  //   px: 4,
-  //   width: '100%',
-  //   display: 'flex',
-  //   alignItems: 'center',
-  //   color: 'text.secondary',
-  //   textDecoration: 'none',
-  //   '& svg': {
-  //     mr: 2,
-  //     fontSize: '1.25rem',
-  //     color: 'text.secondary'
-  //   }
-  // }
-
   const handleLogout = async () => {
     const token = localStorage.getItem(ACCESS_TOKEN_KEY)
     await mutate(token)
     handleDropdownClose()
+  }
+
+  const handleuserSeeting = () => {
+    router.push('/account-setting')
   }
 
   return (
@@ -96,12 +88,7 @@ const UserDropdown = (props: Props) => {
           horizontal: 'right'
         }}
       >
-        <Avatar
-          alt='John Doe'
-          src='/images/avatars/1.png'
-          onClick={handleDropdownOpen}
-          sx={{ width: 40, height: 40 }}
-        />
+        <Avatar alt='John Doe' src={imgSrc} onClick={handleDropdownOpen} sx={{ width: 40, height: 40 }} />
       </Badge>
       <Menu
         anchorEl={anchorEl}
@@ -121,7 +108,7 @@ const UserDropdown = (props: Props) => {
                 horizontal: 'right'
               }}
             >
-              <Avatar alt='John Doe' src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
+              <Avatar alt='John Doe' src={imgSrc} sx={{ width: '2.5rem', height: '2.5rem' }} />
             </Badge>
             <Box sx={{ ml: 3, display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
               <Typography sx={{ fontWeight: 500 }}>{user?.name ?? 'John Doe'}</Typography>
@@ -132,44 +119,18 @@ const UserDropdown = (props: Props) => {
           </Box>
         </Box>
         <Divider sx={{ mt: '0 !important' }} />
-        {/* <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <Icon icon='bx:user' />
-            Profile
-          </Box>
+        <MenuItem
+          onClick={handleuserSeeting}
+          sx={{
+            py: 2,
+            px: 4,
+            color: 'text.secondary',
+            '& svg': { mr: 2, fontSize: '1.25rem', color: 'text.secondary' }
+          }}
+        >
+          <Icon icon='bx:cog' />
+          Settings
         </MenuItem>
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <Icon icon='bx:envelope' />
-            Inbox
-          </Box>
-        </MenuItem>
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <Icon icon='bx:message' />
-            Chat
-          </Box>
-        </MenuItem>
-        <Divider sx={{ my: theme => `${theme.spacing(2)} !important` }} />
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <Icon icon='bx:cog' />
-            Settings
-          </Box>
-        </MenuItem>
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <Icon icon='bx:dollar' />
-            Pricing
-          </Box>
-        </MenuItem>
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <Icon icon='bx:help-circle' />
-            FAQ
-          </Box>
-        </MenuItem>
-        <Divider /> */}
         <MenuItem
           onClick={handleLogout}
           sx={{

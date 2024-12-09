@@ -6,7 +6,7 @@ import { toast } from 'react-hot-toast'
 import { Icon } from '@iconify/react'
 import { formatMessage } from 'src/utils/utils'
 
-const PostCard = ({ id, type = 'text', prompt, name, image, platform }: HistoryType | any) => {
+const PostCard = ({ id, type = 'text', prompt, name, image, platform, sessionId }: HistoryType | any) => {
   const renderContent = () => {
     switch (type) {
       case 'image':
@@ -78,7 +78,7 @@ const PostCard = ({ id, type = 'text', prompt, name, image, platform }: HistoryT
       >
         <Icon icon='solar:copy-line-duotone' />
       </IconButton>
-      <Link href={`/chat/${id}`}>{renderContent()}</Link>
+      <Link href={`/chat/${id ?? sessionId}`}>{renderContent()}</Link>
 
       {platform && (
         <Box
