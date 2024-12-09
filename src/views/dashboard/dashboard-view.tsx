@@ -87,7 +87,8 @@ const DashboardView = () => {
   const { isLoading, startLoading, stopLoading } = useLoading()
 
   const {
-    handleCraeteSessionChat: { mutate }
+    // handleCraeteSessionChat: { mutate }
+    handleUpdateChat: { mutate }
   } = useChat()
 
   const {
