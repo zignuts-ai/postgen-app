@@ -7,7 +7,7 @@ import Box, { BoxProps } from '@mui/material/Box'
 // ** Icon Imports
 import { useChat } from 'src/hooks/useChat'
 import { Controller } from 'react-hook-form'
-import { FormType } from 'src/types/chatContextType'
+import { ChatMessage, FormType } from 'src/types/chatContextType'
 
 // ** Styled Components
 const ChatFormWrapper = styled(Box)<BoxProps & { hasError: boolean }>(({ theme, hasError }) => ({
@@ -29,10 +29,9 @@ const Form = styled('form')(({ theme }) => ({
 const SendMsgForm = () => {
   const {
     methods,
-
-    // sendMessage,
     chatId,
-    handleCraeteSessionChat: { mutate }
+    setMessages,
+    handleUpdateChat: { mutate }
   } = useChat()
 
   const {
@@ -42,7 +41,19 @@ const SendMsgForm = () => {
   } = methods
 
   const onSubmit = async (data: FormType) => {
-    // sendMessage(data.prompt)
+    const message: ChatMessage = {
+      messageId: chatId as string,
+      message: data?.prompt,
+      role: 'user',
+      type: 'text',
+      created_at: Date.now(),
+      created_by: 'user',
+      metadata: null
+    }
+
+    // Now create short summary for linkdin post
+
+    setMessages(prevMessages => [...(prevMessages || []), message])
     await mutate({
       sessionId: chatId,
       prompt: data?.prompt

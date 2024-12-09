@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Card, CardMedia, Box, IconButton, styled } from '@mui/material'
+import { Card, CardMedia, Box, IconButton, styled, Skeleton } from '@mui/material'
 import { Icon } from '@iconify/react'
 import { useChat } from 'src/hooks/useChat'
 import { ChatMessage } from 'src/types/chatContextType'
@@ -41,6 +41,7 @@ interface MediaCardProps {
 const MediaCard: React.FC<MediaCardProps> = ({ type, src, alt = 'Media', onZoom, item }) => {
   const [isHovered, setIsHovered] = useState(false)
   const { setPreviewData } = useChat()
+  const [loading, setLoading] = useState(true)
 
   return (
     <HoverableCard onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
@@ -63,8 +64,8 @@ const MediaCard: React.FC<MediaCardProps> = ({ type, src, alt = 'Media', onZoom,
             onZoom?.()
             setPreviewData({
               title: item.message ?? '',
-              caption: item.message ?? '',
-              imageUrl: src,
+              caption: '',
+              imageUrl: item.message ?? src,
               type: item?.type ?? 'image'
             })
           }}
@@ -72,6 +73,8 @@ const MediaCard: React.FC<MediaCardProps> = ({ type, src, alt = 'Media', onZoom,
           <Icon icon='mdi:eye' fontSize={22} />
         </IconButton>
       </HoverOverlay>
+      {loading && <Skeleton variant='rectangular' height={345} width={345} />}
+
       {type === 'video' ? (
         <CardMedia
           component='video'
@@ -88,6 +91,7 @@ const MediaCard: React.FC<MediaCardProps> = ({ type, src, alt = 'Media', onZoom,
               transform: 'scale(1.05)'
             }
           }}
+          onLoadedData={() => setLoading(false)}
         />
       ) : (
         <CardMedia
@@ -102,6 +106,8 @@ const MediaCard: React.FC<MediaCardProps> = ({ type, src, alt = 'Media', onZoom,
               transform: 'scale(1.05)'
             }
           }}
+          onLoad={() => setLoading(false)}
+          onError={() => setLoading(false)}
         />
       )}
     </HoverableCard>
