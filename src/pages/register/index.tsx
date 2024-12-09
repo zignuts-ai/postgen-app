@@ -69,6 +69,7 @@ const Register = () => {
   const { mutate }: any = register!
 
   const [isTermsChecked, setIsTermsChecked] = useState(false)
+  const [termsError, setTermsError] = useState<string | null>(null)
 
   const {
     control,
@@ -81,6 +82,12 @@ const Register = () => {
   })
 
   const onSubmit = async (data: FormData) => {
+    if (!isTermsChecked) {
+      setTermsError('You must agree to the privacy policy & terms.')
+
+      return
+    }
+    setTermsError(null) // Clear error if the terms are checked
     await mutate(data)
   }
 
@@ -138,6 +145,9 @@ const Register = () => {
                   </>
                 }
               />
+              {termsError && (
+                <Typography sx={{ color: 'error.main', fontSize: '0.875rem', mb: 3 }}>{termsError}</Typography>
+              )}
               <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 4 }}>
                 Sign up
               </Button>
