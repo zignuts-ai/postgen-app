@@ -40,9 +40,9 @@ const InstagramPreview = ({ metadata }: Props) => {
         <div className='post__medias'>
           {type === 'image' || type === 'meme' ? (
             <img className='post__media max-h-[300px] object-contain' src={imageUrl} alt='Post Content' />
-          ) : (
+          ) : type === 'video' ? (
             <video autoPlay className='post__media' src={imageUrl} controls />
-          )}
+          ) : null}
         </div>
       </div>
 

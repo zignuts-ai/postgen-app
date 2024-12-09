@@ -11,12 +11,13 @@ import { useAuth } from 'src/hooks/useAuth'
 type Props = {
   metadata: {
     caption: string
-    imageUrl: string[]
+    imageUrl: string
+    type: string
   }
 }
 
 const XPreview = ({ metadata }: Props) => {
-  const { caption, imageUrl } = metadata
+  const { caption, imageUrl, type } = metadata
 
   const { user } = useAuth()
 
@@ -61,31 +62,39 @@ const XPreview = ({ metadata }: Props) => {
             : 'React has become one of the most popular JavaScript libraries for building user interfaces. In this post I will share some tips and best practices I have learned over the years.'}
         </Typography>
 
-        {imageUrl && imageUrl.length > 0 && (
-          <Box
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-              gap: 1,
-              background: '#f5f5f5'
-            }}
-          >
-            {imageUrl.map((image, index) => (
-              <Box
-                key={index}
-                component='img'
-                src={image}
-                alt={`Post image ${index}`}
-                sx={{
-                  width: '100%',
-                  height: 150,
-                  objectFit: 'contain',
-                  borderRadius: 1
-                }}
-              />
-            ))}
-          </Box>
-        )}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+            gap: 1,
+            background: '#f5f5f5'
+          }}
+        >
+          {type === 'image' || type === 'meme' ? (
+            <Box
+              component='img'
+              src={imageUrl}
+              alt={`Post image `}
+              sx={{
+                width: '100%',
+                height: 150,
+                objectFit: 'contain',
+                borderRadius: 1
+              }}
+            />
+          ) : type === 'video' ? (
+            <Box
+              component='video'
+              src={imageUrl}
+              sx={{
+                width: '100%',
+                height: 150,
+                objectFit: 'contain',
+                borderRadius: 1
+              }}
+            />
+          ) : null}
+        </Box>
       </Box>
 
       {/* Engagement Section */}

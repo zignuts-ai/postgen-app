@@ -30,7 +30,7 @@ import { toast } from 'react-hot-toast'
 // Updated type to include 'none'
 export type postTypes = 'text' | 'image' | 'memes' | 'video' | 'none'
 export type platformTypesExtended = platformTypes | 'none'
-export type toneTypesExtended = toneTypes | 'none'
+export type toneTypesExtended = toneTypes | 'None'
 
 // Update POST_TYPE to include 'none'
 export const POST_TYPE = [
@@ -156,7 +156,7 @@ const DashboardView = () => {
 
   // Modified tone selection to handle 'none'
   const handleToneSelection = (tone: toneTypesExtended) => {
-    if (tone === 'none') {
+    if (tone === 'None') {
       setSelectedTone(null)
     } else {
       setSelectedTone(tone)
@@ -188,7 +188,7 @@ const DashboardView = () => {
   const TONE_TYPE_WITH_NONE = [
     ...TONE_TYPE,
     {
-      value: 'none',
+      value: 'None',
       name: 'None'
     }
   ]

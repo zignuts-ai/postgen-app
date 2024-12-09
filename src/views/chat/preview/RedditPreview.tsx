@@ -7,11 +7,12 @@ type Props = {
     caption: string
     title: string
     imageUrl: string
+    type: 'image' | 'video' | 'text' | 'meme'
   }
 }
 
 const RedditPreview = ({ metadata }: Props) => {
-  const { caption, title, imageUrl } = metadata
+  const { caption, title, imageUrl, type } = metadata
   const { user } = useAuth()
 
   return (
@@ -41,7 +42,11 @@ const RedditPreview = ({ metadata }: Props) => {
             <p className='text-sm text-gray-700 mb-2'>{caption}</p>
 
             <div className='flex justify-center mb-2 bg-[#f5f5f5]'>
-              <img src={imageUrl} alt='Post Image' className='max-h-[460px] w-auto object-contain' />
+              {type === 'image' || type === 'meme' ? (
+                <img className='max-h-[460px] w-auto object-contain' src={imageUrl} alt='Post Content' />
+              ) : type === 'video' ? (
+                <video autoPlay className='max-h-[460px] w-auto object-contain' src={imageUrl} controls />
+              ) : null}
             </div>
 
             <div className='flex text-gray-500 text-xs font-semibold'>
