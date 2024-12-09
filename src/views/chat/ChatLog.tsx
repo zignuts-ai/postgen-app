@@ -71,7 +71,7 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
     switch (item.type) {
       case 'text':
         return (
-          <Card sx={{ border: 0, boxShadow: 0, color: 'common.white', backgroundColor: '#535353' }}>
+          <Card sx={{ border: 0, boxShadow: 0, color: 'common.white', backgroundColor: '#373737' }}>
             <CardContent sx={{ p: theme => `${theme.spacing(3.25, 5, 4.5)} !important` }}>
               <Typography variant='body2' sx={{ mb: 3, color: 'common.white' }}>
                 {item?.message ?? 'Generating..'}

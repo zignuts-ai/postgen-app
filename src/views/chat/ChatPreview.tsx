@@ -1,10 +1,42 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, Card, CardContent } from '@mui/material'
 import InstagramPreview from './preview/InstagramPreview'
 import { useChat } from 'src/hooks/useChat'
+import { ChatMessage } from 'src/types/chatContextType'
 
 const ChatPreview = () => {
-  const { previewData } = useChat()
+  const { previewData, chatDetails, setPreviewData } = useChat()
+
+  function validType(data: ChatMessage[]) {
+    if (!Array.isArray(data)) {
+      throw new Error('Input must be an array')
+    }
+
+    const reversedData = [...data].reverse()
+    const lastValidType = reversedData.find(item => typeof item.type === 'string' && item.type) || null
+
+    return {
+      type: lastValidType ? lastValidType.type : null,
+      item: lastValidType
+    }
+  }
+
+  useEffect(() => {
+    const validData = validType(chatDetails?.data.messages ?? [])
+    if (validData.type) {
+      if (validData.type === 'image') {
+        setPreviewData({
+          caption: '',
+          imageUrl:
+            validData?.item?.message ??
+            'https://user-images.githubusercontent.com/24848110/33519396-7e56363c-d79d-11e7-969b-09782f5ccbab.png',
+          title: '',
+          type: 'image'
+        })
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chatDetails])
 
   return (
     <Box display='flex' justifyContent='center' flexDirection='column' height='100%' maxWidth={500} margin='auto'>

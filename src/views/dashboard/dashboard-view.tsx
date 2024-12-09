@@ -19,9 +19,12 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import CustomTextField from 'src/components/common/form/CustomTextField'
 import themeConfig from 'src/configs/themeConfig'
 import { platformTypes, toneTypes } from 'src/types/constantTypes'
-import { PLATFORM_TYPE, TONE_TYPE } from 'src/constants/constant'
+import { LOCAL_CHAT_SESSION_KEY, PLATFORM_TYPE, TONE_TYPE } from 'src/constants/constant'
 import { UUID } from 'src/utils/utils'
-import { useChat } from 'src/hooks/useChat'
+import { useRouter } from 'next/router'
+import { updateCurrentChat } from 'src/queries/chat'
+import { useAuth } from 'src/hooks/useAuth'
+import useLoading from 'src/hooks/useLoading'
 
 export type postTypes = 'text' | 'image' | 'memes' | 'video'
 
@@ -77,18 +80,12 @@ const DashboardView = () => {
   const [selectedPlatform, setSelectedPlatform] = useState<platformTypes | null>(null)
   const [selectedTone, setSelectedTone] = useState<toneTypes | null>(null)
   const [selectedPostType, setSelectedPostType] = useState<postTypes | null>(null)
-
-  // Anchor states for dropdowns
   const [platformAnchorEl, setPlatformAnchorEl] = useState<null | HTMLElement>(null)
   const [toneAnchorEl, setToneAnchorEl] = useState<null | HTMLElement>(null)
   const [postTypeAnchorEl, setPostTypeAnchorEl] = useState<null | HTMLElement>(null)
-
-  const {
-    handleUpdateChat: { mutate },
-    setIsContenegenerating,
-    isContenegenerating
-  } = useChat()
-
+  const router = useRouter()
+  const { user } = useAuth()
+  const { isLoading, startLoading, stopLoading } = useLoading()
   const {
     handleSubmit,
     control,
@@ -100,20 +97,25 @@ const DashboardView = () => {
 
   const onSubmit = async (data: FormData) => {
     const sessionId = UUID()
-    const payLoad = {
-      platform: selectedPlatform,
-      tone: selectedTone,
-      postType: selectedPostType,
-      prompt: data.prompt,
-      sessionId
-    }
 
     try {
-      setIsContenegenerating(true)
-      await mutate(payLoad)
+      startLoading()
+      const res = await updateCurrentChat({ sessionId, prompt: data.prompt }, user)
+      stopLoading()
+
+      if (!user) {
+        const guestHistory = JSON.parse(localStorage.getItem(LOCAL_CHAT_SESSION_KEY) || '[]')
+        guestHistory.push({
+          sessionId: res?.data?.sessionId,
+          name: res?.data?.name,
+          createdAt: res?.data?.createdAt
+        })
+        localStorage.setItem(LOCAL_CHAT_SESSION_KEY, JSON.stringify(guestHistory))
+      }
+      router.push(`/chat/${sessionId}`)
     } catch (error) {
       console.error('Error generating content:', error)
-      setIsContenegenerating(false)
+      stopLoading()
     }
   }
 
@@ -266,13 +268,9 @@ const DashboardView = () => {
               fullWidth
               variant='contained'
               color='primary'
-              disabled={isContenegenerating}
+              disabled={isLoading}
               endIcon={
-                isContenegenerating ? (
-                  <CircularProgress size={20} color='inherit' />
-                ) : (
-                  <Icon icon='ri:quill-pen-ai-line' />
-                )
+                isLoading ? <CircularProgress size={20} color='inherit' /> : <Icon icon='ri:quill-pen-ai-line' />
               }
               sx={{
                 py: 1.5,
@@ -283,7 +281,7 @@ const DashboardView = () => {
                 mt: 4
               }}
             >
-              {isContenegenerating ? 'Generating...' : 'Generate Post'}
+              {isLoading ? 'Generating...' : 'Generate Post'}
             </Button>
           </CardContent>
         </form>
