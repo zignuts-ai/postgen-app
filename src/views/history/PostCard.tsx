@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardMedia, CardContent, Typography, Button, Box, Chip, IconButton } from '@mui/material'
+import { Card, CardMedia, CardContent, Typography, Button, Box, Chip, IconButton, useTheme } from '@mui/material'
 import Link from 'next/link'
 import { HistoryType } from 'src/types/chatContextType'
 import { toast } from 'react-hot-toast'
@@ -7,6 +7,9 @@ import { Icon } from '@iconify/react'
 import { formatMessage } from 'src/utils/utils'
 
 const PostCard = ({ id, type = 'text', prompt, name, image, platform, sessionId }: HistoryType | any) => {
+  const theme = useTheme()
+  const isDarkMode = theme.palette.mode === 'dark'
+
   const renderContent = () => {
     switch (type) {
       case 'image':
@@ -16,7 +19,12 @@ const PostCard = ({ id, type = 'text', prompt, name, image, platform, sessionId 
             height='200'
             image={image}
             alt={prompt}
-            sx={{ cursor: 'pointer', objectFit: 'cover', borderRadius: 1, maxHeight: 200 }}
+            sx={{
+              cursor: 'pointer',
+              objectFit: 'cover',
+              borderRadius: 1,
+              maxHeight: 200
+            }}
           />
         )
       case 'video':
@@ -26,7 +34,11 @@ const PostCard = ({ id, type = 'text', prompt, name, image, platform, sessionId 
             muted
             height='200'
             controls
-            style={{ borderRadius: '4px', maxHeight: 200, objectFit: 'cover' }}
+            style={{
+              borderRadius: '4px',
+              maxHeight: 200,
+              objectFit: 'cover'
+            }}
           >
             <source src={image} type='video/mp4' />
           </video>
@@ -43,10 +55,11 @@ const PostCard = ({ id, type = 'text', prompt, name, image, platform, sessionId 
               justifyContent: 'center',
               textAlign: 'center',
               borderTopLeftRadius: 4,
-              borderTopRightRadius: 4
+              borderTopRightRadius: 4,
+              backgroundColor: isDarkMode ? theme.palette.background.paper : theme.palette.grey[200]
             }}
           >
-            <Typography variant='body1' color='white'>
+            <Typography variant='body1' color={isDarkMode ? 'text.primary' : 'text.secondary'}>
               {formatMessage(name || prompt)?.length > 130
                 ? formatMessage(name || prompt)?.slice(0, 130) + '...'
                 : formatMessage(name || prompt) || 'Name not found'}
@@ -61,9 +74,11 @@ const PostCard = ({ id, type = 'text', prompt, name, image, platform, sessionId 
       sx={{
         position: 'relative',
         transition: 'transform 0.3s ease-in-out',
-        boxShadow: 4,
+        boxShadow: isDarkMode ? 4 : 2,
+        backgroundColor: isDarkMode ? theme.palette.background.paper : 'white',
         '&:hover': {
-          transform: 'scale(1.05)'
+          transform: 'scale(1.05)',
+          boxShadow: isDarkMode ? 6 : 4
         }
       }}
     >
@@ -75,8 +90,14 @@ const PostCard = ({ id, type = 'text', prompt, name, image, platform, sessionId 
         }}
         className='absolute top-2 left-2'
         size='small'
+        sx={{
+          backgroundColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
+          '&:hover': {
+            backgroundColor: isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'
+          }
+        }}
       >
-        <Icon icon='solar:copy-line-duotone' />
+        <Icon icon='solar:copy-line-duotone' color={isDarkMode ? '#fff' : '#000'} />
       </IconButton>
       <Link href={`/chat/${id ?? sessionId}`}>{renderContent()}</Link>
 
@@ -87,26 +108,30 @@ const PostCard = ({ id, type = 'text', prompt, name, image, platform, sessionId 
             top: 10,
             left: 10,
             display: 'flex',
-            gap: 1
+            gap: 1,
+            backgroundColor: isDarkMode ? theme.palette.background.paper : 'white'
           }}
         >
-          <Chip label={platform?.toUpperCase()} color='primary' size='small' />
+          <Chip
+            label={platform?.toUpperCase()}
+            color='primary'
+            size='small'
+            sx={{
+              backgroundColor: isDarkMode ? theme.palette.primary.dark : theme.palette.primary.light,
+              color: isDarkMode ? theme.palette.primary.contrastText : theme.palette.primary.contrastText
+            }}
+          />
         </Box>
       )}
 
       {/* Card Content */}
       {!(type === 'text') && prompt && (
         <CardContent>
-          <Typography gutterBottom variant='h6' component='div'>
+          <Typography gutterBottom variant='h6' component='div' color={isDarkMode ? 'text.primary' : 'text.secondary'}>
             {prompt.length > 20 ? `${prompt.slice(0, 20)}...` : prompt}
           </Typography>
         </CardContent>
       )}
-      {/* {description && (
-          <Typography variant='body2' color='text.secondary'>
-            {description.length > 40 ? `${description.slice(0, 40)}...` : description}
-          </Typography>
-        )} */}
 
       {(type === 'image' || type === 'video') && (
         <Button
@@ -115,10 +140,11 @@ const PostCard = ({ id, type = 'text', prompt, name, image, platform, sessionId 
           sx={{
             borderTopLeftRadius: 0,
             borderTopRightRadius: 0,
-            bgcolor: 'primary.main',
+            bgcolor: isDarkMode ? theme.palette.primary.dark : theme.palette.primary.main,
             '&:hover': {
-              bgcolor: 'primary.dark'
-            }
+              bgcolor: isDarkMode ? theme.palette.primary.light : theme.palette.primary.dark
+            },
+            color: theme.palette.primary.contrastText
           }}
         >
           Download
