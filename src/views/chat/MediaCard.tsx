@@ -36,9 +36,12 @@ interface MediaCardProps {
   item: ChatMessage
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const MediaCard: React.FC<MediaCardProps> = ({ type, src, alt = 'Media', onZoom, item }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isHovered, setIsHovered] = useState(false)
-  console.log(isHovered, onZoom, item)
+
+  // console.log(isHovered, onZoom, item)
 
   // const { setPreviewData } = useChat()
 

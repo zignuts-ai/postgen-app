@@ -44,6 +44,7 @@ export type ChatValuesTypes = {
   guestHistory: GuestHistoryType[]
   setIsContenegenerating: React.Dispatch<React.SetStateAction<boolean>>
   isContenegenerating: boolean
+  isPublic: boolean
 
   // handleUpdateChat: UseMutationResult<CreateSessionResponseTypes, AxiosError<unknown, any>, any, unknown>
 }
@@ -68,6 +69,21 @@ const ChatProvider = ({ children }: Props) => {
   const [previewData, setPreviewData] = useState<PreviewDataType>({} as PreviewDataType)
   const [guestHistory, setGuestHistory] = useState<GuestHistoryType[]>([])
   const { isLoading: isPendingChat, startLoading: startLoadingChat, stopLoading: stopLoadingChat } = useLoading()
+
+  const isPublic = useMemo(() => {
+    if (!user) {
+      const shareIndex = guestHistory?.findIndex(
+        item => String(item.sessionId) === String(chatId) // Convert both to strings for comparison
+      )
+      if (shareIndex !== -1) {
+        return true
+      }
+
+      return false
+    } else {
+      return String(user?.id) === String(chatDetails?.data?.userId)
+    }
+  }, [guestHistory, chatId, user, chatDetails?.data?.userId])
 
   // const { isLoading: isSocketInit, startLoading: startLoadingSocket, stopLoading: stopLoadingSocket } = useLoading()
   const [isContenegenerating, setIsContenegenerating] = useState<boolean>(false)
@@ -255,7 +271,8 @@ const ChatProvider = ({ children }: Props) => {
 
       // handleUpdateChat,
       setIsContenegenerating,
-      isContenegenerating
+      isContenegenerating,
+      isPublic
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [chatId, messages, previewData]

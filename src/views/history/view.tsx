@@ -172,7 +172,7 @@ const HistoryView = () => {
             >
               <CardContent>
                 <Typography
-                  variant='h4'
+                  variant='h5'
                   color='text.primary'
                   gutterBottom
                   sx={{
@@ -180,17 +180,17 @@ const HistoryView = () => {
                     color: isDarkMode ? 'text.primary' : 'primary.dark'
                   }}
                 >
-                  No History Found
+                  You Haven't Generated Any Content Yet
                 </Typography>
                 <Typography
-                  variant='subtitle1'
+                  variant='subtitle2'
                   color='text.secondary'
                   sx={{
                     mt: 2,
                     color: isDarkMode ? 'text.secondary' : 'text.primary'
                   }}
                 >
-                  Start creating chats to populate your history
+                  Once you start generating posts, they will show up here for easy access.
                 </Typography>
               </CardContent>
             </Card>

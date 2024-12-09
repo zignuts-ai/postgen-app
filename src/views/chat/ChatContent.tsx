@@ -16,6 +16,7 @@ import SendMsgForm from './SendMsgForm'
 import { useChat } from 'src/hooks/useChat'
 import { Button, IconButton, useMediaQuery } from '@mui/material'
 import { useRouter } from 'next/router'
+import { toast } from 'react-hot-toast'
 
 // ** Styled Components
 const ChatWrapperStartChat = styled(Box)<BoxProps>(({ theme }) => ({
@@ -30,7 +31,7 @@ const ChatWrapperStartChat = styled(Box)<BoxProps>(({ theme }) => ({
 }))
 
 const ChatContent = (props: ChatContentType) => {
-  const { messages, chatDetails, chatDetailQuery } = useChat()
+  const { messages, chatDetails, chatDetailQuery, isPublic } = useChat()
   const router = useRouter()
 
   const isDownMd = useMediaQuery('(min-width:1200px)')
@@ -120,20 +121,29 @@ const ChatContent = (props: ChatContentType) => {
                       {chatDetails?.data?.name ?? 'Not Found'}
                     </Typography>
                   </Box>
-                  {!isDownMd && (
-                    <div>
-                      <IconButton onClick={openModal}>
+                  <div className='flex items-center gap-3'>
+                    <IconButton
+                      color='primary'
+                      onClick={() => {
+                        window.navigator.clipboard.writeText(`${window.location.origin}/chat/${chatDetails?.data?.id}`)
+                        toast.success('Link copied to clipboard')
+                      }}
+                    >
+                      <Icon icon='material-symbols:share' fontSize={22} />
+                    </IconButton>
+                    {!isDownMd && (
+                      <IconButton color='primary' onClick={openModal}>
                         <Icon icon='mdi:eye' fontSize={22} />
                       </IconButton>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </Box>
               </Box>
             </Box>
 
             <ChatLog hidden={hidden} />
 
-            <SendMsgForm />
+            {isPublic && <SendMsgForm />}
           </Box>
         )
       }
