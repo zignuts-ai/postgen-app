@@ -25,6 +25,7 @@ import { useRouter } from 'next/router'
 import { updateCurrentChat } from 'src/queries/chat'
 import { useAuth } from 'src/hooks/useAuth'
 import useLoading from 'src/hooks/useLoading'
+import { toast } from 'react-hot-toast'
 
 export type postTypes = 'text' | 'image' | 'memes' | 'video'
 
@@ -113,7 +114,8 @@ const DashboardView = () => {
         localStorage.setItem(LOCAL_CHAT_SESSION_KEY, JSON.stringify(guestHistory))
       }
       router.push(`/chat/${sessionId}`)
-    } catch (error) {
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to Generate Content')
       console.error('Error generating content:', error)
       stopLoading()
     }

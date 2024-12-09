@@ -193,7 +193,17 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
                     backgroundColor: isSender ? 'primary.main' : 'background.paper'
                   }}
                 >
-                  {isSender ? item.message : <div className='my-3'>{renderMessageType(item)}</div>}
+                  {isSender ? (
+                    item.message
+                  ) : item?.isLoading ? (
+                    <Typography variant='body2' sx={{ color: 'common.white', display: 'flex', height: 20 }}>
+                      <Icon color='white' icon='svg-spinners:3-dots-scale' fontSize={20} />
+                      <Icon color='white' icon='svg-spinners:3-dots-scale' fontSize={20} />
+                      <Icon color='white' icon='svg-spinners:3-dots-scale' fontSize={20} />
+                    </Typography>
+                  ) : (
+                    <div className='my-3'>{renderMessageType(item)}</div>
+                  )}
                 </Typography>
               </div>
 

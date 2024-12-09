@@ -9,7 +9,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 // ** Types
 import {
   ChatMessage,
-  CreateSessionResponseTypes,
   FormType,
   GetChatByIdResponseTypes,
   GuestHistoryType,
@@ -20,14 +19,13 @@ import { useRouter } from 'next/router'
 // import { io, Socket } from 'socket.io-client'
 // import endpoints from 'src/constants/endpoints'
 // import useLoading from 'src/hooks/useLoading'
-import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query'
+import { useQuery, UseQueryResult } from '@tanstack/react-query'
 import { CHAT } from 'src/queries/query-keys'
 import { getChatById, updateCurrentChat } from 'src/queries/chat'
-import { AxiosError } from 'axios'
 import { useAuth } from 'src/hooks/useAuth'
 import { LOCAL_CHAT_SESSION_KEY } from 'src/constants/constant'
-import toast from 'react-hot-toast'
 import useLoading from 'src/hooks/useLoading'
+import { toast } from 'react-hot-toast'
 
 export type ChatValuesTypes = {
   methods: UseFormReturn<FormType, any>
@@ -46,7 +44,8 @@ export type ChatValuesTypes = {
   guestHistory: GuestHistoryType[]
   setIsContenegenerating: React.Dispatch<React.SetStateAction<boolean>>
   isContenegenerating: boolean
-  handleUpdateChat: UseMutationResult<CreateSessionResponseTypes, AxiosError<unknown, any>, any, unknown>
+
+  // handleUpdateChat: UseMutationResult<CreateSessionResponseTypes, AxiosError<unknown, any>, any, unknown>
 }
 
 // ** Defaults
@@ -109,18 +108,18 @@ const ChatProvider = ({ children }: Props) => {
   //   }
   // })
 
-  const handleUpdateChat = useMutation({
-    mutationFn: dto => updateCurrentChat(dto, user),
-    onSuccess: () => {
-      setIsContenegenerating(false)
-      chatDetailQuery.refetch()
-    },
-    onError: async (err: AxiosError) => {
-      setIsContenegenerating(false)
-      console.log(err)
-      toast.error(err.message)
-    }
-  })
+  // const handleUpdateChat = useMutation({
+  //   mutationFn: dto => updateCurrentChat(dto, user),
+  //   onSuccess: () => {
+  //     setIsContenegenerating(false)
+  //     chatDetailQuery.refetch()
+  //   },
+  //   onError: async (err: AxiosError) => {
+  //     setIsContenegenerating(false)
+  //     console.log(err)
+  //     toast.error(err.message)
+  //   }
+  // })
 
   const sendMessage = useCallback(
     async (content: string) => {
@@ -139,10 +138,39 @@ const ChatProvider = ({ children }: Props) => {
 
           // socket.emit('send-message', message)
           setMessages(prevMessages => [...(prevMessages || []), message])
-          await handleUpdateChat.mutate({
-            sessionId: chatId as string,
-            prompt: content
-          } as any)
+          setMessages(prevMessages => [
+            ...(prevMessages || []),
+            {
+              created_at: Date.now(),
+              created_by: 'ai',
+              messageId: chatId as string,
+              message: null,
+              metadata: null,
+              role: 'ai',
+              type: 'text',
+              isLoading: true
+            }
+          ])
+
+          try {
+            await updateCurrentChat(
+              {
+                sessionId: chatId as string,
+                prompt: content
+              },
+              user
+            )
+
+            setIsContenegenerating(false)
+            chatDetailQuery.refetch()
+          } catch (error) {
+            console.log(error)
+            setIsContenegenerating(false)
+            toast.error('Failed to Generate Content')
+            chatDetailQuery.refetch()
+            console.log(`%c ERROR`, 'color: red; font-weight: bold;', error)
+          }
+
           stopLoadingChat()
         }
       } catch (err) {
@@ -224,7 +252,8 @@ const ChatProvider = ({ children }: Props) => {
       chatDetails,
       chatDetailQuery,
       guestHistory,
-      handleUpdateChat,
+
+      // handleUpdateChat,
       setIsContenegenerating,
       isContenegenerating
     }),
