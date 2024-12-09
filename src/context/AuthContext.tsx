@@ -9,7 +9,7 @@ import { AuthValuesType, UserDataType } from './types'
 import { useMutation } from '@tanstack/react-query'
 import { login, logout, signup } from 'src/queries/auth'
 import toast from 'react-hot-toast'
-import { formatMessage } from 'src/utils/utils'
+import { checkUserStatus, formatMessage } from 'src/utils/utils'
 import { ACCESS_TOKEN_KEY, USER_DATA_KEY } from 'src/constants/constant'
 
 // ** Defaults
@@ -57,6 +57,7 @@ const AuthProvider = ({ children }: Props) => {
       setLoading(false)
     },
     onError: (err: any) => {
+      checkUserStatus(err)
       toast.error(formatMessage(err.response?.data?.message) ?? 'Someting Went Wrong')
     }
   })
@@ -72,6 +73,7 @@ const AuthProvider = ({ children }: Props) => {
       router.push('/chat')
     },
     onError: (err: any) => {
+      checkUserStatus(err)
       toast.error(formatMessage(err.response?.data?.message) ?? 'Someting Went Wrong')
     }
   })
@@ -88,6 +90,7 @@ const AuthProvider = ({ children }: Props) => {
     },
     onError: (err: any) => {
       toast.error(formatMessage(err.response?.data?.message) ?? 'Something Went Wrong')
+      checkUserStatus(err)
     }
   })
 

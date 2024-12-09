@@ -20,7 +20,7 @@ import CustomTextField from 'src/components/common/form/CustomTextField'
 import themeConfig from 'src/configs/themeConfig'
 import { platformTypes, toneTypes } from 'src/types/constantTypes'
 import { LOCAL_CHAT_SESSION_KEY, PLATFORM_TYPE, TONE_TYPE } from 'src/constants/constant'
-import { UUID } from 'src/utils/utils'
+import { checkUserStatus, UUID } from 'src/utils/utils'
 import { useRouter } from 'next/router'
 import { updateCurrentChat } from 'src/queries/chat'
 import { useAuth } from 'src/hooks/useAuth'
@@ -125,7 +125,8 @@ const DashboardView = () => {
       }
       router.push(`/chat/${sessionId}`)
     } catch (error: any) {
-      toast.error(error?.message || 'Failed to Generate Content')
+      checkUserStatus(error)
+      toast.error(error?.response?.data?.message || 'Failed to Generate Content')
       console.error('Error generating content:', error)
       stopLoading()
     }

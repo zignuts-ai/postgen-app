@@ -21,7 +21,7 @@ const ChatPreview = () => {
     }
 
     return 'instagram'
-  }, [chatDetails?.data.messages])
+  }, [chatDetails?.data?.messages])
 
   function validType(data: ChatMessage[]) {
     if (!Array.isArray(data)) {
@@ -38,7 +38,7 @@ const ChatPreview = () => {
   }
 
   useEffect(() => {
-    const validData = validType(chatDetails?.data.messages ?? [])
+    const validData = validType(chatDetails?.data?.messages ?? [])
     if (validData.type) {
       if (validData.type === 'image') {
         setPreviewData({
