@@ -13,6 +13,11 @@ export async function login(dto: any): Promise<any> {
 
   return data
 }
+export async function userdetails(dto: any): Promise<any> {
+  const { data } = await api(endpoints.user.userDetails, dto, 'post')
+
+  return data
+}
 
 export async function logout(dto: any): Promise<any> {
   const { data } = await apiClient.post(

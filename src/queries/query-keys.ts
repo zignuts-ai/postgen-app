@@ -1,5 +1,6 @@
 export const AUTH = {
-  LOGGED_IN: 'LOGGED_IN'
+  LOGGED_IN: 'LOGGED_IN',
+  USER: 'USER'
 } as const
 
 export const CHAT = {

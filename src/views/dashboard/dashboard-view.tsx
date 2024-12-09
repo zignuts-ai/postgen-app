@@ -22,9 +22,8 @@ import { platformTypes, toneTypes } from 'src/types/constantTypes'
 import { PLATFORM_TYPE, TONE_TYPE } from 'src/constants/constant'
 import { UUID } from 'src/utils/utils'
 import { useChat } from 'src/hooks/useChat'
-import useLoading from 'src/hooks/useLoading'
 
-export type postTypes = 'text' | 'image' | 'memes'
+export type postTypes = 'text' | 'image' | 'memes' | 'video'
 
 export const POST_TYPE = [
   {
@@ -84,11 +83,10 @@ const DashboardView = () => {
   const [toneAnchorEl, setToneAnchorEl] = useState<null | HTMLElement>(null)
   const [postTypeAnchorEl, setPostTypeAnchorEl] = useState<null | HTMLElement>(null)
 
-  const { isLoading, startLoading, stopLoading } = useLoading()
-
   const {
-    // handleCraeteSessionChat: { mutate }
-    handleUpdateChat: { mutate }
+    handleUpdateChat: { mutate },
+    setIsContenegenerating,
+    isContenegenerating
   } = useChat()
 
   const {
@@ -110,9 +108,13 @@ const DashboardView = () => {
       sessionId
     }
 
-    startLoading()
-    await mutate(payLoad)
-    stopLoading()
+    try {
+      setIsContenegenerating(true)
+      await mutate(payLoad)
+    } catch (error) {
+      console.error('Error generating content:', error)
+      setIsContenegenerating(false)
+    }
   }
 
   // Dropdown handlers
@@ -264,9 +266,13 @@ const DashboardView = () => {
               fullWidth
               variant='contained'
               color='primary'
-              disabled={isLoading}
+              disabled={isContenegenerating}
               endIcon={
-                isLoading ? <CircularProgress size={20} color='inherit' /> : <Icon icon='ri:quill-pen-ai-line' />
+                isContenegenerating ? (
+                  <CircularProgress size={20} color='inherit' />
+                ) : (
+                  <Icon icon='ri:quill-pen-ai-line' />
+                )
               }
               sx={{
                 py: 1.5,
@@ -277,7 +283,7 @@ const DashboardView = () => {
                 mt: 4
               }}
             >
-              {isLoading ? 'Generating...' : 'Generate Post'}
+              {isContenegenerating ? 'Generating...' : 'Generate Post'}
             </Button>
           </CardContent>
         </form>

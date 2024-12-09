@@ -25,6 +25,7 @@ import { createChatSession, getChatById, updateCurrentChat } from 'src/queries/c
 import { AxiosError } from 'axios'
 import { useAuth } from 'src/hooks/useAuth'
 import { LOCAL_CHAT_SESSION_KEY } from 'src/constants/constant'
+import toast from 'react-hot-toast'
 
 export type ChatValuesTypes = {
   methods: UseFormReturn<FormType, any>
@@ -40,6 +41,8 @@ export type ChatValuesTypes = {
   chatDetails: GetChatByIdResponseTypes | null
   chatDetailQuery: UseQueryResult<GetChatByIdResponseTypes, Error>
   guestHistory: GuestHistoryType[]
+  setIsContenegenerating: React.Dispatch<React.SetStateAction<boolean>>
+  isContenegenerating: boolean
   handleUpdateChat: UseMutationResult<CreateSessionResponseTypes, AxiosError<unknown, any>, any, unknown>
 }
 
@@ -64,6 +67,7 @@ const ChatProvider = ({ children }: Props) => {
   const [guestHistory, setGuestHistory] = useState<GuestHistoryType[]>([])
   const { isLoading: isPendingChat, startLoading: startLoadingChat, stopLoading: stopLoadingChat } = useLoading()
   const { isLoading: isSocketInit, startLoading: startLoadingSocket, stopLoading: stopLoadingSocket } = useLoading()
+  const [isContenegenerating, setIsContenegenerating] = useState<boolean>(false)
 
   // ** States
   const [socket, setSocket] = useState<Socket | null>(null)
@@ -104,10 +108,14 @@ const ChatProvider = ({ children }: Props) => {
   const handleUpdateChat = useMutation({
     mutationFn: dto => updateCurrentChat(dto, user),
     onSuccess: data => {
+      setIsContenegenerating(false)
       console.log(data)
     },
     onError: async (err: AxiosError) => {
+      console.log('hjhj')
+      setIsContenegenerating(false)
       console.log(err)
+      toast.error(err.message)
     }
   })
 
@@ -197,7 +205,9 @@ const ChatProvider = ({ children }: Props) => {
       chatDetails,
       chatDetailQuery,
       guestHistory,
-      handleUpdateChat
+      handleUpdateChat,
+      setIsContenegenerating,
+      isContenegenerating
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [chatId, socket, messages, isPendingChat, isSocketInit, previewData, methods]
