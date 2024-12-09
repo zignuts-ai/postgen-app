@@ -113,9 +113,6 @@ const XPreview = ({ metadata }: Props) => {
           }}
         >
           <CommentIcon />
-          <Typography variant='body2' sx={{ ml: 1 }}>
-            12
-          </Typography>
         </IconButton>
 
         <IconButton
@@ -124,9 +121,6 @@ const XPreview = ({ metadata }: Props) => {
           }}
         >
           <RetweetIcon />
-          <Typography variant='body2' sx={{ ml: 1 }}>
-            3
-          </Typography>
         </IconButton>
 
         <IconButton
@@ -135,9 +129,6 @@ const XPreview = ({ metadata }: Props) => {
           }}
         >
           <LikeIcon />
-          <Typography variant='body2' sx={{ ml: 1 }}>
-            10
-          </Typography>
         </IconButton>
 
         <IconButton

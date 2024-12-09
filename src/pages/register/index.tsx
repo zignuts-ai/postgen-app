@@ -108,10 +108,12 @@ const Register = () => {
                   fontSize: '1.75rem !important'
                 }}
               >
-                Register
+                Sign up
               </Typography>
             </Box>
-            <Typography sx={{ mb: 6, color: 'text.secondary' }}>Create AI Powerd Dashboards 🚀</Typography>
+            <Typography sx={{ mb: 6, color: 'text.secondary' }}>
+              Get Started Today - Sign up and Let Al Take Your Content Further!
+            </Typography>
             <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
               <FormControl fullWidth sx={{ mb: 5 }}>
                 <CustomTextField control={control} label='Name' name='name' errors={errors?.name} />
