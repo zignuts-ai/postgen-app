@@ -13,7 +13,9 @@ import { Button } from '@mui/material'
 // }
 
 const Feature: FC<{ section: Section }> = ({ section }) => (
+  
   <div className='my-4 md:my-16 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-24 items-center'>
+    
     {section.image_position === 'left' && (
       <div className='order-1 md:order-1'>
         <img
@@ -74,6 +76,7 @@ const Feature: FC<{ section: Section }> = ({ section }) => (
 export default function () {
   return (
     <div className='py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl'>
+           <h2 className='mt-2 text-3xl font-bold tracking-tight text-center sm:text-4xl'> How It Works</h2>
       <div className='my-4 flex flex-col gap-8'>
         {LANDING_DATA.section?.items?.map((v: Section, idx: number) => (
           <Feature key={idx} section={v} />

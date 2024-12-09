@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react'
-import { Box, Card, CardContent, DialogTitle, Typography, useMediaQuery } from '@mui/material'
+import { Box, Card, CardContent, DialogTitle, IconButton, Typography, useMediaQuery } from '@mui/material'
 import InstagramPreview from './preview/InstagramPreview'
 import { useChat } from 'src/hooks/useChat'
 import { ChatMessage } from 'src/types/chatContextType'
@@ -7,7 +7,8 @@ import XPreview from './preview/XPreview'
 import RedditPreview from './preview/RedditPreview'
 import LinkedInPreview from './preview/LinkedInPreview'
 import FacebookPreview from './preview/FacebookPreview'
-import { formatMessage } from 'src/utils/utils'
+import { toast } from 'react-hot-toast'
+import { Icon } from '@iconify/react'
 
 const ChatPreview = () => {
   const { previewData, chatDetails, setPreviewData } = useChat()
@@ -16,12 +17,13 @@ const ChatPreview = () => {
 
   const platformType: 'instagram' | 'linkedin' | 'x' | 'facebook' | 'reddit' | 'text' | '' = useMemo(() => {
     const validData = validType(chatDetails?.data.messages ?? [])
+
     const platform = validData?.item?.metadata?.platform
-    if (['instagram', 'linkedin', 'x', 'facebook', 'reddit'].includes(platform?.toLowerCase())) {
+    if (['instagram', 'linkedin', 'x', 'facebook', 'reddit', 'text'].includes(platform?.toLowerCase())) {
       return platform?.toLowerCase()
     }
 
-    return 'text'
+    return !!platform ? platform : validData?.type === 'image' ? 'instagram' : 'text'
   }, [chatDetails?.data?.messages])
 
   function validType(data: ChatMessage[]) {
@@ -58,10 +60,7 @@ const ChatPreview = () => {
         })
       } else if (validData.type === 'text') {
         setPreviewData({
-          caption:
-            validData?.item?.metadata?.userPrompt?.length > 150
-              ? validData?.item?.metadata?.userPrompt?.slice(0, 150) + '...'
-              : validData?.item?.metadata?.userPrompt ?? '',
+          caption: validData?.item?.metadata?.userPrompt ?? '',
           imageUrl:
             validData?.item?.message ??
             'https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg',
@@ -90,25 +89,24 @@ const ChatPreview = () => {
         {isDownMd && <DialogTitle id='alert-dialog-slide-title'>Social Preview</DialogTitle>}
         <CardContent sx={{ pt: 0 }}>
           {platformType === 'text' && (
-            <Box
-              sx={{
-                p: 2,
-                minHeight: 200,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                textAlign: 'center',
-                borderTopLeftRadius: 4,
-                borderTopRightRadius: 4,
-                backgroundColor: 'background.paper'
-              }}
-            >
-              <Typography variant='body1' color={'text.primary'}>
-                {formatMessage(previewData?.caption)?.length > 130
-                  ? formatMessage(previewData?.caption)?.slice(0, 130) + '...'
-                  : formatMessage(previewData?.caption) || 'Name not found'}
-              </Typography>
-            </Box>
+            <Card sx={{ border: 0, boxShadow: 0, color: 'common.white', backgroundColor: '#373737' }}>
+              <CardContent sx={{ p: theme => `${theme.spacing(3.25, 5, 4.5)} !important` }}>
+                <Typography variant='body2' sx={{ mb: 3, color: 'common.white' }}>
+                  {previewData?.caption ?? 'Generating..'}
+                </Typography>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <IconButton
+                    onClick={() => {
+                      navigator.clipboard.writeText(previewData?.caption ?? '')
+                      toast.success('Copied to your clipboard.')
+                    }}
+                    size='small'
+                  >
+                    <Icon icon='solar:copy-line-duotone' />
+                  </IconButton>
+                </Box>
+              </CardContent>
+            </Card>
           )}
           {platformType === 'x' && (
             <XPreview

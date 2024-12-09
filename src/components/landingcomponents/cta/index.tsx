@@ -12,7 +12,7 @@ export default function () {
           <p className='mt-6 text-xl leading-8 opacity-90 text-muted-foreground'>{LANDING_DATA.cta?.description}</p>
           <div className='mt-10 flex flex-col sm:flex-row items-center justify-center gap-4'>
             {LANDING_DATA.cta?.buttons?.map((v, idx) => (
-              <Link key={idx} href={v.url || ''} target={v.target || '_blank'}>
+              <Link key={idx} href={'#try-now' || ''} >
                 <Button
                   key={idx}
                   size='large'

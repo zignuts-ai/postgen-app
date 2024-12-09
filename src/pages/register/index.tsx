@@ -141,9 +141,7 @@ const Register = () => {
                 label={
                   <>
                     <span>I agree to </span>
-                    <LinkStyled href='/' onClick={e => e.preventDefault()}>
-                      privacy policy & terms
-                    </LinkStyled>
+                    <LinkStyled href='/privacy-policy'>privacy policy & terms</LinkStyled>
                   </>
                 }
               />
