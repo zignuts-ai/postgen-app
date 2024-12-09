@@ -98,7 +98,10 @@ const DashboardView = () => {
 
     try {
       startLoading()
-      const res = await updateCurrentChat({ sessionId, prompt: data.prompt }, user)
+      const res = await updateCurrentChat(
+        { sessionId, prompt: data.prompt, selectedTone, selectedPostType, selectedPlatform },
+        user
+      )
       stopLoading()
 
       if (!user) {

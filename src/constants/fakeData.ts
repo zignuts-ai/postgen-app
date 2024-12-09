@@ -66,7 +66,7 @@ export const LANDING_DATA: Page = {
   hero: {
     title: 'Transforming News into Engaging Content',
     description:
-      'Build AI-driven daily news agents that summarize, generate, and repurpose content into multiple formats, enabling seamless information sharing.',
+      'AI-driven daily news tools that summarize, generate, and repurpose content into multiple formats, enabling seamless information sharing.',
     image: {
       src: '/imgs/hero.png'
     },
