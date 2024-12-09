@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 import CustomTextField from 'src/components/common/form/CustomTextField'
-import { useProfilePictureGenerator } from './profilepicturegenerator'
+import { useProfilePictureGenerator } from '../../views/account-setting/profilepicturegenerator'
 import { useProfilePicture } from 'src/context/ProfilePictureContext'
 
 const ImgStyled = styled('img')(({ theme }) => ({
