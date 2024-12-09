@@ -40,12 +40,12 @@ export const POST_TYPE = [
     icon: 'ri:file-text-line'
   },
   {
-    value: 'image',
+    value: 'generate image',
     name: 'Post with Image',
     icon: 'ri:image-line'
   },
   {
-    value: 'video',
+    value: 'generate video',
     name: 'Post with Video',
     icon: 'ri:video-line'
   },

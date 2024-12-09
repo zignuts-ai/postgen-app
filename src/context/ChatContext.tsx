@@ -72,6 +72,7 @@ const ChatProvider = ({ children }: Props) => {
 
   const isPublic = useMemo(() => {
     if (!user) {
+      return true
       const shareIndex = guestHistory?.findIndex(
         item => String(item.sessionId) === String(chatId) // Convert both to strings for comparison
       )
