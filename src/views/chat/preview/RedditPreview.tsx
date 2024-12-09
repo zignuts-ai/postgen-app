@@ -12,7 +12,7 @@ type Props = {
 }
 
 const RedditPreview = ({ metadata }: Props) => {
-  const { caption, title, imageUrl, type } = metadata
+  const { caption, imageUrl, type } = metadata
   const { user } = useAuth()
 
   return (
@@ -34,10 +34,10 @@ const RedditPreview = ({ metadata }: Props) => {
               />
               <span className='font-bold mr-1 hover:underline'>r/JavaScript</span>
               <span className='mx-1'>•</span>
-              <span>Posted by u/CodeMaster 3 hours ago</span>
+              <span>Posted by u/CodeMaster</span>
             </div>
 
-            <h2 className='text-black font-semibold mb-1'>{title}</h2>
+            {/* <h2 className='text-black font-semibold mb-1'>{title}</h2> */}
 
             <p className='text-sm text-gray-700 mb-2'>{caption}</p>
 
