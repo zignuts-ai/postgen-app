@@ -64,11 +64,11 @@ export const LANDING_DATA: Page = {
     ]
   },
   hero: {
-    title: 'Transforming News into Engaging Content',
+    title: 'Transforming News Content, Tailored just for you with AI',
     description:
-      'AI-driven daily news tools that summarize, generate, and repurpose content into multiple formats, enabling seamless information sharing.',
+      'Empower your content strategy with AI - Summarize, generate, and transform daily news into engaging formats, ready to share across platforms.',
     image: {
-      src: '/imgs/hero.png'
+      src: '/imgs/image.png'
     },
     image_position: 'right',
     text_align: 'left',
@@ -86,124 +86,66 @@ export const LANDING_DATA: Page = {
     show_proof: true
   },
   section: {
-    title: 'Our Innovation Platform',
-    description: 'Discover the powerful features that set our AI News Agent apart.',
+
     items: [
       {
         // name: "challenge",
-        title: 'AI NEWS AGENT',
+        title: "Input Your News Idea",
         description:
-          'Build an AI agent capable of summarizing and reformatting daily news into digestible content, making information more accessible for diverse audiences.',
+          'Start by providing a simple prompt. Tell PostGen.ai the news you want to create or summarize, and our AI will instantly process it to generate your personalized content.',
         image: {
-          src: '/imgs/section1-news.png'
+          src: '/images/step1.png'
         },
         image_position: 'left',
         text_align: 'center',
-        items: [
-          {
-            title: 'Welcome to Our Innovation Platform',
-            description:
-              'Discover the tools, resources, and community to bring your innovative ideas to life. Collaborate, create, and achieve excellence together.'
-          },
-          {
-            title: 'Empowering Creativity',
-            description:
-              'Unleash your potential with a platform designed to fuel creativity and foster innovation in every project.'
-          },
-          {
-            title: 'Your Journey Starts Here',
-            description:
-              'Begin your journey toward building impactful solutions with our collaborative ecosystem tailored for success.'
-          }
-        ]
+       
       },
       {
-        name: 'features',
-        title: 'AI Agent Features',
-        description: 'Explore the key capabilities of the AI News Agent and how it can transform news consumption.',
-        image: {
-          src: '/imgs/section2-news.png'
-        },
-        image_position: 'right',
-        text_align: 'center',
-        items: [
-          {
-            title: 'Automated Summaries',
-            description: 'Summarizes content instantly with high accuracy.'
+        title: 'Tailor Your Content',
+        description:
+          "Choose your preferred platform (LinkedIn, Instagram, Reddit, etc.), adjust the tone, and select the type of content you want – whether it's a text post, image, video, or meme. PostGen.ai makes it easy to adapt your content to any style.",
+          image: {
+            src: '/images/step2.png'
           },
-          {
-            title: 'Customizable Outputs',
-            description: 'Choose the format and style that suits your audience.'
-          },
-          {
-            title: 'AI-Driven Insights',
-            description: 'Identify key trends and insights from multiple sources.'
-          }
-        ]
-      },
+          image_position: 'right',
+          text_align: 'center',
+      },  
       {
         name: 'workflow',
-        title: 'How It Works',
-        description: 'Get started with the AI News Agent in three simple steps:',
+        title: ' Preview and Share Your Creation',
+        description: 'View a live preview of your post and ensure it’s exactly what you want. Then, download or copy your content to share across your social media platforms, all within seconds.',
         image: {
-          src: '/imgs/section3-news.png'
+          src: '/images/step3.png'
         },
         image_position: 'left',
         text_align: 'center',
-        items: [
-          {
-            title: '1. Input Content',
-            description: 'Provide the news articles or feeds you want the agent to process.'
-          },
-          {
-            title: '2. Choose a Format',
-            description: 'Select the desired output format—summaries, scripts, infographics, or others.'
-          },
-          {
-            title: '3. Deploy & Share',
-            description: 'Share the generated content directly to your preferred platforms.'
-          }
-        ],
-        buttons: [
-          {
-            title: 'Start Building',
-            url: '/chat'
-          }
-        ]
+   
+      
       }
     ]
   },
   feature: {
-    title: 'Key Features of AI News Agent',
-    description: 'Discover the powerful features that set our AI News Agent apart.',
-    items: [
+    title: 'Features',
+       items: [
       {
-        title: 'Automated Summarization',
-        description: 'Quickly summarize lengthy articles into bite-sized information.',
-        avatar: {
-          src: '/imgs/icons/1.svg'
-        }
+        title: 'AI-Powered Content Generation',
+        description: 'Leverage the power of AI to quickly generate high-quality, engaging content from your prompts. PostGen.ai can summarize, rephrase, and create fresh content based on your input, helping you stay ahead of the content curve.',
+    
       },
       {
-        title: 'Flexible Content Formats',
-        description: 'Transform news into multiple formats tailored to various audiences.',
-        avatar: {
-          src: '/imgs/icons/2.svg'
-        }
+        title: 'Multi-Format Content Creation',
+        description: 'Create more than just text. PostGen.ai supports a variety of content formats, including images, videos, and memes, so you can engage your audience in diverse and creative ways, no matter the platform.',
+
       },
       {
-        title: 'Analytics Integration',
-        description: 'Track the impact of your content with detailed analytics.',
-        avatar: {
-          src: '/imgs/icons/3.svg'
-        }
+        title: 'Platform Customization',
+        description: 'Tailor your content for different social media platforms like LinkedIn, Facebook, Instagram, Reddit, and X. Whether you need professional tone or casual flair, PostGen.ai ensures your content fits perfectly for each platform.',
+      
       },
       {
-        title: 'Customizable Templates',
-        description: 'Select from a range of templates for professional-quality outputs.',
-        avatar: {
-          src: '/imgs/icons/4.svg'
-        }
+        title: 'Real-Time Content Preview',
+        description: 'Preview how your content will look before you publish. PostGen.ai provides instant previews, giving you full control over how your posts will appear on social media, so you can make adjustments if needed.',
+      
       }
     ]
   },
@@ -217,59 +159,38 @@ export const LANDING_DATA: Page = {
       }
     ]
   },
-  testimonial: {
-    title: 'What People Are Saying',
-    description: 'Hear from our users who have streamlined their workflows with the AI News Agent.',
-    items: [
-      {
-        name: 'Alex Johnson',
-        title: 'Journalist',
-        description: 'The AI News Agent has drastically reduced the time it takes to prepare daily updates.',
-        avatar: {
-          src: '/imgs/user/1.png'
-        }
-      },
-      {
-        name: 'Sophia Martinez',
-        title: 'Content Marketer',
-        description: 'A game changer! I can now repurpose content efficiently for various platforms.',
-        avatar: {
-          src: '/imgs/user/2.png'
-        }
-      },
-      {
-        name: 'Chris Lee',
-        title: 'Editor',
-        description: 'It’s like having an extra pair of hands—our productivity has soared.',
-        avatar: {
-          src: '/imgs/user/3.png'
-        }
-      }
-    ]
-  },
+
   faq: {
     title: 'FAQs About AI News Agent',
     description: 'Your questions answered about our innovative AI tool.',
     items: [
       {
-        title: 'How accurate is the summarization?',
-        description: 'Our AI delivers highly accurate summaries with minimal manual adjustments needed.'
+        title: 'What is PostGen.ai?',
+        description: 'PostGen.ai is an AI-powered platform that helps you generate customized content from news articles or prompts. It supports various formats like text, images, videos, and memes, which can be tailored for platforms such as LinkedIn, Instagram, Facebook, Reddit, and X. The tool also allows you to adjust the tone and type of content for a more personalized output.'
       },
       {
-        title: 'Can I customize the output format?',
-        description: 'Yes, you can choose from multiple formats like text, video, and graphics.'
+        title: 'How does PostGen.ai work?',
+        description: 'Simply enter a prompt or a news idea into PostGen.ai. The AI will process it and generate content in your preferred format. You can customize the content further by selecting the platform, tone, and content type. Once ready, you can preview and download the content to share on your social media channels.'
       },
       {
-        title: 'Is the agent suitable for all industries?',
-        description: 'Absolutely! The AI News Agent is versatile and can adapt to various use cases.'
+        title: 'Can I use PostGen.ai for free?',
+        description: 'Yes! PostGen.ai offers a free version with core features, allowing you to create and customize your posts. For additional advanced features and more customization options, you can explore our premium offerings.'
+      },
+      {
+        title: 'Which platforms can I customize my content for?',
+        description: 'You can customize your content for popular platforms such as LinkedIn, Facebook, Instagram, Reddit, and X (formerly Twitter).'
+      },  {
+        title: 'What types of content can I generate on PostGen.ai?',
+        description: 'PostGen.ai lets you create various content types, including text posts, images, videos, and memes, giving you the flexibility to engage your audience in different ways.'
       }
     ]
   },
   footer: {
     brand: {
-      title: 'AI News Agent',
+    
+      title: 'Postgen.ai',
       description:
-        'AI News Agent transforms how news is consumed and shared, empowering users with versatile tools for content creation.',
+        'PostGen.ai is an AI-powered content generation platform designed to simplify the process of creating engaging social media posts from news and prompts.',
       avatar: {
         src: '/imgs/ai-logo.png',
         title: 'AI News Agent'
@@ -277,7 +198,7 @@ export const LANDING_DATA: Page = {
       url: '/'
     },
     badge_disabled: true,
-    copyright: '© 2024 • AI News Agent. All rights reserved.',
+    copyright: '© 2024 PostGen.ai. All rights reserved. Made with  `<div class="heart"></div>` by Team Zignutsian',
     social: {
       items: [
         {
