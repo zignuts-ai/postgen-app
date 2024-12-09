@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Card, CardMedia, styled } from '@mui/material'
+import { Button, Card, CardMedia, styled } from '@mui/material'
 import { ChatMessage } from 'src/types/chatContextType'
 
 const HoverableCard = styled(Card)(({ theme }) => ({
@@ -47,6 +47,21 @@ const MediaCard: React.FC<MediaCardProps> = ({ type, src, alt = 'Media', onZoom,
 
   // const [loading, setLoading] = useState(true)
 
+  // Function to download media using anchor tag
+  const downloadMedia = (e: any) => {
+    e.preventDefault()
+    const link = document.createElement('a')
+    link.href = src
+    link.target = '_blank'
+
+    link.download = `${alt || 'downloaded-media'}.png`
+
+    // Append to body, click, and remove
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   return (
     <HoverableCard onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
       {/* <HoverOverlay
@@ -80,41 +95,51 @@ const MediaCard: React.FC<MediaCardProps> = ({ type, src, alt = 'Media', onZoom,
       {/* {loading && <Skeleton variant='rectangular' height={345} width={345} />} */}
 
       {type === 'video' ? (
-        <CardMedia
-          component='video'
-          controls={false}
-          autoPlay
-          muted
-          loop
-          height='194'
-          src={src}
-          sx={{
-            objectFit: 'contain',
-            transition: 'transform 0.3s ease',
-            '&:hover': {
-              transform: 'scale(1.05)'
-            }
-          }}
+        <>
+          <CardMedia
+            component='video'
+            controls={false}
+            autoPlay
+            muted
+            loop
+            height='194'
+            src={src}
+            sx={{
+              objectFit: 'contain',
+              transition: 'transform 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.05)'
+              }
+            }}
 
-          // onLoadedData={() => setLoading(false)}
-        />
+            // onLoadedData={() => setLoading(false)}
+          />
+          <Button onClick={downloadMedia} variant='contained' fullWidth sx={{ mt: 2 }}>
+            Download
+          </Button>
+        </>
       ) : (
-        <CardMedia
-          component='img'
-          height='194'
-          image={src}
-          alt={alt}
-          sx={{
-            objectFit: 'contain',
-            transition: 'transform 0.3s ease',
-            '&:hover': {
-              transform: 'scale(1.05)'
-            }
-          }}
+        <>
+          <CardMedia
+            component='img'
+            height='194'
+            image={src}
+            alt={alt}
+            sx={{
+              objectFit: 'contain',
+              transition: 'transform 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.05)'
+              }
+            }}
 
-          // onLoad={() => setLoading(false)}
-          // onError={() => setLoading(false)}
-        />
+            // onLoad={() => setLoading(false)}
+            // onError={() => setLoading(false)}
+          />
+          <Button onClick={downloadMedia} variant='contained' fullWidth sx={{ mt: 2 }}>
+            Download
+          </Button>
+        </>
       )}
     </HoverableCard>
   )
