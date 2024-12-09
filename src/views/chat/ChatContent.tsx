@@ -120,7 +120,7 @@ const ChatContent = (props: ChatContentType) => {
                   >
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                       <Typography sx={{ fontWeight: 700, fontSize: '0.975rem' }}>
-                        {chatDetails?.data?.[0]?.name ?? 'Not Found'}
+                        {chatDetails?.data?.name ?? 'Not Found'}
                       </Typography>
                     </Box>
                   </Box>

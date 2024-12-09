@@ -12,11 +12,18 @@ export type ChatMessage = {
   created_by: string | null
 }
 
+type NewsItem = {
+  url: string
+  title: string
+  content: string
+}
+
 interface Session {
-  sessionId: string
+  id: string
   name: string
   userId: string
   prompt: string
+  news: NewsItem[]
   is_active: boolean
   created_at: string
   created_by: string
@@ -29,7 +36,7 @@ interface Session {
 }
 
 export interface GetChatByIdResponseTypes {
-  data: Session[]
+  data: Session
 }
 export interface CreateSessionResponseTypes {
   data: {
@@ -42,6 +49,7 @@ export interface CreateSessionResponseTypes {
     message: null
     metadata: null
     userId: string
+    name: string
     role: 'ai' | 'user'
     sessionId: string
     createdBy: null
