@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react'
-import { Box, Card, CardContent } from '@mui/material'
+import { Box, Card, CardContent, DialogTitle, useMediaQuery } from '@mui/material'
 import InstagramPreview from './preview/InstagramPreview'
 import { useChat } from 'src/hooks/useChat'
 import { ChatMessage } from 'src/types/chatContextType'
@@ -10,6 +10,8 @@ import FacebookPreview from './preview/FacebookPreview'
 
 const ChatPreview = () => {
   const { previewData, chatDetails, setPreviewData } = useChat()
+
+  const isDownMd = useMediaQuery('(min-width:1200px)')
 
   const platformType: 'instagram' | 'linkedin' | 'x' | 'facebook' | 'reddit' | '' = useMemo(() => {
     const validData = validType(chatDetails?.data.messages ?? [])
@@ -63,7 +65,8 @@ const ChatPreview = () => {
   return (
     <Box display='flex' justifyContent='center' flexDirection='column' height='100%' maxWidth={500} margin='auto'>
       <Card>
-        <CardContent>
+        {isDownMd && <DialogTitle id='alert-dialog-slide-title'>Social Preview</DialogTitle>}
+        <CardContent sx={{ pt: 0 }}>
           {platformType === 'x' && (
             <XPreview
               metadata={{

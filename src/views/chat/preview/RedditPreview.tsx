@@ -1,5 +1,6 @@
 import React from 'react'
 import { Icon } from '@iconify/react'
+import { useAuth } from 'src/hooks/useAuth'
 
 type Props = {
   metadata: {
@@ -11,6 +12,7 @@ type Props = {
 
 const RedditPreview = ({ metadata }: Props) => {
   const { caption, title, imageUrl } = metadata
+  const { user } = useAuth()
 
   return (
     <div className='max-w-2xl mx-auto'>
@@ -24,7 +26,11 @@ const RedditPreview = ({ metadata }: Props) => {
         <div className='flex-grow'>
           <div className='p-2.5'>
             <div className='flex items-center text-xs text-gray-500 mb-1 flex-wrap'>
-              <img src='/images/avatars/1.png' className='rounded-full mr-2 w-4 h-4' alt='Community Logo' />
+              <img
+                src={`https://avatar.vercel.sh/rauchg.svg?text=${user?.name?.slice(0, 2)?.toUpperCase()}`}
+                className='rounded-full mr-2 w-4 h-4'
+                alt='Community Logo'
+              />
               <span className='font-bold mr-1 hover:underline'>r/JavaScript</span>
               <span className='mx-1'>•</span>
               <span>Posted by u/CodeMaster 3 hours ago</span>
