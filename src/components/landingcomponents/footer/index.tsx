@@ -11,8 +11,14 @@ export default function () {
           {/* Newsletter */}
           {footer?.brand && footer?.brand.title && (
             <div className='w-full md:w-1/4 text-center md:text-left px-8'>
-              <p className='uppercase mb-6 font-bold'>{footer?.brand.title}</p>
-              <div className='flex flex-col'>{footer?.brand.description}</div>
+              <div className="flex items-center gap-4 mb-4">
+    <img 
+      src="/logo.png" 
+      alt="Brand Logo" 
+      className="w-10 h-10 object-contain" 
+    />
+    <p className="uppercase font-bold text-lg">{footer?.brand?.title || "Brand Title"}</p>
+  </div>  <div className='flex flex-col'>{footer?.brand.description}</div>
             </div>
           )}
 
@@ -62,7 +68,7 @@ export default function () {
 
         {/* Copyright */}
         <div className='mt-4 text-center'>
-          <p className='text-base text-gray-400'>{footer?.copyright}</p>
+          <p className='text-base text-gray-400'> © 2024 <a href="https://postgen.zignuts.dev/">PostGen.ai.</a> All rights reserved. Made with <span className="heart-icon">💖</span> by Team Zignutsian</p>
           {!footer?.badge_disabled && (
             <div className='mt-4 mb-2 flex flex-wrap space-x-2 text-sm dark:text-gray-400'>
               <div className='w-full flex-shrink-0'>

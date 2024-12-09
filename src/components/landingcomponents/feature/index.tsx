@@ -2,7 +2,7 @@ import { LANDING_DATA } from 'src/constants/fakeData'
 import { Item } from 'src/types/landing'
 
 export default function () {
-  const section = LANDING_DATA.section
+  const section = LANDING_DATA.feature
 
   return (
     <div className='bg-gradient-to-t py-16 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl'>

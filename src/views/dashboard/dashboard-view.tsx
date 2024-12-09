@@ -207,10 +207,11 @@ const DashboardView = () => {
       <Box sx={{ my: 10, mt: 10 }}>
         <div className='max-w-3xl mx-auto text-center'>
           <h2 className='text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-primary mb-2 md:mb-6 drop-shadow-md'>
-            AI Social Media Post Generator
+            Create Stunning News Content in Seconds
           </h2>
           <p className='text-sm sm:text-lg text-muted-foreground mb-8'>
-            Stay consistent, creative, and productive with {themeConfig.templateName}'s free AI social media post
+          Stay consistent, creative, and impactful with {themeConfig.templateName} - Your AI-powered solution for generating tailored content across platforms!
+            Stay consistent, creative, and productive with 's free AI social media post
             generator.
           </p>
         </div>
