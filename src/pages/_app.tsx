@@ -126,13 +126,6 @@ const App = (props: ExtendedAppProps) => {
 
   const aclAbilities = Component.acl ?? defaultACLObj
 
-  console.log({
-    authGuard,
-    publicGuard,
-    guestGuard,
-    aclAbilities
-  })
-
   return (
     <CacheProvider value={emotionCache}>
       <Head>

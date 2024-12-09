@@ -106,7 +106,7 @@ const DashboardView = () => {
       if (!user) {
         const guestHistory = JSON.parse(localStorage.getItem(LOCAL_CHAT_SESSION_KEY) || '[]')
         guestHistory.push({
-          sessionId: res?.data?.sessionId,
+          sessionId: sessionId,
           name: res?.data?.name,
           createdAt: res?.data?.createdAt
         })

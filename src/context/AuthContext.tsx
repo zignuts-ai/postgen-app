@@ -23,7 +23,6 @@ const AuthProvider = ({ children }: Props) => {
   // ** States
   const [user, setUser] = useState<UserDataType | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
-  console.log(user)
 
   // ** Hooks
   const router = useRouter()

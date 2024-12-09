@@ -190,8 +190,6 @@ const ChatProvider = ({ children }: Props) => {
     //  eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatDetailQuery?.isSuccess, chatDetailQuery.isFetching])
 
-  console.log(chatDetailQuery.isFetching)
-
   useEffect(() => {
     if (!user) {
       const storedHistory = localStorage.getItem(LOCAL_CHAT_SESSION_KEY)
