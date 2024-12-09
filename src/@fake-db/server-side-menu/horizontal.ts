@@ -291,7 +291,7 @@ const navigation: HorizontalNavItemsType = [
         children: [
           {
             title: 'Account',
-            path: '/pages/account-settings/account'
+            path: '/pages/account-setting/'
           },
           {
             title: 'Security',
