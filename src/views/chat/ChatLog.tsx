@@ -25,6 +25,7 @@ import MediaCard from './MediaCard'
 import { Avatar, Card, CardContent, IconButton } from '@mui/material'
 import { Icon } from '@iconify/react'
 import { toast } from 'react-hot-toast'
+import BeatLoader from 'react-spinners/BeatLoader'
 
 const PerfectScrollbar = styled(PerfectScrollbarComponent)<ScrollBarProps & { ref: Ref<unknown> }>(({ theme }) => ({
   padding: theme.spacing(5)
@@ -32,7 +33,7 @@ const PerfectScrollbar = styled(PerfectScrollbarComponent)<ScrollBarProps & { re
 
 const ChatLog = ({ hidden }: { hidden: boolean }) => {
   // ** Props
-  const { messages } = useChat()
+  const { messages, chatDetailQuery } = useChat()
   const { user } = useAuth()
 
   const senderData = {
@@ -242,7 +243,18 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
 
   return (
     <Box sx={{ height: 'calc(100% - 8.4375rem)' }} className='common-scroll'>
-      <ScrollWrapper>{renderChats()}</ScrollWrapper>
+      <ScrollWrapper>
+        {chatDetailQuery?.isPending ? (
+          <div className='flex flex-col items-center justify-center w-full h-full'>
+            <div className='flex items-center space-x-4'>
+              <BeatLoader color='#7a88ee' size={15} />
+            </div>
+            <p className='mt-4 text-sm text-gray-300'>Please wait while we process your request...</p>
+          </div>
+        ) : (
+          renderChats()
+        )}
+      </ScrollWrapper>
     </Box>
   )
 }
