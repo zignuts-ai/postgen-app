@@ -29,10 +29,10 @@ const AppBarContent = (props: Props) => {
       ) : (
         <div className='flex gap-3 mx-4'>
           <Link href='/login'>
-            <Button variant='contained'>Login</Button>
+            <Button size='small' variant='contained'>Login</Button>
           </Link>
           <Link href='/register'>
-            <Button variant='outlined'>Register</Button>
+            <Button size='small' variant='outlined'>Register</Button>
           </Link>
         </div>
       )}

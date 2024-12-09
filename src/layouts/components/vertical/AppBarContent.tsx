@@ -29,7 +29,15 @@ const AppBarContent = (props: Props) => {
   const { user } = useAuth()
 
   return (
-    <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Box
+      sx={{
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: { xs: 'wrap', md: 'nowrap' }
+      }}
+    >
       <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
         {hidden ? (
           <IconButton color='inherit' sx={{ ml: -2.75 }} onClick={toggleNavVisibility}>
@@ -46,10 +54,14 @@ const AppBarContent = (props: Props) => {
       ) : (
         <div className='flex gap-3 mx-4'>
           <Link href='/login'>
-            <Button variant='contained'>Login</Button>
+            <Button size='small' variant='contained'>
+              Login
+            </Button>
           </Link>
           <Link href='/register'>
-            <Button variant='outlined'>Register</Button>
+            <Button size='small' variant='outlined'>
+              Register
+            </Button>
           </Link>
         </div>
       )}

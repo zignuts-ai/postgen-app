@@ -22,7 +22,9 @@ import { useAuth } from 'src/hooks/useAuth'
 import { ChatMessage } from 'src/types/chatContextType'
 import themeConfig from 'src/configs/themeConfig'
 import MediaCard from './MediaCard'
-import { Avatar, Card, CardContent } from '@mui/material'
+import { Avatar, Card, CardContent, IconButton } from '@mui/material'
+import { Icon } from '@iconify/react'
+import { toast } from 'react-hot-toast'
 
 const PerfectScrollbar = styled(PerfectScrollbarComponent)<ScrollBarProps & { ref: Ref<unknown> }>(({ theme }) => ({
   padding: theme.spacing(5)
@@ -81,6 +83,15 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
                     {user?.name ?? 'John Doe'}
                   </Typography>
                 </Box>
+                <IconButton
+                  onClick={() => {
+                    navigator.clipboard.writeText(item?.message ?? '')
+                    toast.success('Copied to your clipboard.')
+                  }}
+                  size='small'
+                >
+                  <Icon icon='solar:copy-line-duotone' />
+                </IconButton>
               </Box>
             </CardContent>
           </Card>
@@ -91,9 +102,10 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
           <MediaCard
             type='image'
             src={
-              'https://plus.unsplash.com/premium_photo-1688645554172-d3aef5f837ce?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW5kaWFuJTIwbW91bnRhaW5zfGVufDB8fDB8fHww'
+              item?.message ||
+              'https://user-images.githubusercontent.com/24848110/33519396-7e56363c-d79d-11e7-969b-09782f5ccbab.png'
             }
-            alt='Uploaded image'
+            alt='Generated Image'
             item={item}
           />
         )

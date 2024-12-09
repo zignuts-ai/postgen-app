@@ -47,13 +47,16 @@ const BlankLayoutAppBar = () => {
     >
       <Toolbar
         sx={{
-          justifyContent: 'space-between',
+          justifyContent: { xs: 'center', sm: 'space-between' },
           p: theme => `${theme.spacing(0, 6)} !important`,
-          minHeight: `${(theme.mixins.toolbar.minHeight as number) - (skin === 'bordered' ? 1 : 0)}px !important`
+          minHeight: `${(theme.mixins.toolbar.minHeight as number) - (skin === 'bordered' ? 1 : 0)}px !important`,
+          flexWrap: { xs: 'wrap', md: 'nowrap' },
+          padding: { xs: `${theme.spacing(2, 6)} !important`, md: 0 },
+          gap: 3
         }}
       >
         <LinkStyled href='/'>
-          <img alt='Logo' src='/logo.png' className='h-[40px] w-[40px] ' />
+          <img alt='Logo' src='/logo.png' className='h-[40px] w-[40px] object-contain' />
           <Typography
             variant='h5'
             sx={{
@@ -73,7 +76,7 @@ const BlankLayoutAppBar = () => {
           <div className='flex gap-3 mx-4 items-center'>
             {isLandingPage && (
               <Link href='/history'>
-                <Button variant='contained' startIcon={<Icon icon='material-symbols:history' />}>
+                <Button size='small' variant='contained' startIcon={<Icon icon='material-symbols:history' />}>
                   History
                 </Button>
               </Link>
@@ -83,10 +86,14 @@ const BlankLayoutAppBar = () => {
         ) : (
           <div className='flex gap-3 mx-4'>
             <Link href='/login'>
-              <Button variant='contained'>Login</Button>
+              <Button size='small' variant='contained'>
+                Login
+              </Button>
             </Link>
             <Link href='/register'>
-              <Button variant='outlined'>Register</Button>
+              <Button size='small' variant='outlined'>
+                Register
+              </Button>
             </Link>
           </div>
         )}

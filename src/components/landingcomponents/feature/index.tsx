@@ -21,7 +21,7 @@ export default function () {
                 </div>
               )}
               <h3 className='text-xl font-semibold mb-2'>{item.title}</h3>
-              <p className='text-gray-600'>{item.description}</p>
+              <p className='text-gray-400'>{item.description}</p>
             </div>
           ))}
         </div>

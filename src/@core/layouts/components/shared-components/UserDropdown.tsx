@@ -46,7 +46,7 @@ const UserDropdown = (props: Props) => {
 
   // ** Hooks
   const router = useRouter()
-  const { logout } = useAuth()
+  const { logout, user } = useAuth()
   const { mutate } = logout!
 
   // ** Vars
@@ -124,9 +124,9 @@ const UserDropdown = (props: Props) => {
               <Avatar alt='John Doe' src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
             </Badge>
             <Box sx={{ ml: 3, display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-              <Typography sx={{ fontWeight: 500 }}>John Doe</Typography>
+              <Typography sx={{ fontWeight: 500 }}>{user?.name ?? 'John Doe'}</Typography>
               <Typography variant='body2' sx={{ color: 'text.secondary' }}>
-                Admin
+                {user?.role ?? 'Admin'}
               </Typography>
             </Box>
           </Box>

@@ -21,7 +21,7 @@ import endpoints from 'src/constants/endpoints'
 import useLoading from 'src/hooks/useLoading'
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query'
 import { CHAT } from 'src/queries/query-keys'
-import { createChatSession, getAllChats, getChatById } from 'src/queries/chat'
+import { createChatSession, getChatById, updateCurrentChat } from 'src/queries/chat'
 import { AxiosError } from 'axios'
 import { useAuth } from 'src/hooks/useAuth'
 import { LOCAL_CHAT_SESSION_KEY } from 'src/constants/constant'
@@ -31,6 +31,7 @@ export type ChatValuesTypes = {
   chatId: string | string[] | undefined
   sendMessage: (content: string) => void
   messages: ChatMessage[] | null
+  setMessages: React.Dispatch<React.SetStateAction<ChatMessage[] | null>>
   isPendingChat: boolean
   isSocketInit: boolean
   setPreviewData: (data: PreviewDataType) => void
@@ -38,8 +39,8 @@ export type ChatValuesTypes = {
   handleCraeteSessionChat: UseMutationResult<CreateSessionResponseTypes, AxiosError<unknown, any>, any, unknown>
   chatDetails: GetChatByIdResponseTypes | null
   chatDetailQuery: UseQueryResult<GetChatByIdResponseTypes, Error>
-  allUserChatsQuery: UseQueryResult<GetChatByIdResponseTypes, Error>
   guestHistory: GuestHistoryType[]
+  handleUpdateChat: UseMutationResult<CreateSessionResponseTypes, AxiosError<unknown, any>, any, unknown>
 }
 
 // ** Defaults
@@ -81,12 +82,6 @@ const ChatProvider = ({ children }: Props) => {
     enabled: !!chatId
   })
 
-  const allUserChatsQuery = useQuery({
-    queryKey: [CHAT.ALL_USER_CHATS],
-    queryFn: getAllChats,
-    enabled: false
-  })
-
   const handleCraeteSessionChat = useMutation({
     mutationFn: dto => createChatSession(dto, user),
     onSuccess: data => {
@@ -94,11 +89,22 @@ const ChatProvider = ({ children }: Props) => {
         const guestHistory = JSON.parse(localStorage.getItem(LOCAL_CHAT_SESSION_KEY) || '[]')
         guestHistory.push({
           sessionId: data.data.sessionId,
-          sessionName: data.data.message
+          name: data.data.message,
+          createdAt: data.data?.createdAt
         })
         localStorage.setItem(LOCAL_CHAT_SESSION_KEY, JSON.stringify(guestHistory))
       }
       router.push(`/chat/${data.data.sessionId}`)
+    },
+    onError: async (err: AxiosError) => {
+      console.log(err)
+    }
+  })
+
+  const handleUpdateChat = useMutation({
+    mutationFn: dto => updateCurrentChat(dto, user),
+    onSuccess: data => {
+      console.log(data)
     },
     onError: async (err: AxiosError) => {
       console.log(err)
@@ -162,8 +168,15 @@ const ChatProvider = ({ children }: Props) => {
 
   useEffect(() => {
     if (!user) {
-      if (localStorage.getItem(LOCAL_CHAT_SESSION_KEY)) {
-        setGuestHistory(JSON.parse(localStorage.getItem(LOCAL_CHAT_SESSION_KEY)! ?? []))
+      const storedHistory = localStorage.getItem(LOCAL_CHAT_SESSION_KEY)
+      if (storedHistory) {
+        try {
+          const parsedHistory = JSON.parse(storedHistory)
+          setGuestHistory(parsedHistory)
+        } catch (error) {
+          console.error('Error parsing guest history', error)
+          localStorage.removeItem(LOCAL_CHAT_SESSION_KEY)
+        }
       }
     }
   }, [user])
@@ -175,6 +188,7 @@ const ChatProvider = ({ children }: Props) => {
       socket,
       sendMessage,
       messages,
+      setMessages,
       isPendingChat,
       isSocketInit,
       previewData,
@@ -183,7 +197,7 @@ const ChatProvider = ({ children }: Props) => {
       chatDetails,
       chatDetailQuery,
       guestHistory,
-      allUserChatsQuery
+      handleUpdateChat
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [chatId, socket, messages, isPendingChat, isSocketInit, previewData, methods]
