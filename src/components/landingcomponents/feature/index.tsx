@@ -11,17 +11,20 @@ export default function () {
         <div className='mt-4 text-sm font-semibold tracking-wide'>{section?.description}</div>
         <p className='mt-6 text-lg leading-8 text-muted-foreground'>{section?.tip}</p>
       </div>
-      <div className='mt-8 flex flex-col gap-16'>
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-12'>
+      <div className='mt-8'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>
           {section?.items?.map((item: Item, idx: number) => (
-            <div key={idx} className='text-left p-6 border border-gray-200 rounded-lg shadow-sm'>
+            <div
+              key={idx}
+              className='text-center p-6 border border-gray-200 rounded-lg shadow-sm flex flex-col items-center'
+            >
               {item.avatar && item.avatar.src && (
                 <div className='mb-4 text-primary-500'>
-                  <img src={item.avatar?.src} alt={item.avatar?.title} className='w-10 h-10' />
+                  <img src={item.avatar?.src} alt={item.avatar?.title} className='w-10 h-10 mx-auto' />
                 </div>
               )}
-              <h3 className='text-xl font-semibold mb-2'>{item.title}</h3>
-              <p className='text-gray-400'>{item.description}</p>
+              <h3 className='text-lg mx-4 font-semibold mb-2 whitespace-nowrap'>{item.title}</h3>
+              <p className='text-gray-400 text-center'>{item.description}</p>
             </div>
           ))}
         </div>
