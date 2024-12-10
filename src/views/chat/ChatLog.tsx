@@ -117,7 +117,12 @@ const ChatLog = ({ hidden }: { hidden: boolean }) => {
 
       case 'video':
         return (
-          <MediaCard item={item} type='video' src={'https://www.w3schools.com/html/movie.mp4'} alt='Uploaded video' />
+          <MediaCard
+            item={item}
+            type='video'
+            src={item?.message || 'https://www.w3schools.com/html/movie.mp4'}
+            alt='Uploaded video'
+          />
         )
 
       case 'meme':
