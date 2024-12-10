@@ -1,5 +1,5 @@
 import { toast } from 'react-hot-toast'
-import { ACCESS_TOKEN_KEY } from 'src/constants/constant'
+import { ACCESS_TOKEN_KEY, USER_DATA_KEY } from 'src/constants/constant'
 import { v4 as uuidv4 } from 'uuid'
 
 export function formatMessage(message: string) {
@@ -13,8 +13,8 @@ export function formatMessage(message: string) {
 export const UUID = () => uuidv4()
 
 export const checkUserStatus = (err: any) => {
-  if (err?.response?.status === 401 || err?.response?.status === 500) {
-    localStorage.removeItem('user')
+  if (err?.response?.status === 401) {
+    localStorage.removeItem(USER_DATA_KEY)
     localStorage.removeItem(ACCESS_TOKEN_KEY)
     window.location.href = '/login'
     toast.error('Session Expierd')
