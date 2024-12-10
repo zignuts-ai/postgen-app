@@ -23,7 +23,7 @@ const ChatPreview = () => {
       return platform?.toLowerCase()
     }
 
-    return !!platform ? platform : validData?.type === 'image' ? 'instagram' : 'text'
+    return !!platform ? platform : validData?.type === 'image' || validData?.type === 'video' ? 'instagram' : 'text'
   }, [chatDetails?.data?.messages])
 
   function validType(data: ChatMessage[]) {
@@ -69,6 +69,21 @@ const ChatPreview = () => {
               ? validData?.item?.metadata?.userPrompt?.slice(0, 150) + '...'
               : validData?.item?.metadata?.userPrompt ?? '',
           type: 'text'
+        })
+      } else if (validData.type === 'video') {
+        setPreviewData({
+          caption:
+            validData?.item?.metadata?.userPrompt?.length > 150
+              ? validData?.item?.metadata?.userPrompt?.slice(0, 150) + '...'
+              : validData?.item?.metadata?.userPrompt ?? '',
+          imageUrl:
+            validData?.item?.message ??
+            'https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg',
+          title:
+            validData?.item?.metadata?.userPrompt?.length > 150
+              ? validData?.item?.metadata?.userPrompt?.slice(0, 150) + '...'
+              : validData?.item?.metadata?.userPrompt ?? '',
+          type: 'video'
         })
       }
     } else {
